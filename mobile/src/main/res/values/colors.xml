@@ -19,6 +19,8 @@
   <color name="colorWhiteTrans">#66ffffff</color>
   <color name="colorWhite">#ffffff</color>
 
+  <color name="colorFabMenu">#00d9ff</color>
+
   <color name="light_grey">#cfcfcf</color>
   <color name="darker_grey">#898989</color>
 

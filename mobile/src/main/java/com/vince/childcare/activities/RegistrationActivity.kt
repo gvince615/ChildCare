@@ -14,11 +14,6 @@ import com.vince.childcare.core.registration.MedicalData
 import com.vince.childcare.core.registration.ParentData
 import kotlinx.android.synthetic.main.activity_registration.*
 
-
-
-
-
-
 class RegistrationActivity : BaseActivity() {
 
   private val cards = ArrayList<Any>()
@@ -39,21 +34,25 @@ class RegistrationActivity : BaseActivity() {
   private fun billingMenuButtonClicked() {
     cards.add(BillingData())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    menu.close(true)
   }
 
   private fun medicalMenuButtonClicked() {
     cards.add(MedicalData())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    menu.close(true)
   }
 
   private fun parentMenuButtonClicked() {
     cards.add(ParentData())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    menu.close(true)
   }
 
   private fun childMenuButtonClicked() {
     cards.add(ChildData())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    menu.close(true)
   }
 
   private fun setUpRecyclerView() {
