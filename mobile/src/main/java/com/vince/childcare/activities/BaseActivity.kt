@@ -7,7 +7,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 
 
-
 open class BaseActivity : AppCompatActivity() {
 
   private lateinit var firebaseAnalytics: FirebaseAnalytics

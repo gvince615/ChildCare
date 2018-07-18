@@ -5,10 +5,19 @@
   <color name="colorAccent">#FF4081</color>
 
   <color name="colorRed">#e32b2b</color>
+  <color name="colorRedDark">#ae1313</color>
+
   <color name="colorGreen">#3e9c3e</color>
+  <color name="colorGreenDark">#1b761b</color>
+
   <color name="colorYellow">#f2df2e</color>
+  <color name="colorYellowDark">#afa221</color>
+
   <color name="colorBlue">#1f7ce4</color>
+  <color name="colorBlueDark">#155aa6</color>
+
   <color name="colorWhiteTrans">#66ffffff</color>
+  <color name="colorWhite">#ffffff</color>
 
   <color name="light_grey">#cfcfcf</color>
   <color name="darker_grey">#898989</color>

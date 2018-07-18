@@ -12,25 +12,29 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="5dp"
-      android:background="@color/colorRed"
       android:orientation="vertical"
+      android:background="@color/colorRed"
       android:padding="5dp"
       android:transitionName="simple_activity_transition"
       >
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhiteTrans"
+        android:background="@color/colorWhite"
         android:gravity="center"
         android:padding="5dp"
         >
 
-      <ImageView
-          android:layout_width="64dp"
-          android:layout_height="64dp"
-          android:padding="10dp"
-          android:src="@drawable/baseline_assignment_ind_white_18dp"
-          />
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/registration_rv"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+
+      </android.support.v7.widget.RecyclerView>
+
+
     </LinearLayout>
   </LinearLayout>
 

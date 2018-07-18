@@ -1,8 +1,11 @@
 package com.vince.childcare.activities
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.MenuItem
 import com.vince.childcare.R
+import kotlinx.android.synthetic.main.activity_registration.*
 
 class TodoActivity : BaseActivity() {
 
@@ -20,5 +23,18 @@ class TodoActivity : BaseActivity() {
       }
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    beginBackTransition()
+  }
+
+  private fun beginBackTransition() {
+    val colorAnimation = ValueAnimator.ofObject(
+        ArgbEvaluator(), resources.getColor(R.color.colorWhite, null), resources.getColor(R.color.colorWhiteTrans, null))
+    colorAnimation.duration = 250 // milliseconds
+    colorAnimation.addUpdateListener { animator -> content.setBackgroundColor(animator.animatedValue as Int) }
+    colorAnimation.start()
   }
 }
