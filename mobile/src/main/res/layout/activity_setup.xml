@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SetupActivity"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/setup_view"
+      android:transitionName="simple_activity_transition"
+      android:padding="5dp"
+      android:layout_margin="5dp"
+      android:background="@color/colorYellow"
+      android:orientation="vertical"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/colorWhiteTrans"
+        android:padding="5dp"
+        >
+
+      <ImageView
+          android:layout_width="64dp"
+          android:layout_height="64dp"
+          android:padding="10dp"
+          android:src="@drawable/ic_tab_five"
+          />
+    </LinearLayout>
+  </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

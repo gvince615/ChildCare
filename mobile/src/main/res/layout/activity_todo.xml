@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.TodoActivity"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/todo_view"
+      android:transitionName="simple_activity_transition"
+      android:padding="5dp"
+      android:layout_margin="5dp"
+      android:background="@color/colorGreen"
+      android:orientation="vertical"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/colorWhiteTrans"
+        android:padding="5dp"
+        >
+
+      <ImageView
+          android:layout_width="64dp"
+          android:layout_height="64dp"
+          android:padding="10dp"
+          android:src="@drawable/baseline_playlist_add_check_white_18dp"
+          />
+    </LinearLayout>
+  </LinearLayout>
+
+
+
+
+</android.support.constraint.ConstraintLayout>
