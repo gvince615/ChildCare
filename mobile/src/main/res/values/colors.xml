@@ -2,15 +2,39 @@
 <resources>
   <color name="colorPrimary">#3F51B5</color>
   <color name="colorPrimaryDark">#303F9F</color>
-  <color name="colorAccent">#FF4081</color>
+  <color name="colorPrimaryAccent">#b5a33f</color>
 
-  <color name="colorRed">#e32b2b</color>
-  <color name="colorGreen">#3e9c3e</color>
-  <color name="colorYellow">#f2df2e</color>
-  <color name="colorBlue">#1f7ce4</color>
+  <color name="colorRed">#F44336</color>
+  <color name="colorRedDark">#D32F2F</color>
+  <color name="colorRedAccent">#36e7f4</color>
+
+  <color name="colorOrange">#ff9800</color>
+  <color name="colorOrangeDark">#c66900</color>
+  <color name="colorOrangeAccent">#0066ff</color>
+
+  <color name="colorGreen">#4CAF50</color>
+  <color name="colorGreenDark">#388E3C</color>
+  <color name="colorGreenAccent">#af4cac</color>
+
+  <color name="colorYellow">#FFEB3B</color>
+  <color name="colorYellowDark">#FBC02D</color>
+  <color name="colorYellowAccent">#3b4fff</color>
+
+  <color name="colorBlue">#2196F3</color>
+  <color name="colorBlueDark">#1976D2</color>
+  <color name="colorBlueAccent">#f37f21</color>
+
+  <color name="colorPurple">#BA68C8</color>
+  <color name="colorPurpleDark">#9C27B0</color>
+  <color name="colorPurpleAccent">#3cb027</color>
+
   <color name="colorWhiteTrans">#66ffffff</color>
+  <color name="colorWhite">#ffffff</color>
 
-  <color name="light_grey">#cfcfcf</color>
-  <color name="darker_grey">#898989</color>
+  <color name="lighter_grey">#B0BEC5</color>
+  <color name="light_grey">#607D8B</color>
+  <color name="darker_grey">#455A64</color>
+
+  <color name="colorBlack">#000000</color>
 
 </resources>

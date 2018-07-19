@@ -22,25 +22,31 @@
     <activity android:name=".activities.MainActivity" />
 
 
-
     <activity
         android:name=".activities.RegistrationActivity"
-        android:parentActivityName="com.vince.childcare.activities.MainActivity">
+        android:parentActivityName="com.vince.childcare.activities.MainActivity"
+        android:theme="@style/RegistrationTheme">
 
     </activity>
     <activity
         android:name=".activities.MessageBoardActivity"
-        android:parentActivityName="com.vince.childcare.activities.MainActivity">
+        android:parentActivityName="com.vince.childcare.activities.MainActivity"
+        android:theme="@style/MessageBoardTheme">
+
 
     </activity>
     <activity
         android:name=".activities.TodoActivity"
-        android:parentActivityName="com.vince.childcare.activities.MainActivity">
+        android:parentActivityName="com.vince.childcare.activities.MainActivity"
+        android:theme="@style/TodoTheme">
+
 
     </activity>
     <activity
         android:name=".activities.SetupActivity"
-        android:parentActivityName="com.vince.childcare.activities.MainActivity">
+        android:parentActivityName="com.vince.childcare.activities.MainActivity"
+        android:theme="@style/SetupTheme">
+
 
     </activity>
   </application>

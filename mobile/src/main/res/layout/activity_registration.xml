@@ -12,25 +12,29 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="5dp"
-      android:background="@color/colorRed"
       android:orientation="vertical"
+      android:background="@color/colorRed"
       android:padding="5dp"
       android:transitionName="simple_activity_transition"
       >
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhiteTrans"
+        android:background="@color/colorWhite"
         android:gravity="center"
         android:padding="5dp"
         >
 
-      <ImageView
-          android:layout_width="64dp"
-          android:layout_height="64dp"
-          android:padding="10dp"
-          android:src="@drawable/baseline_assignment_ind_white_18dp"
-          />
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/registration_rv"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+
+      </android.support.v7.widget.RecyclerView>
+
+
     </LinearLayout>
   </LinearLayout>
 
@@ -39,11 +43,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       fab:menu_animationDelayPerItem="50"
-      fab:menu_backgroundColor="@android:color/transparent"
+      fab:menu_backgroundColor="@color/lighter_grey"
       fab:menu_buttonSpacing="0dp"
-      fab:menu_colorNormal="@color/colorPrimary"
-      fab:menu_colorPressed="#99FFFFFF"
-      fab:menu_colorRipple="#99FFFFFF"
+      fab:menu_colorNormal="@color/colorRedAccent"
       fab:menu_fab_label="Available Data Cards"
       android:layout_marginBottom="8dp"
       android:layout_marginEnd="8dp"
@@ -51,17 +53,14 @@
       fab:menu_icon="@drawable/fab_add"
       fab:layout_constraintEnd_toEndOf="parent"
       fab:layout_constraintBottom_toBottomOf="parent"
-      fab:menu_labels_colorNormal="@color/fui_transparent"
+      fab:menu_labels_colorNormal="#000000"
       >
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/child_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/fui_transparent"
-        fab:fab_shadowColor="#00000000"
-        fab:menu_colorPressed="#99FFFFFF"
-        fab:menu_colorRipple="#99FFFFFF"
+        fab:fab_colorNormal="@color/colorBlue"
         android:src="@drawable/account_child_white_48x48"
         fab:fab_label="Add Child Data Card"
         fab:fab_size="mini"
@@ -70,10 +69,7 @@
         android:id="@+id/parent_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/fui_transparent"
-        fab:fab_shadowColor="#00000000"
-        fab:menu_colorPressed="#99FFFFFF"
-        fab:menu_colorRipple="#99FFFFFF"
+        fab:fab_colorNormal="@color/colorYellow"
         android:src="@drawable/account_circle_white_48x48"
         fab:fab_label="Add Parent/Guardian Data Card"
         fab:fab_size="mini"
@@ -82,10 +78,7 @@
         android:id="@+id/medical_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/fui_transparent"
-        fab:fab_shadowColor="#00000000"
-        fab:menu_colorPressed="#99FFFFFF"
-        fab:menu_colorRipple="#99FFFFFF"
+        fab:fab_colorNormal="@color/colorPurple"
         android:src="@drawable/round_local_hospital_white_18dp"
         fab:fab_label="Add Medical Data Card"
         fab:fab_size="mini"
@@ -94,10 +87,7 @@
         android:id="@+id/billing_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/fui_transparent"
-        fab:fab_shadowColor="#00000000"
-        fab:menu_colorPressed="#99FFFFFF"
-        fab:menu_colorRipple="#99FFFFFF"
+        fab:fab_colorNormal="@color/colorGreen"
         android:src="@drawable/round_attach_money_white_18dp"
         fab:fab_label="Add Billing Data Card"
         fab:fab_size="mini"
