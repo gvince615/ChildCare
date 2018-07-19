@@ -28,7 +28,7 @@
         >
 
       <TextView
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="2"
           android:gravity="start|center"
@@ -40,19 +40,20 @@
           />
 
       <ImageButton
-          android:id="@+id/edit_card_button"
+          android:id="@+id/edit_save_parent_card_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:backgroundTint="@android:color/transparent"
+          android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
-          android:scaleType="fitCenter"
           android:src="@android:drawable/ic_menu_edit"
           />
       <ImageButton
-          android:id="@+id/delete_card_button"
+          android:id="@+id/delete_parent_card_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:backgroundTint="@android:color/transparent"
+          android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
           android:src="@android:drawable/ic_menu_close_clear_cancel"
 
@@ -71,7 +72,7 @@
 
 
       <LinearLayout
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:layout_weight="2"

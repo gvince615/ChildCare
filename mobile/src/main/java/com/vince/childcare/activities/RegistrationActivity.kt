@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_registration.*
 
 class RegistrationActivity : BaseActivity() {
 
-  private val cards = ArrayList<Any>()
+  val cards = ArrayList<Any>()
   private lateinit var adapter: RegistrationAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class RegistrationActivity : BaseActivity() {
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
     registration_rv.itemAnimator = DefaultItemAnimator()
-    adapter = RegistrationAdapter(cards)
+    adapter = RegistrationAdapter(cards, this)
     registration_rv.adapter = adapter
   }
 
