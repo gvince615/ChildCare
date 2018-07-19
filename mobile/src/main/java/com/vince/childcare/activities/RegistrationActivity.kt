@@ -80,6 +80,7 @@ class RegistrationActivity : BaseActivity() {
   }
 
   private fun beginBackTransition() {
+
     val colorAnimation = ValueAnimator.ofObject(
         ArgbEvaluator(), resources.getColor(R.color.colorWhite, null), resources.getColor(R.color.colorWhiteTrans, null))
     colorAnimation.duration = 250 // milliseconds

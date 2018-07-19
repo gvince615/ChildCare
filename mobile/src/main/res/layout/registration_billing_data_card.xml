@@ -17,6 +17,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
+      android:theme="@style/BillingCardTheme"
       android:padding="5dp"
       >
 
@@ -39,15 +40,6 @@
           android:textStyle="bold"
           />
 
-      <ImageButton
-          android:id="@+id/edit_card_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:backgroundTint="@android:color/transparent"
-          android:foreground="?android:attr/selectableItemBackground"
-          android:padding="3dp"
-          android:src="@android:drawable/ic_menu_edit"
-          />
       <ImageButton
           android:id="@+id/delete_card_button"
           android:layout_width="wrap_content"
@@ -93,24 +85,6 @@
           android:layout_gravity="center|end"
           android:orientation="vertical"
           >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:background="@color/colorGreen"
-            android:orientation="horizontal"
-            android:paddingEnd="5dp"
-            >
-
-          <ImageView
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:padding="5dp"
-              android:src="@drawable/checkbox"
-              />
-        </LinearLayout>
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
