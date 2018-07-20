@@ -98,12 +98,19 @@ class RegistrationAdapter
 
   private fun configureChildViewHolder(childViewHolder: ChildHolder, position: Int) {
     var childData = (ChildData())
+    childData.first_name = childViewHolder.itemView.input_layout_first_name.editText?.text.toString()
+    childData.last_name = childViewHolder.itemView.input_layout_last_name.editText?.text.toString()
+
     childViewHolder.itemView.childDataCardView.setOnClickListener {
       Toast.makeText(context, "child card tapped ", Toast.LENGTH_SHORT).show()
     }
 
+    childViewHolder.itemView.child_image.setOnClickListener {
+      Toast.makeText(context, "child image tapped ", Toast.LENGTH_SHORT).show()
+      //todo - start image capture, set image bitmap to imageview
+    }
+
     childViewHolder.itemView.delete_child_card_button.setOnClickListener {
-      Toast.makeText(context, "delete tapped ", Toast.LENGTH_SHORT).show()
       cards.remove(cards[position])
       notifyItemRemoved(position)
       notifyItemRangeChanged(position, itemCount)
@@ -143,12 +150,13 @@ class RegistrationAdapter
   private fun configureBillingViewHolder(billingViewHolder: BillingHolder, position: Int) {
     var billingData = (BillingData())
 
-    //if (billingData != null) {
-    //  billingViewHolder.getDiscountDescription_label()
-    //      .getEditText()
-    //      .setText(billingData.discount_description);
-    //  //billingViewHolder.getDiscountAmount().getChildAt(position).getText.(discountData.discount_description);
+//    if (billingData != null) {
+//      billingViewHolder.getDiscountDescription_label()
+//          .getEditText()
+//          .setText(billingData.discount_description);
+//      //billingViewHolder.getDiscountAmount().getChildAt(position).getText.(discountData.discount_description);
   }
+
 
   companion object {
     const val CHILD = 0

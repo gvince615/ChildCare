@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
+import com.vince.childcare.core.registration.ChildData
 import java.util.*
 
 class FirestoreUtil(private val db: FirebaseFirestore, private val context: Context) {
@@ -22,6 +23,17 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
       }.addOnFailureListener {
         Log.e(context.getString(R.string.login_activity_tag), context.getString(R.string.data_update_failed))
       }
+    }
+  }
+
+  fun saveChildData(firebaseUser: FirebaseUser?, childData: ChildData) {
+    db
+    .collection("user_data").document("uid_" + firebaseUser?.uid)
+    .collection("child_registration_data").document("child_data")
+    .set(childData).addOnSuccessListener {
+      Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_succeeded))
+    }.addOnFailureListener {
+      Log.e(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_update_failed))
     }
   }
 }
