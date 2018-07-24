@@ -5,6 +5,8 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
+import com.vince.childcare.core.registration.Child
+import com.vince.childcare.core.registration.RegistrationCardItem
 import java.util.*
 
 
@@ -26,17 +28,17 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
     }
   }
 
-//  fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: ChildData) {
-//
-//    db.collection("user_data").document("uid_" + firebaseUser?.uid)
-//        .collection("registration_data").document(childData.firstName + "_" + childData.last_name)
-//        .set(childData).addOnSuccessListener {
-//          Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_succeeded))
-//        }.addOnFailureListener {
-//          Log.e(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_update_failed))
-//        }
-//
-//  }
+  fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: RegistrationCardItem<Child>) {
+
+    db.collection("user_data").document("uid_" + firebaseUser?.uid)
+        .collection("registration_data").document(childData.`object`.firstName + "_" + childData.`object`.lastName)
+        .set(childData).addOnSuccessListener {
+          Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_update_failed))
+        }
+
+  }
 
   fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
     db.collection("user_data").document("uid_" + firebaseUser?.uid)

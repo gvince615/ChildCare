@@ -3,22 +3,30 @@ package com.vince.childcare.activities
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
+import com.vince.childcare.core.FirestoreUtil
 import com.vince.childcare.core.registration.Child
 import com.vince.childcare.core.registration.Parent
 import com.vince.childcare.core.registration.RegistrationAdapter
+import com.vince.childcare.core.registration.RegistrationCardItem
 import kotlinx.android.synthetic.main.activity_registration.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
 
+
   private lateinit var adapter: RegistrationAdapter
+  val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,8 +64,9 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     menu.close(true)
   }
 
+
   private fun setUpRecyclerView() {
-    adapter = RegistrationAdapter(this, this)
+    adapter = RegistrationAdapter(this, list, this)
     registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
@@ -82,7 +91,35 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   private fun saveRegistration() {
 
+    var childCard: RegistrationCardItem<Child>? = saveAndGetChildCard()
 
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.PARENT -> {
+          // todo - save parent stuff??
+        }
+      }
+    }
+  }
+
+  private fun saveAndGetChildCard(): RegistrationCardItem<Child>? {
+    for ((pos, card) in adapter.getList().withIndex()) {
+      when (card.viewType) {
+        RegistrationCardItem.CHILD -> {
+
+          val firstname = registration_rv.getChildAt(pos).findViewById<TextInputLayout>(R.id.child_first_name).editText?.text.toString()
+
+
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, card as RegistrationCardItem<Child>)
+
+          Log.d("CHILD", card.`object`.firstName + " - " + card.`object`.lastName)
+          return card
+        }
+      }
+    }
+    return null
   }
 
   override fun onBackPressed() {
@@ -105,12 +142,11 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return true
   }
 
-  override fun onParentCardClicked(message: String?) {
+  override fun onParentCardClicked(message: String) {
     showToast("Parent:$message")
   }
 
-
-  override fun onChildCardClicked(message: String?) {
+  override fun onChildCardClicked(message: String) {
     showToast("Parent:$message")
   }
 
