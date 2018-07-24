@@ -5,26 +5,19 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.FirestoreUtil
-import com.vince.childcare.core.adapters.RegistrationAdapter
-import com.vince.childcare.core.registration.BillingData
-import com.vince.childcare.core.registration.ChildData
-import com.vince.childcare.core.registration.MedicalData
-import com.vince.childcare.core.registration.ParentData
+import com.vince.childcare.core.registration.Child
+import com.vince.childcare.core.registration.Parent
+import com.vince.childcare.core.registration.RegistrationAdapter
 import kotlinx.android.synthetic.main.activity_registration.*
-import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 
-class RegistrationActivity : BaseActivity() {
 
-  val cards = ArrayList<Any>()
+class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
+
   private lateinit var adapter: RegistrationAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,43 +33,41 @@ class RegistrationActivity : BaseActivity() {
   }
 
   private fun billingMenuButtonClicked() {
-    cards.add(BillingData())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+//    cards.add(BillingData())
+//    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun medicalMenuButtonClicked() {
-    cards.add(MedicalData())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+//    cards.add(MedicalData())
+//    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun parentMenuButtonClicked() {
-    cards.add(ParentData())
+    adapter.addParent(Parent())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun childMenuButtonClicked() {
-    cards.add(ChildData())
+    adapter.addChild(Child())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun setUpRecyclerView() {
-
+    adapter = RegistrationAdapter(this, this)
+    registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
     registration_rv.itemAnimator = DefaultItemAnimator()
-    adapter = RegistrationAdapter(cards, this)
-    registration_rv.adapter = adapter
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_save -> {
         Toast.makeText(this, "save tapped ", Toast.LENGTH_SHORT).show()
-        //todo - save card
         saveRegistration()
       }
 
@@ -88,34 +79,10 @@ class RegistrationActivity : BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
+
   private fun saveRegistration() {
 
-    for ((number, num) in cards.withIndex()) {
-      if (num is ChildData) {
 
-        FirestoreUtil(FirebaseFirestore.getInstance(), this).saveChildData(FirebaseAuth.getInstance().currentUser, getChildData(number))
-
-
-      }
-      if (num is ParentData) {
-        Log.d(this.packageName, "Parent Data")
-      }
-    }
-
-  }
-
-  private fun getChildData(number: Int): ChildData {
-    Log.d(this.packageName, "Child Data")
-    val childData = ChildData()
-    childData.first_name = registration_rv.getChildAt(number).input_layout_first_name.editText?.text.toString()
-    childData.last_name = registration_rv.getChildAt(number).input_layout_first_name.editText?.text.toString()
-    childData.birth_date = registration_rv.getChildAt(number).input_layout_dob.editText?.text.toString()
-    childData.address_ln_1 = registration_rv.getChildAt(number).input_layout_address_ln_1.editText?.text.toString()
-    childData.address_ln_2 = registration_rv.getChildAt(number).input_layout_address_ln_2.editText?.text.toString()
-    childData.address_city = registration_rv.getChildAt(number).input_layout_city.editText?.text.toString()
-    childData.address_state = registration_rv.getChildAt(number).input_layout_state.editText?.text.toString()
-    childData.address_zip = registration_rv.getChildAt(number).input_layout_zip.editText?.text.toString()
-    return childData
   }
 
   override fun onBackPressed() {
@@ -136,5 +103,18 @@ class RegistrationActivity : BaseActivity() {
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.registration_menu, menu)
     return true
+  }
+
+  override fun onParentCardClicked(message: String?) {
+    showToast("Parent:$message")
+  }
+
+
+  override fun onChildCardClicked(message: String?) {
+    showToast("Parent:$message")
+  }
+
+  fun showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
   }
 }

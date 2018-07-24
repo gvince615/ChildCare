@@ -1,11 +1,19 @@
 <resources>
   <string name="app_name">ChildCare</string>
+
+
+  <!--login activity-->
   <string name="login_activity_tag">LOGIN</string>
-  <string name="registration_activity_tag">REGISTRATION</string>
-  <string name="child_data_succeeded">child data added or updated</string>
-  <string name="child_data_update_failed">child data failed to add or update</string>
   <string name="data_update_succeeded">data added or updated</string>
   <string name="data_update_failed">data failed to add or update</string>
-  <string name="title_activity_registration">RegistrationActivity</string>
+
+  <!--login activity-->
+  <string name="title_activity_registration">Registration</string>
+  <string name="registration_activity_tag">REGISTRATION</string>
+  <string name="parent_data_succeeded">parent data added or updated</string>
+  <string name="parent_data_update_failed">parent data failed to add or update</string>
+  <string name="child_data_succeeded">child data added or updated</string>
+  <string name="child_data_update_failed">child data failed to add or update</string>
+  <string name="encrypt_tag">ENCRYPT</string>
 
 </resources>
