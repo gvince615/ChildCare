@@ -31,7 +31,7 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.parentFirstName.editText?.onChange {
         (listItem as RegistrationCardItem<Parent>).`object`.firstName = holder.parentFirstName.editText?.text?.toString()
       }
-      holder.parentFirstName.editText?.onChange {
+      holder.parentLastName.editText?.onChange {
         (listItem as RegistrationCardItem<Parent>).`object`.lastName = holder.parentLastName.editText?.text?.toString()
       }
 
