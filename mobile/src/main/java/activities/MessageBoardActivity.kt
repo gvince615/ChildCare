@@ -1,23 +1,26 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.MenuItem
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
+import core.FirestoreUtil
 import kotlinx.android.synthetic.main.activity_registration.*
 
-class TodoActivity : BaseActivity() {
+class MessageBoardActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_todo)
+    setContentView(R.layout.activity_message_board)
+    FirestoreUtil(FirebaseFirestore.getInstance(), this).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       android.R.id.home -> {
-        // Respond to the action bar's Up/Home button
         onBackPressed()
         return true
       }

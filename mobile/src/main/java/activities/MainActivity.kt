@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,9 +6,9 @@ import android.os.Handler
 import android.support.design.widget.Snackbar
 import com.firebase.ui.auth.AuthUI
 import com.vince.childcare.R
-import com.vince.childcare.fragments.Attendance
-import com.vince.childcare.fragments.Billing
-import com.vince.childcare.fragments.Dashboard
+import fragments.Attendance
+import fragments.Billing
+import fragments.Dashboard
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 

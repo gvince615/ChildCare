@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -12,8 +12,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.FirestoreUtil
-import com.vince.childcare.core.HashMapUtil
+import core.FirestoreUtil
+import core.HashMapUtil
 import kotlinx.android.synthetic.main.activity_registration.*
 import registration.Child
 import registration.Parent

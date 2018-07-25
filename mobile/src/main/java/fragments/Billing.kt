@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package com.vince.childcare.fragments
+package fragments
 
 
 import android.os.Bundle

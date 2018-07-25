@@ -1,4 +1,4 @@
-package com.vince.childcare.core
+package core
 
 import android.content.Context
 import android.util.Log

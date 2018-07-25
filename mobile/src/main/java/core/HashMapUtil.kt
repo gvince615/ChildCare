@@ -1,4 +1,4 @@
-package com.vince.childcare.core
+package core
 
 import registration.Child
 import registration.Parent
