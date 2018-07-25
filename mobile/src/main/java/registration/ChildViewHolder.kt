@@ -1,4 +1,4 @@
-package com.vince.childcare.core.registration
+package registration
 
 import android.content.Context
 import android.support.design.widget.TextInputLayout

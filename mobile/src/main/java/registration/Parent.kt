@@ -1,4 +1,4 @@
-package com.vince.childcare.core.registration
+package registration
 
 class Parent {
   internal var firstName: String? = null

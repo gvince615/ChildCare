@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,11 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
 import com.vince.childcare.core.FirestoreUtil
-import com.vince.childcare.core.registration.Child
-import com.vince.childcare.core.registration.Parent
-import com.vince.childcare.core.registration.RegistrationAdapter
-import com.vince.childcare.core.registration.RegistrationCardItem
+import com.vince.childcare.core.HashMapUtil
 import kotlinx.android.synthetic.main.activity_registration.*
+import registration.Child
+import registration.Parent
+import registration.RegistrationAdapter
+import registration.RegistrationCardItem
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
@@ -90,32 +90,30 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   private fun saveRegistration() {
 
-    var childCard: RegistrationCardItem<Child>? = saveAndGetChildCard()
+    var childCard: HashMap<String, Any>? = saveAndGetChildCard()
 
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.PARENT -> {
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, card as RegistrationCardItem<Parent>,
-                  childCard as RegistrationCardItem<Child>)
+              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+                  childCard)
 
-          Log.d("Parent", card.`object`.firstName + " - " + card.`object`.lastName)
         }
       }
     }
   }
 
-  private fun saveAndGetChildCard(): RegistrationCardItem<Child>? {
-    for ((pos, card) in adapter.getList().withIndex()) {
+  private fun saveAndGetChildCard(): HashMap<String, Any>? {
+    for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, card as RegistrationCardItem<Child>)
+              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
 
-          Log.d("CHILD", card.`object`.firstName + " - " + card.`object`.lastName)
-          return card
+          return HashMapUtil().createChildMap(card)
         }
       }
     }

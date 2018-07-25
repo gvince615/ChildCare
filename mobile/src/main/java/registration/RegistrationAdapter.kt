@@ -1,4 +1,4 @@
-package com.vince.childcare.core.registration
+package registration
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -36,8 +36,10 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
   override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
 
     when (getItemViewType(position)) {
-      RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder, list[position], listener)
-      RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position], listener)
+      RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder,
+          list[position], listener)
+      RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder,
+          list[position], listener)
     }
   }
 

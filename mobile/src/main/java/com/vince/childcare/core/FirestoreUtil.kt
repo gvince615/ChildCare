@@ -5,10 +5,6 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.registration.Child
-import com.vince.childcare.core.registration.Parent
-import com.vince.childcare.core.registration.RegistrationCardItem
-import java.util.*
 
 
 class FirestoreUtil(private val db: FirebaseFirestore, private val context: Context) {
@@ -29,10 +25,10 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
     }
   }
 
-  fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: RegistrationCardItem<Child>) {
+  fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: HashMap<String, Any>) {
 
     db.collection("user_data").document("uid_" + firebaseUser?.uid)
-        .collection("registration_data").document(childData.`object`.firstName + "_" + childData.`object`.lastName)
+        .collection("registration_data").document(childData["first_name"].toString() + "_" + childData["last_name"].toString())
         .set(childData).addOnSuccessListener {
           Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.child_data_succeeded))
         }.addOnFailureListener {
@@ -58,11 +54,11 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
   }
 
 
-  fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: RegistrationCardItem<Parent>, childData: RegistrationCardItem<Child>) {
+  fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: HashMap<String, Any>, childData: HashMap<String, Any>?) {
     db
         .collection("user_data").document("uid_" + firebaseUser?.uid)
-        .collection("registration_data").document(childData.`object`.firstName + "_" + childData.`object`.lastName)
-        .collection("parents").document(parentData.`object`.firstName + "_" + parentData.`object`.lastName)
+        .collection("registration_data").document(childData?.get("first_name").toString() + "_" + childData?.get("last_name").toString())
+        .collection("parents").document(parentData["first_name"].toString() + "_" + parentData["last_name"].toString())
         .set(parentData).addOnSuccessListener {
           Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {

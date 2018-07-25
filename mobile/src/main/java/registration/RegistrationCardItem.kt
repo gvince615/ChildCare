@@ -1,4 +1,4 @@
-package com.vince.childcare.core.registration
+package registration
 
 import android.support.annotation.IntDef
 
