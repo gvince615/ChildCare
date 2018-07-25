@@ -2,7 +2,7 @@ package com.vince.childcare.core.registration
 
 class Parent {
   internal var firstName: String? = null
-  internal var LastName: String? = null
+  internal var lastName: String? = null
   internal var addressLn1: String? = null
   internal var addressLn2: String? = null
   internal var addressCity: String? = null

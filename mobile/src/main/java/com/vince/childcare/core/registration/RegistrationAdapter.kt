@@ -34,9 +34,10 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+
     when (getItemViewType(position)) {
-      RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder, list[position].`object` as Parent, listener)
-      RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position].`object` as Child, position, listener)
+      RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder, list[position], listener)
+      RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position], listener)
     }
   }
 

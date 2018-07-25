@@ -3,7 +3,6 @@ package com.vince.childcare.activities
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -96,7 +95,12 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.PARENT -> {
-          // todo - save parent stuff??
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, card as RegistrationCardItem<Parent>,
+                  childCard as RegistrationCardItem<Child>)
+
+          Log.d("Parent", card.`object`.firstName + " - " + card.`object`.lastName)
         }
       }
     }
@@ -106,10 +110,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     for ((pos, card) in adapter.getList().withIndex()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
-
-          val firstname = registration_rv.getChildAt(pos).findViewById<TextInputLayout>(R.id.child_first_name).editText?.text.toString()
-
-
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
               .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, card as RegistrationCardItem<Child>)
