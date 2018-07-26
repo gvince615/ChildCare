@@ -60,7 +60,7 @@ class Attendance : Fragment() {
     rv.adapter = adapter
 
 
-    swipeController = SwipeController(object : SwipeControllerActions() {
+    swipeController = SwipeController(this.context!!, object : SwipeControllerActions() {
       override fun onRightClicked(position: Int) {
         //todo - delete child/data associated from firestore
           //todo - get fresh data from firestore on completion of previous
