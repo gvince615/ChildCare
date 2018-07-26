@@ -7,15 +7,22 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import attendance.AttenChild
 import attendance.AttendanceAdapter
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.vince.childcare.R
+import core.COLLECTION_REGISTRATION_DATA
+import core.COLLECTION_USER_DATA
+import core.PREFIX_UID
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
-
-
+import registration.Child
 
 
 class Attendance : Fragment() {
@@ -38,17 +45,18 @@ class Attendance : Fragment() {
       }
     })
 
+    setDocumentListener()
+
     return view
   }
 
-  override fun onResume() {
-    super.onResume()
+  private fun setDocumentListener() {
+
   }
 
   private fun refreshData(children: ArrayList<AttenChild>) {
     this.children = children
     adapter.refreshData(this.children)
-
   }
 
   private fun setupRecyclerView(view: View) {
@@ -61,14 +69,37 @@ class Attendance : Fragment() {
 
 
     swipeController = SwipeController(this.context!!, object : SwipeControllerActions() {
-      override fun onRightClicked(position: Int) {
+      override fun onDeleteClicked(position: Int) {
         //todo - delete child/data associated from firestore
-          //todo - get fresh data from firestore on completion of previous
-            //todo - update recyclerview data on completion of previous
+        //todo - get fresh data from firestore on completion of previous
+        //todo - update recyclerview data on completion of previous
       }
-      override fun onLeftClicked(position: Int) {
+
+      override fun onEditClicked(position: Int) {
         //todo - get child document/associated data from firestore
-          //todo - open registration activity with data for this child
+
+//        MainActivity().getChildObject(adapter.items[position].lastName + "_" + adapter.items[position].firstName)
+
+
+        var childRef = adapter.items[position].lastName + "_" + adapter.items[position].firstName
+
+        FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+            .collection(COLLECTION_REGISTRATION_DATA)
+            .get()
+            .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+              if (task.isSuccessful) {
+                for (document in task.result) {
+                  if (document.id == childRef){
+                    var child = document.toObject(Child::class.java)
+                    Log.d("", document.id + " => " + document.data)
+                  }
+                  Log.d("", document.id + " => " + document.data)
+                }
+              } else {
+                Log.d("", "Error getting documents: ", task.exception)
+              }
+            })
+        //todo - open registration activity with data for this child
       }
     })
 

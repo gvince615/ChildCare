@@ -101,9 +101,9 @@ internal class SwipeController(private val context: Context, private val buttons
 
         if (buttonsActions != null && buttonInstance != null && buttonInstance!!.contains(event.x, event.y)) {
           if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-            buttonsActions.onLeftClicked(viewHolder.adapterPosition)
+            buttonsActions.onEditClicked(viewHolder.adapterPosition)
           } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-            buttonsActions.onRightClicked(viewHolder.adapterPosition)
+            buttonsActions.onDeleteClicked(viewHolder.adapterPosition)
           }
         }
         buttonShowedState = ButtonsState.GONE

@@ -1,13 +1,15 @@
 package registration
 
-class Parent {
-  internal var firstName: String? = null
-  internal var lastName: String? = null
-  internal var addressLn1: String? = null
-  internal var addressLn2: String? = null
-  internal var addressCity: String? = null
-  internal var addressState: String? = null
-  internal var addressZip: String? = null
-  internal var phoneNumber1: String? = null
-  internal var phoneNumber2: String? = null
+class Parent(firstName: String?, lastName: String?, addressLn1: String?, addressLn2: String?, addressCity: String?, addressState: String?,
+    addressZip: String?, phoneNumber1: String?, phoneNumber2: String?) {
+
+  internal var firstName = firstName
+  internal var lastName = lastName
+  internal var addressLn1 = addressLn1
+  internal var addressLn2 = addressLn2
+  internal var addressCity = addressCity
+  internal var addressState = addressState
+  internal var addressZip = addressZip
+  internal var phoneNumber1 = phoneNumber1
+  internal var phoneNumber2 = phoneNumber2
 }

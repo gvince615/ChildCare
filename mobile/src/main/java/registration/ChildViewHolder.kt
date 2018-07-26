@@ -39,28 +39,28 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
       holder.childFirstNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()!!
       }
       holder.childLastNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.lastName = holder.childLastNameLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.lastName = holder.childLastNameLayout.editText?.text?.toString()!!
       }
       holder.childDOBLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.birthDate = holder.childDOBLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.birthDate = holder.childDOBLayout.editText?.text?.toString()!!
       }
       holder.childLAddressLn1Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressLn1 = holder.childLAddressLn1Layout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.addressLn1 = holder.childLAddressLn1Layout.editText?.text?.toString()!!
       }
       holder.childLAddressLn2Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressLn2 = holder.childLAddressLn2Layout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.addressLn2 = holder.childLAddressLn2Layout.editText?.text?.toString()!!
       }
       holder.childLAddressCityLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressCity = holder.childLAddressCityLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.addressCity = holder.childLAddressCityLayout.editText?.text?.toString()!!
       }
       holder.childLAddressStateLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressState = holder.childLAddressStateLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.addressState = holder.childLAddressStateLayout.editText?.text?.toString()!!
       }
       holder.childLAddressZipLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressZip = holder.childLAddressZipLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Child>).`object`.addressZip = holder.childLAddressZipLayout.editText?.text?.toString()!!
       }
 
       holder.childImage.setOnClickListener {

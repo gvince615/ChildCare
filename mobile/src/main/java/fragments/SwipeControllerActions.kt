@@ -2,8 +2,8 @@ package fragments
 
 abstract class SwipeControllerActions {
 
-  open fun onLeftClicked(position: Int) {}
+  open fun onEditClicked(position: Int) {}
 
-  open fun onRightClicked(position: Int) {}
+  open fun onDeleteClicked(position: Int) {}
 
 }

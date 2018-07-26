@@ -52,21 +52,22 @@ class MainActivity : BaseActivity() {
     retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
   }
 
+
   private fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
     children.clear()
 
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
+    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
-        .get()
+        d.get()
         .addOnCompleteListener { task ->
 
           if (task.isSuccessful) {
             children.clear()
 
             for (document in task.result) {
-              val child = AttenChild()
-              child.first_name = document[FIRST_NAME].toString()
-              child.last_name = document[LAST_NAME].toString()
+              val child = AttenChild("", "", "", "")
+              child.firstName = document[FIRST_NAME].toString()
+              child.lastName = document[LAST_NAME].toString()
               children.add(child)
               Log.d(this.packageName.toString(), document.id + " => " + document.data)
             }
@@ -107,5 +108,9 @@ class MainActivity : BaseActivity() {
         .make(coordinator_layout, "Press back again to sign out.", Snackbar.LENGTH_LONG)
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+  }
+
+  fun getChildObject(childDocId: String) {
+    retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
   }
 }

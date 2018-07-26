@@ -1,8 +1,8 @@
 package attendance
 
-class AttenChild() {
-  internal var first_name: String? = null
-  internal var last_name: String? = null
-  internal var birth_date: String? = null
-  internal var enrollment_date: String? = null
+class AttenChild(firstName: String?, lastName: String?, birthDate: String?, enrollmentDate: String?) {
+  internal var firstName = firstName
+  internal var lastName = lastName
+  internal var birthDate = birthDate
+  internal var enrollmentDate = enrollmentDate
 }

@@ -52,13 +52,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun parentMenuButtonClicked() {
-    adapter.addParent(Parent())
+    adapter.addParent(Parent("", "", "", "", "", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child())
+    adapter.addChild(Child("", "", "", "", "", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }

@@ -21,8 +21,8 @@ class AttendanceAdapter(var items: ArrayList<AttenChild>, val context: Context) 
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.tvFirstName.text = items[position].first_name
-    holder.tvLastName.text = items[position].last_name
+    holder.tvFirstName.text = items[position].firstName
+    holder.tvLastName.text = items[position].lastName
   }
 
   fun refreshData(children: ArrayList<AttenChild>) {

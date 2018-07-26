@@ -2,14 +2,14 @@ package core
 
 val SIGN_IN_REQUEST_CODE = 123
 
-val COLLECTION_USER_DATA = "user_data"
-val COLLECTION_REGISTRATION_DATA = "registration_data"
-val COLLECTION_PARENTS = "parents"
+val COLLECTION_USER_DATA = "userData"
+val COLLECTION_REGISTRATION_DATA = "registrationData"
+val COLLECTION_PARENTS = "parentData"
 
 
 
 val PREFIX_UID = "uid_"
 
-val FIRST_NAME = "first_name"
-val LAST_NAME = "last_name"
+val FIRST_NAME = "firstName"
+val LAST_NAME = "lastName"
 
