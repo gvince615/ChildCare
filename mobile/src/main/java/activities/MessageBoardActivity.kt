@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -7,7 +7,7 @@ import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.FirestoreUtil
+import core.FirestoreUtil
 import kotlinx.android.synthetic.main.activity_registration.*
 
 class MessageBoardActivity : BaseActivity() {
@@ -15,7 +15,9 @@ class MessageBoardActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_message_board)
-    FirestoreUtil(FirebaseFirestore.getInstance(), this).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+    var h = FirestoreUtil(FirebaseFirestore.getInstance(), this).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+
+    h=h
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

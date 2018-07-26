@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -7,11 +7,11 @@ import android.view.MenuItem
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.activity_registration.*
 
-class TodoActivity : BaseActivity() {
+class SetupActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_todo)
+    setContentView(R.layout.activity_setup)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

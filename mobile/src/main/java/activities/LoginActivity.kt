@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.app.Activity
 import android.content.Intent
@@ -11,9 +11,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.AnalyticsUtil
-import com.vince.childcare.core.FirestoreUtil
-import com.vince.childcare.core.SIGN_IN_REQUEST_CODE
+import core.AnalyticsUtil
+import core.FirestoreUtil
+import core.SIGN_IN_REQUEST_CODE
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 

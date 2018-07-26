@@ -11,39 +11,39 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".activities.BaseActivity" />
+    <activity android:name="activities.BaseActivity" />
 
-    <activity android:name=".activities.LoginActivity">
+    <activity android:name="activities.LoginActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".activities.MainActivity" />
+    <activity android:name="activities.MainActivity" />
 
 
     <activity
-        android:name=".activities.RegistrationActivity"
+        android:name="activities.RegistrationActivity"
         android:parentActivityName="com.vince.childcare.activities.MainActivity"
         android:theme="@style/RegistrationTheme">
 
     </activity>
     <activity
-        android:name=".activities.MessageBoardActivity"
+        android:name="activities.MessageBoardActivity"
         android:parentActivityName="com.vince.childcare.activities.MainActivity"
         android:theme="@style/MessageBoardTheme">
 
 
     </activity>
     <activity
-        android:name=".activities.TodoActivity"
+        android:name="activities.TodoActivity"
         android:parentActivityName="com.vince.childcare.activities.MainActivity"
         android:theme="@style/TodoTheme">
 
 
     </activity>
     <activity
-        android:name=".activities.SetupActivity"
+        android:name="activities.SetupActivity"
         android:parentActivityName="com.vince.childcare.activities.MainActivity"
         android:theme="@style/SetupTheme">
 

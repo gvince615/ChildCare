@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -9,16 +9,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import com.vince.childcare.core.registration.Child
-import com.vince.childcare.core.registration.Parent
-import com.vince.childcare.core.registration.RegistrationAdapter
+import core.FirestoreUtil
+import core.HashMapUtil
 import kotlinx.android.synthetic.main.activity_registration.*
+import registration.Child
+import registration.Parent
+import registration.RegistrationAdapter
+import registration.RegistrationCardItem
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
 
+
   private lateinit var adapter: RegistrationAdapter
+  val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,8 +63,9 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     menu.close(true)
   }
 
+
   private fun setUpRecyclerView() {
-    adapter = RegistrationAdapter(this, this)
+    adapter = RegistrationAdapter(this, list, this)
     registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
@@ -79,10 +87,36 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return super.onOptionsItemSelected(item)
   }
 
-
   private fun saveRegistration() {
 
+    var childCard: HashMap<String, Any>? = saveAndGetChildCard()
 
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.PARENT -> {
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+                  childCard)
+
+        }
+      }
+    }
+  }
+
+  private fun saveAndGetChildCard(): HashMap<String, Any>? {
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.CHILD -> {
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
+
+          return HashMapUtil().createChildMap(card)
+        }
+      }
+    }
+    return null
   }
 
   override fun onBackPressed() {
@@ -105,12 +139,11 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return true
   }
 
-  override fun onParentCardClicked(message: String?) {
+  override fun onParentCardClicked(message: String) {
     showToast("Parent:$message")
   }
 
-
-  override fun onChildCardClicked(message: String?) {
+  override fun onChildCardClicked(message: String) {
     showToast("Parent:$message")
   }
 
