@@ -1,4 +1,4 @@
-package com.vince.childcare.activities
+package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -7,16 +7,17 @@ import android.view.MenuItem
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.activity_registration.*
 
-class MessageBoardActivity : BaseActivity() {
+class SetupActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_message_board)
+    setContentView(R.layout.activity_setup)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       android.R.id.home -> {
+        // Respond to the action bar's Up/Home button
         onBackPressed()
         return true
       }

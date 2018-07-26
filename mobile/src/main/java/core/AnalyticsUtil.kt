@@ -1,4 +1,4 @@
-package com.vince.childcare.core
+package core
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
