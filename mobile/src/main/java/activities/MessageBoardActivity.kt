@@ -15,7 +15,9 @@ class MessageBoardActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_message_board)
-    FirestoreUtil(FirebaseFirestore.getInstance(), this).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+    var h = FirestoreUtil(FirebaseFirestore.getInstance(), this).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+
+    h=h
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

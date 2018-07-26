@@ -87,7 +87,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return super.onOptionsItemSelected(item)
   }
 
-
   private fun saveRegistration() {
 
     var childCard: HashMap<String, Any>? = saveAndGetChildCard()
