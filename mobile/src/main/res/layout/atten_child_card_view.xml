@@ -38,6 +38,8 @@
           >
 
         <ImageView
+            android:id="@+id/child_image"
+            android:transitionName="simple_activity_transition"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/account_child_white_48x48"

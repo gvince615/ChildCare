@@ -66,6 +66,7 @@
       <ImageView
           android:id="@+id/child_image"
           android:layout_width="108dp"
+          android:transitionName="simple_activity_transition"
           android:layout_height="108dp"
           android:padding="1dp"
           android:foreground="?android:attr/selectableItemBackground"

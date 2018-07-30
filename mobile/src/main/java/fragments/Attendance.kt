@@ -1,28 +1,25 @@
 package fragments
 
 import activities.MainActivity
+import activities.RegistrationActivity
+import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import attendance.AttenChild
 import attendance.AttendanceAdapter
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.vince.childcare.R
-import core.COLLECTION_REGISTRATION_DATA
-import core.COLLECTION_USER_DATA
-import core.PREFIX_UID
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
-import registration.Child
+import registration.Parent
 
 
 class Attendance : Fragment() {
@@ -76,30 +73,16 @@ class Attendance : Fragment() {
       }
 
       override fun onEditClicked(position: Int) {
-        //todo - get child document/associated data from firestore
 
-//        MainActivity().getChildObject(adapter.items[position].lastName + "_" + adapter.items[position].firstName)
+        var childToLoad = adapter.items[position].lastName + "_" + adapter.items[position].firstName
 
+        val intent = Intent(activity, RegistrationActivity::class.java).putExtra("childToLoad", childToLoad)
+        val options = activity?.let {
+          ActivityOptionsCompat.makeSceneTransitionAnimation(it, rv.getChildAt(position).findViewById(R.id.child_image),
+              ViewCompat.getTransitionName(rv.getChildAt(position).findViewById(R.id.child_image)))
 
-        var childRef = adapter.items[position].lastName + "_" + adapter.items[position].firstName
-
-        FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-            .collection(COLLECTION_REGISTRATION_DATA)
-            .get()
-            .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-              if (task.isSuccessful) {
-                for (document in task.result) {
-                  if (document.id == childRef){
-                    var child = document.toObject(Child::class.java)
-                    Log.d("", document.id + " => " + document.data)
-                  }
-                  Log.d("", document.id + " => " + document.data)
-                }
-              } else {
-                Log.d("", "Error getting documents: ", task.exception)
-              }
-            })
-        //todo - open registration activity with data for this child
+        }
+        startActivity(intent, options?.toBundle())
       }
     })
 
@@ -112,4 +95,13 @@ class Attendance : Fragment() {
       }
     })
   }
+
+  private fun getParentsList(childRef: String, document: QueryDocumentSnapshot): ArrayList<Parent> {
+
+    var parentList: ArrayList<Parent> = ArrayList()
+
+
+    return parentList
+  }
+
 }

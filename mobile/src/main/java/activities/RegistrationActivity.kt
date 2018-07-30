@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,28 +16,38 @@ import com.vince.childcare.R
 import core.FirestoreUtil
 import core.HashMapUtil
 import kotlinx.android.synthetic.main.activity_registration.*
-import registration.Child
-import registration.Parent
-import registration.RegistrationAdapter
-import registration.RegistrationCardItem
+import registration.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
 
 
   private lateinit var adapter: RegistrationAdapter
+  private lateinit var registrationPresenter: RegistrationPresenter
+
   val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration)
 
+
+
+    if (intent.hasExtra("childToLoad")) {
+      var childToLoad = intent.getStringExtra("childToLoad")
+      // todo - do stuff to load all child data
+      registrationPresenter = RegistrationPresenter()
+      registrationPresenter.setUp(this, childToLoad)
+      registrationPresenter.loadChild()
+    }else{
+      setUpRecyclerView()
+    }
+
     child_menu_item.setOnClickListener { childMenuButtonClicked() }
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     medical_menu_item.setOnClickListener { medicalMenuButtonClicked() }
     billing_menu_item.setOnClickListener { billingMenuButtonClicked() }
 
-    setUpRecyclerView()
   }
 
   private fun billingMenuButtonClicked() {
@@ -69,14 +80,15 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
-    registration_rv.itemAnimator = DefaultItemAnimator()
+    registration_rv.itemAnimator = DefaultItemAnimator() as RecyclerView.ItemAnimator?
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_save -> {
-        Toast.makeText(this, "save tapped ", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Registration saved ", Toast.LENGTH_SHORT).show()
         saveRegistration()
+        finish()
       }
 
       android.R.id.home -> {
@@ -149,5 +161,25 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   fun showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+  }
+
+  fun setDataCards(fullChildRegistrationData: FullChildRegistrationData) {
+
+
+    list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
+
+    for (parent in fullChildRegistrationData.parents){
+      list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+    }
+
+    adapter = RegistrationAdapter(this, list, this)
+    registration_rv.adapter = adapter
+    val llm = LinearLayoutManager(applicationContext)
+    registration_rv.layoutManager = llm
+    registration_rv.itemAnimator = DefaultItemAnimator() as RecyclerView.ItemAnimator?
+
+
+    adapter.setUpForEdit()
+
   }
 }

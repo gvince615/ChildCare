@@ -59,6 +59,12 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     return list
   }
 
+  fun setUpForEdit() {
+
+
+    notifyDataSetChanged()
+  }
+
   interface CardItemListener {
     fun onParentCardClicked(message: String)
     fun onChildCardClicked(message: String)

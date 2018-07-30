@@ -14,6 +14,8 @@ import android.widget.ImageButton
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_parent_data_card.view.*
 
+
+
 class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var parentCardView: CardView = itemView.parentDataCardView
@@ -33,27 +35,39 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(holder: ParentViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
+
+      holder.parentFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.firstName)
+      holder.parentLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.lastName)
+      holder.parentAddressLn1Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressLn1)
+      holder.parentAddressLn2Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressLn2)
+      holder.parentAddressCityLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressCity)
+      holder.parentAddressStateLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressState)
+      holder.parentAddressZipLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressZip)
+
       holder.parentFirstNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.firstName = holder.parentFirstNameLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.firstName = holder.parentFirstNameLayout.editText?.text?.toString()!!
       }
       holder.parentLastNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.lastName = holder.parentLastNameLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.lastName = holder.parentLastNameLayout.editText?.text?.toString()!!
       }
       holder.parentAddressLn1Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressLn1 = holder.parentAddressLn1Layout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.addressLn1 = holder.parentAddressLn1Layout.editText?.text?.toString()!!
       }
       holder.parentAddressLn2Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressLn2 = holder.parentAddressLn2Layout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.addressLn2 = holder.parentAddressLn2Layout.editText?.text?.toString()!!
       }
       holder.parentAddressCityLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressCity = holder.parentAddressCityLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.addressCity = holder.parentAddressCityLayout.editText?.text?.toString()!!
       }
       holder.parentAddressStateLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressState = holder.parentAddressStateLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.addressState = holder.parentAddressStateLayout.editText?.text?.toString()!!
       }
       holder.parentAddressZipLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressZip = holder.parentAddressZipLayout.editText?.text?.toString()
+        (listItem as RegistrationCardItem<Parent>).`object`.addressZip = holder.parentAddressZipLayout.editText?.text?.toString()!!
       }
+
+
+
 
       holder.parentCardView.setOnClickListener {
         listener?.onParentCardClicked("Parent Card Clicked")

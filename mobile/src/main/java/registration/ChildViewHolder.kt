@@ -38,6 +38,15 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
+      holder.childFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.firstName)
+      holder.childLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.lastName)
+      holder.childDOBLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.birthDate)
+      holder.childLAddressLn1Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn1)
+      holder.childLAddressLn2Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn2)
+      holder.childLAddressCityLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressCity)
+      holder.childLAddressStateLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressState)
+      holder.childLAddressZipLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressZip)
+
       holder.childFirstNameLayout.editText?.onChange {
         (listItem as RegistrationCardItem<Child>).`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()!!
       }
