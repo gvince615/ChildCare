@@ -9,8 +9,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_parent_data_card.view.*
 
@@ -27,6 +29,11 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   var parentAddressCityLayout: TextInputLayout = itemView.parent_layout_city
   var parentAddressStateLayout: TextInputLayout = itemView.parent_layout_state
   var parentAddressZipLayout: TextInputLayout = itemView.parent_layout_zip
+
+  var parentAddressCheckbox: CheckBox = itemView.address_checkbox
+  var parentAddressLinearLayout: LinearLayout = itemView.address_layout
+
+
 
   companion object {
 
@@ -66,8 +73,13 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         (listItem as RegistrationCardItem<Parent>).`object`.addressZip = holder.parentAddressZipLayout.editText?.text?.toString()!!
       }
 
-
-
+      holder.parentAddressCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+        if (isChecked) {
+          holder.parentAddressLinearLayout.visibility = View.GONE
+        } else {
+          holder.parentAddressLinearLayout.visibility = View.VISIBLE
+        }
+      }
 
       holder.parentCardView.setOnClickListener {
         listener?.onParentCardClicked("Parent Card Clicked")

@@ -39,7 +39,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       registrationPresenter = RegistrationPresenter()
       registrationPresenter.setUp(this, childToLoad)
       registrationPresenter.loadChild()
-    }else{
+    } else {
       setUpRecyclerView()
     }
 
@@ -168,7 +168,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
 
-    for (parent in fullChildRegistrationData.parents){
+    for (parent in fullChildRegistrationData.parents) {
       list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
     }
 
