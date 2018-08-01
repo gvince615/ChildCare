@@ -57,13 +57,10 @@ class Attendance : Fragment() {
   }
 
   private fun setupRecyclerView(view: View) {
-
-
     rv = view.attendance_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)
-    adapter = AttendanceAdapter(children, this.context!!)
+    adapter = AttendanceAdapter(this.context!!, children)
     rv.adapter = adapter
-
 
     swipeController = SwipeController(this.context!!, object : SwipeControllerActions() {
       override fun onDeleteClicked(position: Int) {
@@ -78,8 +75,8 @@ class Attendance : Fragment() {
 
         val intent = Intent(activity, RegistrationActivity::class.java).putExtra("childToLoad", childToLoad)
         val options = activity?.let {
-          ActivityOptionsCompat.makeSceneTransitionAnimation(it, rv.getChildAt(position).findViewById(R.id.child_image),
-              ViewCompat.getTransitionName(rv.getChildAt(position).findViewById(R.id.child_image)))
+          ActivityOptionsCompat.makeSceneTransitionAnimation(it, rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image),
+              ViewCompat.getTransitionName(rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image)))
 
         }
         startActivity(intent, options?.toBundle())

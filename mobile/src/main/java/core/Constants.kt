@@ -12,4 +12,5 @@ val PREFIX_UID = "uid_"
 
 val FIRST_NAME = "firstName"
 val LAST_NAME = "lastName"
+val BIRTH_DATE = "birthDate"
 

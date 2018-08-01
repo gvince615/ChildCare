@@ -9,9 +9,15 @@ import android.widget.TextView
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 
-class AttendanceAdapter(var items: ArrayList<AttenChild>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
+  lateinit var items: ArrayList<AttenChild>
+  private lateinit var context: Context
 
+  constructor(context: Context, items: ArrayList<AttenChild>) : this() {
+    this.context = context
+    this.items = items
+  }
   override fun getItemCount(): Int {
     return items.size
   }
@@ -27,7 +33,7 @@ class AttendanceAdapter(var items: ArrayList<AttenChild>, val context: Context) 
 
   fun refreshData(children: ArrayList<AttenChild>) {
     this.items = children
-    this.notifyDataSetChanged()
+    notifyDataSetChanged()
   }
 }
 

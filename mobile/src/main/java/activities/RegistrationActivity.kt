@@ -63,7 +63,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun parentMenuButtonClicked() {
-    adapter.addParent(Parent("", "", "", "", "", "", "", "", ""))
+    adapter.addParent(Parent("", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -80,7 +80,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
-    registration_rv.itemAnimator = DefaultItemAnimator() as RecyclerView.ItemAnimator?
+    registration_rv.itemAnimator = DefaultItemAnimator()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -102,7 +102,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     if (validationSuccess()) {
 
-      var childCard: HashMap<String, Any>? = saveAndGetChildCard()
+      val childCard: HashMap<String, Any>? = saveAndGetChildCard()
 
       for (card in adapter.getList()) {
         when (card.viewType) {
@@ -111,29 +111,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
             FirestoreUtil(FirebaseFirestore.getInstance(), this)
                 .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
                     childCard)
-
           }
         }
       }
       finish()
-    } else {
-      displayValidationErrors()
-    }
-
-
-  }
-
-  private fun displayValidationErrors() {
-    var vh: RecyclerView.ViewHolder
-    for ((pos, card) in adapter.getList().withIndex()) {
-      when (card.viewType) {
-        RegistrationCardItem.CHILD -> {
-          vh = registration_rv.findViewHolderForAdapterPosition(pos) as ChildViewHolder
-
-        }
-      }
-
-
     }
   }
 
@@ -151,10 +132,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun lessThanMinimum(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Parent).firstName.length < 2 || (card.`object` as Parent).lastName.length < 2)
+        return ((card.`object` as Parent).firstName.length < 2 || (card.`object` as Parent).lastName.length < 2 || (card.`object` as Parent).phoneNumber1.length < 12)
       }
       RegistrationCardItem.CHILD -> {
-        return ((card.`object` as Child).firstName.length < 2 || (card.`object` as Child).lastName.length < 2)
+        return ((card.`object` as Child).firstName.length < 2 || (card.`object` as Child).lastName.length < 2 || (card.`object` as Child).birthDate.length < 10)
       }
     }
     return false
@@ -163,10 +144,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun emptyFields(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Parent).firstName.isEmpty() || (card.`object` as Parent).lastName.isEmpty())
+        return ((card.`object` as Parent).firstName.isEmpty() || (card.`object` as Parent).lastName.isEmpty() || (card.`object` as Parent).phoneNumber1.isEmpty())
       }
       RegistrationCardItem.CHILD -> {
-        return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty())
+        return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty() || (card.`object` as Child).birthDate.isEmpty())
       }
     }
     return false

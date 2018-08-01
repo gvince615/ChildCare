@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     tools:context="activities.RegistrationActivity"
     >
 
@@ -12,8 +12,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="5dp"
-      android:orientation="vertical"
       android:background="@color/colorRed"
+      android:orientation="vertical"
       android:padding="5dp"
       android:transitionName="simple_activity_transition"
       >
@@ -26,14 +26,21 @@
         android:padding="5dp"
         >
 
-      <android.support.v7.widget.RecyclerView
-          android:id="@+id/registration_rv"
+      <ScrollView
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           >
 
-      </android.support.v7.widget.RecyclerView>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/registration_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+      </ScrollView>
 
     </LinearLayout>
   </LinearLayout>
@@ -42,17 +49,17 @@
       android:id="@+id/menu"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      fab:layout_constraintBottom_toBottomOf="parent"
+      fab:layout_constraintEnd_toEndOf="parent"
       fab:menu_animationDelayPerItem="50"
       fab:menu_backgroundColor="@color/lighter_grey"
       fab:menu_buttonSpacing="0dp"
       fab:menu_colorNormal="@color/colorRedAccent"
       fab:menu_fab_label="Available Data Cards"
-      android:layout_marginBottom="8dp"
-      android:layout_marginEnd="8dp"
       fab:menu_fab_size="normal"
       fab:menu_icon="@drawable/fab_add"
-      fab:layout_constraintEnd_toEndOf="parent"
-      fab:layout_constraintBottom_toBottomOf="parent"
       fab:menu_labels_colorNormal="#000000"
       >
 
@@ -60,8 +67,8 @@
         android:id="@+id/child_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/colorBlue"
         android:src="@drawable/account_child_white_48x48"
+        fab:fab_colorNormal="@color/colorBlue"
         fab:fab_label="Add Child Data Card"
         fab:fab_size="mini"
         />
@@ -69,8 +76,8 @@
         android:id="@+id/parent_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/colorYellow"
         android:src="@drawable/account_circle_white_48x48"
+        fab:fab_colorNormal="@color/colorYellow"
         fab:fab_label="Add Parent/Guardian Data Card"
         fab:fab_size="mini"
         />
@@ -78,8 +85,8 @@
         android:id="@+id/medical_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/colorPurple"
         android:src="@drawable/round_local_hospital_white_18dp"
+        fab:fab_colorNormal="@color/colorPurple"
         fab:fab_label="Add Medical Data Card"
         fab:fab_size="mini"
         />
@@ -87,8 +94,8 @@
         android:id="@+id/billing_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_colorNormal="@color/colorGreen"
         android:src="@drawable/round_attach_money_white_18dp"
+        fab:fab_colorNormal="@color/colorGreen"
         fab:fab_label="Add Billing Data Card"
         fab:fab_size="mini"
         />

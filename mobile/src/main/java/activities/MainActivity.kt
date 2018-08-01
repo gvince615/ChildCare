@@ -3,7 +3,6 @@ package activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
 import android.util.Log
 import attendance.AttenChild
@@ -68,6 +67,7 @@ class MainActivity : BaseActivity() {
               val child = AttenChild("", "", "", "")
               child.firstName = document[FIRST_NAME].toString()
               child.lastName = document[LAST_NAME].toString()
+              child.birthDate = document[BIRTH_DATE].toString()
               children.add(child)
               Log.d(this.packageName.toString(), document.id + " => " + document.data)
             }
@@ -84,11 +84,6 @@ class MainActivity : BaseActivity() {
 
   interface FragmentRefreshListener {
     fun onRefresh(children: ArrayList<AttenChild>)
-  }
-
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    spaceTabLayout.saveState(outState)
   }
 
   override fun onBackPressed() {
