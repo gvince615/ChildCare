@@ -52,7 +52,7 @@ class MainActivity : BaseActivity() {
   }
 
 
-  private fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
+  fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
     children.clear()
 
     var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
