@@ -38,6 +38,8 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
+
+
       holder.childFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.firstName)
       holder.childLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.lastName)
       holder.childDOBLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.birthDate)
@@ -48,12 +50,17 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.childLAddressZipLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressZip)
 
       holder.childFirstNameLayout.editText?.onChange {
+        holder.childFirstNameLayout.error = if (holder.childFirstNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
         (listItem as RegistrationCardItem<Child>).`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()!!
       }
       holder.childLastNameLayout.editText?.onChange {
+        holder.childLastNameLayout.error = if (holder.childLastNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
         (listItem as RegistrationCardItem<Child>).`object`.lastName = holder.childLastNameLayout.editText?.text?.toString()!!
       }
       holder.childDOBLayout.editText?.onChange {
+        holder.childDOBLayout.error = if (holder.childDOBLayout.editText?.text.toString()
+                .matches("([0-9]{2})/([0-9]{2})/([0-9]{4})".toRegex())) null else "Please enter a valid date (MM/DD/YYYY)"
+
         (listItem as RegistrationCardItem<Child>).`object`.birthDate = holder.childDOBLayout.editText?.text?.toString()!!
       }
       holder.childLAddressLn1Layout.editText?.onChange {
@@ -71,6 +78,10 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.childLAddressZipLayout.editText?.onChange {
         (listItem as RegistrationCardItem<Child>).`object`.addressZip = holder.childLAddressZipLayout.editText?.text?.toString()!!
       }
+
+
+
+
 
       holder.childImage.setOnClickListener {
 

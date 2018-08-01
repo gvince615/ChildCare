@@ -17,9 +17,9 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:theme="@style/ChildCardTheme"
       android:orientation="vertical"
       android:padding="5dp"
+      android:theme="@style/ChildCardTheme"
       >
     <LinearLayout
         android:id="@+id/card_header"
@@ -66,11 +66,11 @@
       <ImageView
           android:id="@+id/child_image"
           android:layout_width="108dp"
-          android:transitionName="simple_activity_transition"
           android:layout_height="108dp"
-          android:padding="1dp"
           android:foreground="?android:attr/selectableItemBackground"
+          android:padding="1dp"
           android:src="@drawable/account_child_white_48x48"
+          android:transitionName="simple_activity_transition"
           />
       <LinearLayout
           android:layout_width="0dp"
@@ -109,98 +109,140 @@
               />
 
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_dob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_dob"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="Date of Birth"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_address_ln_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_address_ln_1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="Address Line 1"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_address_ln_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_address_ln_2"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="Address Line 2"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_city"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="City"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_state"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="State"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_zip"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="Zip Code"
-              />
-
-        </android.support.design.widget.TextInputLayout>
       </LinearLayout>
+
+
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlue"
+        android:orientation="vertical"
+
+        >
+
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_dob"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_address_ln_1"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_address_ln_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Line 1"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_address_ln_2"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_address_ln_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Line 2"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_city"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_state"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="State"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/input_layout_zip"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_zip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Zip Code"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <LinearLayout
+          android:id="@+id/check_layout"
+          android:paddingTop="10dp"
+          android:paddingStart="5dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:gravity="start|center"
+          >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:gravity="start"
+            android:text="Set child as Active?"
+            />
+
+        <CheckBox
+            android:id="@+id/active_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingStart="16dp"
+            android:gravity="start"
+            />
+
+      </LinearLayout>
+
+    </LinearLayout>
+
   </LinearLayout>
 </android.support.v7.widget.CardView>
 

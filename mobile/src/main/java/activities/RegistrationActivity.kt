@@ -88,7 +88,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       R.id.menu_save -> {
         Toast.makeText(this, "Registration saved ", Toast.LENGTH_SHORT).show()
         saveRegistration()
-        finish()
       }
 
       android.R.id.home -> {
@@ -101,19 +100,76 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   private fun saveRegistration() {
 
-    var childCard: HashMap<String, Any>? = saveAndGetChildCard()
+    if (validationSuccess()) {
 
-    for (card in adapter.getList()) {
+      var childCard: HashMap<String, Any>? = saveAndGetChildCard()
+
+      for (card in adapter.getList()) {
+        when (card.viewType) {
+          RegistrationCardItem.PARENT -> {
+
+            FirestoreUtil(FirebaseFirestore.getInstance(), this)
+                .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+                    childCard)
+
+          }
+        }
+      }
+      finish()
+    } else {
+      displayValidationErrors()
+    }
+
+
+  }
+
+  private fun displayValidationErrors() {
+    var vh: RecyclerView.ViewHolder
+    for ((pos, card) in adapter.getList().withIndex()) {
       when (card.viewType) {
-        RegistrationCardItem.PARENT -> {
-
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
-                  childCard)
+        RegistrationCardItem.CHILD -> {
+          vh = registration_rv.findViewHolderForAdapterPosition(pos) as ChildViewHolder
 
         }
       }
+
+
     }
+  }
+
+  private fun validationSuccess(): Boolean {
+    for (card in adapter.getList()) {
+      if (emptyFields(card)) {
+        return false
+      } else if (lessThanMinimum(card)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  private fun lessThanMinimum(card: RegistrationCardItem<*>): Boolean {
+    when (card.viewType) {
+      RegistrationCardItem.PARENT -> {
+        return ((card.`object` as Parent).firstName.length < 2 || (card.`object` as Parent).lastName.length < 2)
+      }
+      RegistrationCardItem.CHILD -> {
+        return ((card.`object` as Child).firstName.length < 2 || (card.`object` as Child).lastName.length < 2)
+      }
+    }
+    return false
+  }
+
+  private fun emptyFields(card: RegistrationCardItem<*>): Boolean {
+    when (card.viewType) {
+      RegistrationCardItem.PARENT -> {
+        return ((card.`object` as Parent).firstName.isEmpty() || (card.`object` as Parent).lastName.isEmpty())
+      }
+      RegistrationCardItem.CHILD -> {
+        return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty())
+      }
+    }
+    return false
   }
 
   private fun saveAndGetChildCard(): HashMap<String, Any>? {

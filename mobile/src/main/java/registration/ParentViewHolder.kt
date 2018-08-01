@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +18,18 @@ import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_parent_data_card.view.*
 
 
-
 class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var parentCardView: CardView = itemView.parentDataCardView
   var parentDeleteButton: ImageButton = itemView.delete_parent_card_button
   var parentFirstNameLayout: TextInputLayout = itemView.parent_first_name
   var parentLastNameLayout: TextInputLayout = itemView.parent_last_name
+
+  var parentEmailLayout: TextInputLayout = itemView.parent_email
+  var parentPhoneNumber1Layout: TextInputLayout = itemView.parent_contact_num_1
+  var parentPhoneNumber2Layout: TextInputLayout = itemView.parent_contact_num_2
+
+
   var parentAddressLn1Layout: TextInputLayout = itemView.parent_layout_address_ln_1
   var parentAddressLn2Layout: TextInputLayout = itemView.parent_layout_address_ln_2
   var parentAddressCityLayout: TextInputLayout = itemView.parent_layout_city
@@ -32,7 +38,6 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var parentAddressCheckbox: CheckBox = itemView.address_checkbox
   var parentAddressLinearLayout: LinearLayout = itemView.address_layout
-
 
 
   companion object {
@@ -45,37 +50,35 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
       holder.parentFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.firstName)
       holder.parentLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.lastName)
-      holder.parentAddressLn1Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressLn1)
-      holder.parentAddressLn2Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressLn2)
-      holder.parentAddressCityLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressCity)
-      holder.parentAddressStateLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressState)
-      holder.parentAddressZipLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.addressZip)
+      holder.parentEmailLayout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.emailAddress)
+      holder.parentPhoneNumber1Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.phoneNumber1)
+      holder.parentPhoneNumber2Layout.editText?.setText((listItem as RegistrationCardItem<Parent>).`object`.phoneNumber2)
 
       holder.parentFirstNameLayout.editText?.onChange {
+        holder.parentFirstNameLayout.error = if (holder.parentFirstNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
         (listItem as RegistrationCardItem<Parent>).`object`.firstName = holder.parentFirstNameLayout.editText?.text?.toString()!!
       }
       holder.parentLastNameLayout.editText?.onChange {
+        holder.parentLastNameLayout.error = if (holder.parentLastNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
         (listItem as RegistrationCardItem<Parent>).`object`.lastName = holder.parentLastNameLayout.editText?.text?.toString()!!
       }
-      holder.parentAddressLn1Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressLn1 = holder.parentAddressLn1Layout.editText?.text?.toString()!!
+      holder.parentEmailLayout.editText?.onChange {
+        holder.parentEmailLayout.error = if (holder.parentEmailLayout.editText?.text.toString().matches(
+                Patterns.EMAIL_ADDRESS.toRegex())) null else "Please enter a valid email address (name@example.com)"
       }
-      holder.parentAddressLn2Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressLn2 = holder.parentAddressLn2Layout.editText?.text?.toString()!!
+      holder.parentPhoneNumber1Layout.editText?.onChange {
+        holder.parentPhoneNumber1Layout.error = if (holder.parentPhoneNumber1Layout.editText?.text.toString()
+                .matches("([0-9]{3})-([0-9]{3})-([0-9]{4})".toRegex())) null else "Please enter a valid phone number (###-###-####)"
       }
-      holder.parentAddressCityLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressCity = holder.parentAddressCityLayout.editText?.text?.toString()!!
-      }
-      holder.parentAddressStateLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressState = holder.parentAddressStateLayout.editText?.text?.toString()!!
-      }
-      holder.parentAddressZipLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Parent>).`object`.addressZip = holder.parentAddressZipLayout.editText?.text?.toString()!!
+      holder.parentPhoneNumber2Layout.editText?.onChange {
+        holder.parentPhoneNumber2Layout.error = if (holder.parentPhoneNumber2Layout.editText?.text.toString()
+                .matches("([0-9]{3})-([0-9]{3})-([0-9]{4})".toRegex())) null else "Please enter a valid phone number (###-###-####)"
       }
 
       holder.parentAddressCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
         if (isChecked) {
           holder.parentAddressLinearLayout.visibility = View.GONE
+
         } else {
           holder.parentAddressLinearLayout.visibility = View.VISIBLE
         }
