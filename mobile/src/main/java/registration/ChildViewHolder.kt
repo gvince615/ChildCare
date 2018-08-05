@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -23,6 +24,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   var childImage: ImageView = itemView.child_image
   var childFirstNameLayout: TextInputLayout = itemView.child_first_name
   var childLastNameLayout: TextInputLayout = itemView.child_last_name
+  var childIsActive: CheckBox = itemView.active_checkbox
   var childDOBLayout: TextInputLayout = itemView.input_layout_dob
   var childLAddressLn1Layout: TextInputLayout = itemView.input_layout_address_ln_1
   var childLAddressLn2Layout: TextInputLayout = itemView.input_layout_address_ln_2
@@ -38,10 +40,19 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-
-
       holder.childFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.firstName)
       holder.childLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.lastName)
+
+
+      if ((listItem as RegistrationCardItem<Child>).`object`.isActive == "Active"){
+        holder.childIsActive.isChecked = true
+      }
+      else{
+        holder.childIsActive.isChecked = false
+      }
+
+
+
       holder.childDOBLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.birthDate)
       holder.childLAddressLn1Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn1)
       holder.childLAddressLn2Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn2)
@@ -80,8 +91,12 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       }
 
 
-
-
+      holder.childIsActive.setOnCheckedChangeListener { buttonView, isChecked ->
+        if (isChecked)
+          ((listItem as RegistrationCardItem<Child>).`object`.isActive) = "Active"
+        else
+          ((listItem as RegistrationCardItem<Child>).`object`.isActive) = "Inactive"
+      }
 
       holder.childImage.setOnClickListener {
 

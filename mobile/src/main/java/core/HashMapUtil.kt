@@ -14,6 +14,7 @@ class HashMapUtil {
     card.`object`.firstName?.let { childMap.put("firstName", it) }
     card.`object`.lastName?.let { childMap.put("lastName", it) }
     card.`object`.birthDate?.let { childMap.put("birthDate", it) }
+    card.`object`.isActive?.let { childMap.put("isActive", it) }
     card.`object`.enrollmentDate?.let { childMap.put("enrollmentDate", it) }
     card.`object`.addressLn1?.let { childMap.put("addressLn1", it) }
     card.`object`.addressLn2?.let { childMap.put("addressLn2", it) }

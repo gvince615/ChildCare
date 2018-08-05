@@ -57,19 +57,62 @@ class MainActivity : BaseActivity() {
 
     var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
-        d.get()
+    d.get()
+    .addOnCompleteListener { task ->
+
+      if (task.isSuccessful) {
+        children.clear()
+
+        for (document in task.result) {
+          val child = AttenChild("", "", "", "", "", "")
+          child.firstName = document[FIRST_NAME].toString()
+          child.lastName = document[LAST_NAME].toString()
+          child.birthDate = document[BIRTH_DATE].toString()
+          child.isActive = document[IS_ACTIVE].toString()
+
+          Log.d(this.packageName.toString(), document.id + " => " + document.data)
+
+          children.add(child)
+
+          getLatestAttendanceData(child)
+        }
+
+        if (getFragmentRefreshListener() != null) {
+          getFragmentRefreshListener()?.onRefresh(children)
+        }
+
+      } else {
+        Log.d(this.packageName.toString(), "Error getting documents: ", task.exception)
+      }
+    }
+  }
+
+  private fun getLatestAttendanceData(child: AttenChild) {
+    var checkIn = ""
+    var checkOut = ""
+
+    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
+    d.get()
         .addOnCompleteListener { task ->
 
           if (task.isSuccessful) {
-            children.clear()
 
-            for (document in task.result) {
-              val child = AttenChild("", "", "", "")
-              child.firstName = document[FIRST_NAME].toString()
-              child.lastName = document[LAST_NAME].toString()
-              child.birthDate = document[BIRTH_DATE].toString()
-              children.add(child)
-              Log.d(this.packageName.toString(), document.id + " => " + document.data)
+            for (doc in task.result.documents) {
+              if (doc.contains("checkIn")) {
+                checkIn = doc["checkIn"].toString()
+
+              }
+              if (doc.contains("checkOut")) {
+                checkOut = doc["checkOut"].toString()
+              }
+
+              if (checkIn != "" && checkOut == "") {
+                child.checkInTime = checkIn
+              }
+
+              Log.d("Firebase:Attendance", doc.id + " => " + checkIn + "::" + checkOut)
+              break
             }
 
             if (getFragmentRefreshListener() != null) {
@@ -77,7 +120,7 @@ class MainActivity : BaseActivity() {
             }
 
           } else {
-            Log.d(this.packageName.toString(), "Error getting documents: ", task.exception)
+            Log.d("Firebase:Attendance", "Error getting documents: ", task.exception)
           }
         }
   }

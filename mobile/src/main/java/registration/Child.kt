@@ -5,6 +5,7 @@ data class Child(
     var firstName: String = "",
     var lastName: String = "",
     var birthDate: String = "",
+    var isActive: String = "",
     var enrollmentDate: String = "",
     var addressLn1: String = "",
     var addressLn2: String = "",
@@ -12,6 +13,6 @@ data class Child(
     var addressState: String = "",
     var addressZip: String = "") {
 
-  constructor() : this("", "", "", "", "", "", "", "", "")
+  constructor() : this("", "", "", "", "", "", "", "", "", "")
 }
 
