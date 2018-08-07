@@ -14,7 +14,6 @@ import core.ACTIVE
 import core.CHILD_ATTEN_CARD_TIME_FORMAT
 import core.FIRESTORE_DATE_TIME_FORMAT
 import core.INACTIVE
-import fragments.Attendance
 import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,15 +40,10 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.cv.setOnClickListener {
 
-      Attendance().updateData()
-
-
 
       var childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
       var attendancePresenter = AttendancePresenter()
       attendancePresenter.setUp(context, childRef, holder.cv.isActivated)
-
-
       attendancePresenter.postAttendance()
 
       //holder.cv.isActivated = !holder.cv.isActivated

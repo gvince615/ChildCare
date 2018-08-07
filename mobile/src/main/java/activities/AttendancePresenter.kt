@@ -26,30 +26,34 @@ class AttendancePresenter {
     var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA)
     d.orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get()
-        .addOnCompleteListener { task ->
+      .addOnCompleteListener { task ->
 
-          if (task.isSuccessful) {
+        if (task.isSuccessful) {
 
-            for (doc in task.result.documents) {
-              if (doc.contains("checkIn")) {
-                checkIn = doc["checkIn"].toString()
+          for (doc in task.result.documents) {
+            if (doc.contains("checkIn")) {
+              checkIn = doc["checkIn"].toString()
 
-              }
-              if (doc.contains("checkOut")) {
-                checkOut = doc["checkOut"].toString()
-              }
-
-              if (checkIn != "" && checkOut == "") {
-                postUpdate(doc.reference)
-              } else {
-                postNew()
-              }
-              Log.d("Firebase:Attendance", doc.id + " => " + checkIn + "::" + checkOut)
             }
-          } else {
-            Log.d("Firebase:Attendance", "Error getting documents: ", task.exception)
+            if (doc.contains("checkOut")) {
+              checkOut = doc["checkOut"].toString()
+            }
+
+            if (checkIn != "" && checkOut == "") {
+              postUpdate(doc.reference)
+            } else {
+              postNew()
+            }
+            Log.d("Firebase:Attendance", doc.id + " => " + checkIn + "::" + checkOut)
           }
+        } else {
+          // unsuccessful
         }
+        if (task.result.isEmpty) {
+          Log.d("Firebase:Attendance", "empty result, need to postNew: ")
+          postNew()
+        }
+      }
   }
 
   private fun postNew() {
@@ -64,10 +68,12 @@ class AttendancePresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA).document()
         .set(attenHash)
         .addOnSuccessListener {
-          MainActivity().retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+//          getUpdatedAttendanceData()
           Log.d("Firestrore", "DocumentSnapshot successfully written!")
         }
-        .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
+        .addOnFailureListener { e ->
+          Log.w("Firestore", "Error writing document", e)
+        }
   }
 
   private fun postUpdate(reference: DocumentReference) {
@@ -77,15 +83,17 @@ class AttendancePresenter {
 
     val attenHash = HashMap<String, Any>()
     attenHash.put("checkOut", currentFormattedTime)
+    attenHash.put("timestamp", FieldValue.serverTimestamp())
 
     FirebaseFirestore.getInstance().document(reference.path)
         .update(attenHash)
         .addOnSuccessListener {
-
-          MainActivity().retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+//          getUpdatedAttendanceData()
           Log.d("Firestrore", "DocumentSnapshot successfully written!")
         }
-        .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
+        .addOnFailureListener { e ->
+          Log.w("Firestore", "Error writing document", e)
+        }
   }
 
 

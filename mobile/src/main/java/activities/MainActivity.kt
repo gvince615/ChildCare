@@ -148,8 +148,4 @@ class MainActivity : BaseActivity() {
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
   }
-
-  fun getChildObject(childDocId: String) {
-    retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
-  }
 }
