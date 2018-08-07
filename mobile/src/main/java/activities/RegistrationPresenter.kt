@@ -19,7 +19,9 @@ class RegistrationPresenter {
   fun loadChild() {
     var childRef = childToLoad
     var parentList: ArrayList<Parent> = ArrayList()
-    var child = Child("", "", "", "", "", "", "", "", "")
+    var child: Child
+
+    activity.showProgress()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
@@ -30,6 +32,7 @@ class RegistrationPresenter {
               if (document.id == childRef) {
 
                 child = document.toObject(Child::class.java)
+                child.isActive = document["isActive"].toString()
 
                 FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
                     PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
@@ -53,12 +56,13 @@ class RegistrationPresenter {
                       } else {
                         Log.d("FIRESTORE", "Error getting documents: ", task.exception)
                       }
+                      activity.hideProgress()
                     }
               }
-              Log.d("", document.id + " => " + document.data)
+              Log.d("FIRESTORE", document.id + " => " + document.data)
             }
           } else {
-            Log.d("", "Error getting documents: ", task.exception)
+            Log.d("FIRESTORE", "Error getting documents: ", task.exception)
           }
         }
 

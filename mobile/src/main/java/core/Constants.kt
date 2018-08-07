@@ -17,3 +17,10 @@ val LAST_NAME = "lastName"
 val BIRTH_DATE = "birthDate"
 val IS_ACTIVE = "isActive"
 
+val FIRESTORE_DATE_TIME_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy"
+val CHILD_ATTEN_CARD_TIME_FORMAT = "HH:mm:ss a"
+
+val INACTIVE = "Inactive"
+val ACTIVE = "Active"
+
+

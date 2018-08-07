@@ -37,13 +37,17 @@ class Attendance : Fragment() {
 
     val view: View = inflater.inflate(R.layout.fragment_attendance, container, false)
     setupRecyclerView(view)
+
+    setRefreshListener()
+    return view
+  }
+
+  private fun setRefreshListener() {
     (activity as MainActivity).setFragmentRefreshListener(object : MainActivity.FragmentRefreshListener {
       override fun onRefresh(children: java.util.ArrayList<AttenChild>) {
-
         refreshData(children)
       }
     })
-    return view
   }
 
   private fun refreshData(children: ArrayList<AttenChild>) {
@@ -90,5 +94,9 @@ class Attendance : Fragment() {
         swipeController!!.onDraw(c)
       }
     })
+  }
+
+  fun updateData() {
+    MainActivity().retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
   }
 }

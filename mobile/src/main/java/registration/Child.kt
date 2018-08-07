@@ -5,7 +5,7 @@ data class Child(
     var firstName: String = "",
     var lastName: String = "",
     var birthDate: String = "",
-    var isActive: String = "",
+    var isActive: String? = "",
     var enrollmentDate: String = "",
     var addressLn1: String = "",
     var addressLn2: String = "",

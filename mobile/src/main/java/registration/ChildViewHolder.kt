@@ -45,12 +45,11 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
       if ((listItem as RegistrationCardItem<Child>).`object`.isActive == "Active"){
-        holder.childIsActive.isChecked = true
+        holder.childIsActive.setChecked(true)
       }
       else{
-        holder.childIsActive.isChecked = false
+        holder.childIsActive.setChecked(false)
       }
-
 
 
       holder.childDOBLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.birthDate)

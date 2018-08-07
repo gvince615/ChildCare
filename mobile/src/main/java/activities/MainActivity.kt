@@ -10,6 +10,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.vince.childcare.R
 import core.*
 import fragments.Attendance
@@ -70,7 +71,7 @@ class MainActivity : BaseActivity() {
           child.birthDate = document[BIRTH_DATE].toString()
           child.isActive = document[IS_ACTIVE].toString()
 
-          Log.d(this.packageName.toString(), document.id + " => " + document.data)
+          Log.d("Firestore", document.id + " => " + document.data)
 
           children.add(child)
 
@@ -82,7 +83,7 @@ class MainActivity : BaseActivity() {
         }
 
       } else {
-        Log.d(this.packageName.toString(), "Error getting documents: ", task.exception)
+        Log.d("Firestore", "Error getting documents: ", task.exception)
       }
     }
   }
@@ -93,7 +94,7 @@ class MainActivity : BaseActivity() {
 
     var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
-    d.get()
+    d.orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
 
           if (task.isSuccessful) {
@@ -111,7 +112,7 @@ class MainActivity : BaseActivity() {
                 child.checkInTime = checkIn
               }
 
-              Log.d("Firebase:Attendance", doc.id + " => " + checkIn + "::" + checkOut)
+              Log.d("Firestore", doc.id + " => " + checkIn + "::" + checkOut)
               break
             }
 
@@ -120,7 +121,7 @@ class MainActivity : BaseActivity() {
             }
 
           } else {
-            Log.d("Firebase:Attendance", "Error getting documents: ", task.exception)
+            Log.d("Firestore", "Error getting documents: ", task.exception)
           }
         }
   }

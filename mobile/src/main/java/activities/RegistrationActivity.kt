@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -213,10 +212,17 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     registration_rv.adapter = adapter
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
-    registration_rv.itemAnimator = DefaultItemAnimator() as RecyclerView.ItemAnimator?
-
+    registration_rv.itemAnimator = DefaultItemAnimator()
 
     adapter.setUpForEdit()
 
+  }
+
+  fun showProgress() {
+    progress_layout.visibility = View.VISIBLE
+  }
+
+  fun hideProgress() {
+    progress_layout.visibility = View.GONE
   }
 }
