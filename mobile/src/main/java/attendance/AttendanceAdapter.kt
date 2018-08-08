@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   lateinit var items: ArrayList<AttenChild>
@@ -30,7 +31,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   interface CardItemListener {
     fun onChildCardClicked(childRef: String)
-    fun onChildCardLongClicked()
+    fun onChildCardLongClicked(childRef: String)
   }
 
   override fun getItemCount(): Int {
@@ -43,13 +44,13 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.cv.setOnClickListener {
-
       cardItemListener.onChildCardClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString())
+    }
 
-//      val childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
-//      val attendancePresenter = AttendancePresenter()
-//      attendancePresenter.setUp(context, childRef, holder.cv.isActivated)
-//      attendancePresenter.postAttendance()
+    holder.cv.setOnLongClickListener {
+      cardItemListener.onChildCardLongClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString())
+
+      false
     }
 
     holder.tvFirstName.text = items[position].firstName

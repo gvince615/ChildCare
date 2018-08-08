@@ -1,5 +1,6 @@
 package fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -62,6 +63,7 @@ internal class SwipeController(private val context: Context, private val buttons
     currentItemViewHolder = viewHolder
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->
@@ -80,6 +82,7 @@ internal class SwipeController(private val context: Context, private val buttons
     }
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchDownListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->
@@ -90,6 +93,7 @@ internal class SwipeController(private val context: Context, private val buttons
     }
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchUpListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->

@@ -21,8 +21,12 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     attendancePresenter.postAttendance(childRef)
   }
 
-  override fun onChildCardLongClicked() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun onChildCardLongClicked(childRef: String) {
+    Snackbar.make(
+        this.coordinator_layout, // Parent view
+        "LONG CLICKED", // Message to show
+        Snackbar.LENGTH_SHORT // How long to display the message.
+    ).show()
   }
 
   private var doubleBackToExitPressedOnce = false
