@@ -1,9 +1,9 @@
 package activities
 
-import android.content.Context
 import android.util.Log
+import attendance.AttenChild
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -11,22 +11,21 @@ import core.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AttendancePresenter {
+
   var alreadyCheckedIn: Boolean = false
   lateinit var childReference: String
-  lateinit var context: Context
+  lateinit var activity: MainActivity
+  private lateinit var children: ArrayList<AttenChild>
 
-  fun setUp(context: Context, childRef: String, activated: Boolean) {
-    this.childReference = childRef
-    this.context = context
-    this.alreadyCheckedIn = activated
+  fun setUp(context: MainActivity, children: ArrayList<AttenChild>) {
+    this.activity = context
+    this.children = children
   }
 
-  fun postAttendance() {
+  fun postAttendance(childReference:String) {
 
-    var checkIn = ""
-    var checkOut = ""
+    this.childReference = childReference
 
     var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA)
@@ -37,21 +36,15 @@ class AttendancePresenter {
           if (task.isSuccessful) {
 
             for (doc in task.result.documents) {
-              if (doc.contains(CHECK_IN)) {
-                checkIn = doc[CHECK_IN].toString()
-
-              }
-              if (doc.contains(CHECK_OUT)) {
-                checkOut = doc[CHECK_OUT].toString()
-              }
-
-              if (checkIn != "" && checkOut == "") {
-                postUpdate(doc.reference)
-              } else {
-                postNew()
+              if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "")) {
+                if (doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
+                  postNew()
+                }else{
+                  postUpdate(doc.reference.path)
+                }
               }
 
-              Log.d(FIRESTORE_TAG, doc.id + " => " + checkIn + "::" + checkOut)
+              Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
             }
           } else {
             // todo - unsuccessful
@@ -77,7 +70,7 @@ class AttendancePresenter {
         .set(attenHash)
         .addOnSuccessListener {
 
-          //todo update fragment
+          activity.updateChildData()
 
           Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
         }
@@ -87,7 +80,7 @@ class AttendancePresenter {
         }
   }
 
-  private fun postUpdate(reference: DocumentReference) {
+  private fun postUpdate(path: String) {
 
     val currentFormattedTime = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).format(Date())
 
@@ -95,11 +88,11 @@ class AttendancePresenter {
     attenMap[CHECK_OUT] = currentFormattedTime
     attenMap[TIME_STAMP] = FieldValue.serverTimestamp()
 
-    FirebaseFirestore.getInstance().document(reference.path)
+    FirebaseFirestore.getInstance().document(path)
         .update(attenMap)
         .addOnSuccessListener {
 
-          //todo update fragment
+          activity.updateChildData()
 
           Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
         }
@@ -109,61 +102,56 @@ class AttendancePresenter {
         }
   }
 
-//  fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
-//
-//    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
-//        .collection(COLLECTION_REGISTRATION_DATA)
-//    d.get()
-//        .addOnCompleteListener { task ->
-//          if (task.isSuccessful) {
-//            children.clear()
-//            for (document in task.result) {
-//              val child = AttenChild("", "", "", "", "", "")
-//              child.firstName = document[FIRST_NAME].toString()
-//              child.lastName = document[LAST_NAME].toString()
-//              child.birthDate = document[BIRTH_DATE].toString()
-//              child.isActive = document[IS_ACTIVE].toString()
-//              Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
-//              children.add(child)
-//              getLatestAttendanceData(child)
-//            }
-//
-//          } else {
-//            // todo - unsuccessful
-//            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
-//          }
-//        }
-//  }
-//
-//  private fun getLatestAttendanceData(child: AttenChild) {
-//    var checkIn = ""
-//    var checkOut = ""
-//
-//    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-//        .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
-//
-//    d.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
-//        .addOnCompleteListener { task ->
-//
-//          if (task.isSuccessful) {
-//            for (doc in task.result.documents) {
-//              if (doc.contains(CHECK_IN)) {
-//                checkIn = doc[CHECK_IN].toString()
-//              }
-//              if (doc.contains(CHECK_OUT)) {
-//                checkOut = doc[CHECK_OUT].toString()
-//              }
-//              if (checkIn != "" && checkOut == "") {
-//                child.checkInTime = checkIn
-//              }
-//              Log.d(FIRESTORE_TAG, doc.id + " => " + checkIn + "::" + checkOut)
-//            }
-//          } else {
-//            // todo - unsuccessful
-//            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
-//          }
-//        }
-//  }
+  private fun getLatestAttendanceData(child: AttenChild) {
 
+    var reference = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
+
+    reference.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
+        .addOnCompleteListener { task ->
+
+          if (task.isSuccessful) {
+            for (doc in task.result.documents) {
+              if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
+                child.checkInTime = doc[CHECK_IN].toString()
+                Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString() )
+              }
+            }
+
+            if (activity.getFragmentRefreshListener() != null) {
+              activity.getFragmentRefreshListener()?.onRefresh(children)
+            }
+
+          } else {
+            // todo - unsuccessful
+            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+          }
+        }
+  }
+
+  fun getChildData(currentUser: FirebaseUser?) {
+    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA)
+    d.get()
+        .addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            children.clear()
+            for (document in task.result) {
+              val child = AttenChild(document[FIRST_NAME].toString(), document[LAST_NAME].toString(), document[IS_ACTIVE].toString(), document[BIRTH_DATE].toString(), "", "")
+              Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
+              children.add(child)
+              getLatestAttendanceData(child)
+            }
+
+            if (activity.getFragmentRefreshListener() != null) {
+              activity.getFragmentRefreshListener()?.onRefresh(children)
+            }
+
+          } else {
+            // todo - unsuccessful
+            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+          }
+        }
+  }
 
 }

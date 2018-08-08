@@ -1,6 +1,5 @@
 package attendance
 
-import activities.AttendancePresenter
 import android.content.Context
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -21,14 +20,16 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   lateinit var items: ArrayList<AttenChild>
   private lateinit var context: Context
+  private lateinit var cardItemListener: CardItemListener
 
-  constructor(context: Context, items: ArrayList<AttenChild>) : this() {
+  constructor(context: Context, items: ArrayList<AttenChild>, cardItemListener: CardItemListener) : this() {
     this.context = context
     this.items = items
+    this.cardItemListener = cardItemListener
   }
 
   interface CardItemListener {
-    fun onChildCardClicked()
+    fun onChildCardClicked(childRef: String)
     fun onChildCardLongClicked()
   }
 
@@ -43,10 +44,12 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.cv.setOnClickListener {
 
-      val childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
-      val attendancePresenter = AttendancePresenter()
-      attendancePresenter.setUp(context, childRef, holder.cv.isActivated)
-      attendancePresenter.postAttendance()
+      cardItemListener.onChildCardClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString())
+
+//      val childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
+//      val attendancePresenter = AttendancePresenter()
+//      attendancePresenter.setUp(context, childRef, holder.cv.isActivated)
+//      attendancePresenter.postAttendance()
     }
 
     holder.tvFirstName.text = items[position].firstName

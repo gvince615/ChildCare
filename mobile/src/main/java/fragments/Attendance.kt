@@ -23,13 +23,15 @@ import com.vince.childcare.R
 import core.*
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
 
-
 class Attendance : Fragment() {
 
   private var swipeController: SwipeController? = null
   var children: ArrayList<AttenChild> = ArrayList()
   lateinit var rv: RecyclerView
   lateinit var adapter: AttendanceAdapter
+
+
+
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -56,7 +58,7 @@ class Attendance : Fragment() {
   private fun setupRecyclerView(view: View) {
     rv = view.attendance_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)
-    adapter = AttendanceAdapter(this.context!!, children)
+    adapter = AttendanceAdapter(this.context!!, children, (activity as MainActivity))
     rv.adapter = adapter
 
     swipeController = SwipeController(this.context!!, object : SwipeControllerActions() {
@@ -66,10 +68,13 @@ class Attendance : Fragment() {
             .collection(COLLECTION_REGISTRATION_DATA).document(childToDelete)
             .delete()
             .addOnSuccessListener {
-              (activity as MainActivity).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+              (activity as MainActivity).updateChildData()
               Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully deleted!")
             }
-            .addOnFailureListener { e -> Log.w(FIRESTORE_TAG, "Error deleting document", e) }
+            .addOnFailureListener { e ->
+              //todo failed
+              Log.w(FIRESTORE_TAG, "Error deleting document", e)
+            }
       }
 
       override fun onEditClicked(position: Int) {
@@ -92,9 +97,5 @@ class Attendance : Fragment() {
         swipeController!!.onDraw(c)
       }
     })
-  }
-
-  fun updateData() {
-    MainActivity().retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
   }
 }
