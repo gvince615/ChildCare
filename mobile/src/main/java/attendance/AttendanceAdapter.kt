@@ -1,7 +1,6 @@
 package attendance
 
 import activities.AttendancePresenter
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -28,6 +27,11 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     this.items = items
   }
 
+  interface CardItemListener {
+    fun onChildCardClicked()
+    fun onChildCardLongClicked()
+  }
+
   override fun getItemCount(): Int {
     return items.size
   }
@@ -36,17 +40,13 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     return ViewHolder(LayoutInflater.from(context).inflate(R.layout.atten_child_card_view, parent, false))
   }
 
-  @SuppressLint("ResourceType")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.cv.setOnClickListener {
 
-
-      var childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
-      var attendancePresenter = AttendancePresenter()
+      val childRef = holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString()
+      val attendancePresenter = AttendancePresenter()
       attendancePresenter.setUp(context, childRef, holder.cv.isActivated)
       attendancePresenter.postAttendance()
-
-      //holder.cv.isActivated = !holder.cv.isActivated
     }
 
     holder.tvFirstName.text = items[position].firstName
@@ -55,14 +55,14 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     if (items[position].isActive == ACTIVE) {
       holder.tvIsActive.text = ""
       holder.cv.isEnabled = true
-      if(items[position].checkInTime != "") {
+      if (items[position].checkInTime != "") {
         val dateFormat = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US)
         val date = dateFormat.parse(items[position].checkInTime)
         val df = SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US)
         df.format(date)
         holder.tvCheckInTime.text = df.format(date).toString()
         holder.cv.isActivated = true
-      }else{
+      } else {
         holder.tvCheckInTime.text = ""
         holder.cv.isActivated = false
       }

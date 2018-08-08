@@ -20,15 +20,13 @@ import attendance.AttendanceAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import core.COLLECTION_REGISTRATION_DATA
-import core.COLLECTION_USER_DATA
-import core.PREFIX_UID
+import core.*
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
 
 
 class Attendance : Fragment() {
-  private var swipeController: SwipeController? = null
 
+  private var swipeController: SwipeController? = null
   var children: ArrayList<AttenChild> = ArrayList()
   lateinit var rv: RecyclerView
   lateinit var adapter: AttendanceAdapter
@@ -69,14 +67,14 @@ class Attendance : Fragment() {
             .delete()
             .addOnSuccessListener {
               (activity as MainActivity).retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
-              Log.d("Firestore", "DocumentSnapshot successfully deleted!")
+              Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully deleted!")
             }
-            .addOnFailureListener { e -> Log.w("Firestore", "Error deleting document", e) }
+            .addOnFailureListener { e -> Log.w(FIRESTORE_TAG, "Error deleting document", e) }
       }
 
       override fun onEditClicked(position: Int) {
         var childToLoad = adapter.items[position].lastName + "_" + adapter.items[position].firstName
-        val intent = Intent(activity, RegistrationActivity::class.java).putExtra("childToLoad", childToLoad)
+        val intent = Intent(activity, RegistrationActivity::class.java).putExtra(CHILD_TO_LOAD, childToLoad)
         val options = activity?.let {
           ActivityOptionsCompat.makeSceneTransitionAnimation(it,
               rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image),
