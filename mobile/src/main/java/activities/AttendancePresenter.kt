@@ -4,6 +4,7 @@ import android.util.Log
 import attendance.AttenChild
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -23,7 +24,7 @@ class AttendancePresenter {
     this.children = children
   }
 
-  fun postAttendance(childReference:String) {
+  fun postAttendance(childReference: String, position: Int) {
 
     this.childReference = childReference
 
@@ -38,9 +39,9 @@ class AttendancePresenter {
             for (doc in task.result.documents) {
               if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "")) {
                 if (doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
-                  postNew()
-                }else{
-                  postUpdate(doc.reference.path)
+                  postNew(position)
+                } else if (doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() == "")) {
+                  postUpdate(doc, position)
                 }
               }
 
@@ -52,25 +53,25 @@ class AttendancePresenter {
           }
           if (task.result.isEmpty) {
             Log.d(FIRESTORE_TAG, "empty result, need to postNew: ")
-            postNew()
+            postNew(position)
           }
         }
   }
 
-  private fun postNew() {
-    val attenHash = HashMap<String, Any>()
-    val sdf = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US)
-    val currentFormattedTime = sdf.format(Date())
+  private fun postNew(position: Int) {
+    val currentFormattedTime = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).format(Date())
 
-    attenHash[CHECK_IN] = currentFormattedTime
-    attenHash[TIME_STAMP] = FieldValue.serverTimestamp()
+    val attenMap = HashMap<String, Any>()
+    attenMap[CHECK_IN] = currentFormattedTime
+    attenMap[CHECK_OUT] = ""
+    attenMap[TIME_STAMP] = FieldValue.serverTimestamp()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA).document()
-        .set(attenHash)
+        .set(attenMap)
         .addOnSuccessListener {
 
-          activity.updateChildData()
+          activity.updateChildAttendanceData(attenMap, position)
 
           Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
         }
@@ -80,19 +81,18 @@ class AttendancePresenter {
         }
   }
 
-  private fun postUpdate(path: String) {
+  private fun postUpdate(doc: DocumentSnapshot, position: Int) {
 
     val currentFormattedTime = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).format(Date())
 
     val attenMap = HashMap<String, Any>()
     attenMap[CHECK_OUT] = currentFormattedTime
-    attenMap[TIME_STAMP] = FieldValue.serverTimestamp()
 
-    FirebaseFirestore.getInstance().document(path)
+    FirebaseFirestore.getInstance().document(doc.reference.path)
         .update(attenMap)
         .addOnSuccessListener {
 
-          activity.updateChildData()
+          activity.updateChildAttendanceData(attenMap, position)
 
           Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
         }
@@ -102,29 +102,25 @@ class AttendancePresenter {
         }
   }
 
-  private fun getLatestAttendanceData(child: AttenChild) {
+  private fun getLatestAttendanceData(refDoc: DocumentSnapshot, child: AttenChild) {
 
-    var reference = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
-
+    var reference = FirebaseFirestore.getInstance().document(refDoc.reference.path).collection(COLLECTION_ATTENDANCE_DATA)
     reference.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
-
           if (task.isSuccessful) {
             for (doc in task.result.documents) {
-              if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
+              if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() == "")) {
                 child.checkInTime = doc[CHECK_IN].toString()
-                Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString() )
+                Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
               }
             }
-
-            if (activity.getFragmentRefreshListener() != null) {
-              activity.getFragmentRefreshListener()?.onRefresh(children)
-            }
-
           } else {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+          }
+
+          if (activity.getFragmentRefreshListener() != null) {
+            activity.getFragmentRefreshListener()?.onRefresh(children, -1)
           }
         }
   }
@@ -137,16 +133,12 @@ class AttendancePresenter {
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-              val child = AttenChild(document[FIRST_NAME].toString(), document[LAST_NAME].toString(), document[IS_ACTIVE].toString(), document[BIRTH_DATE].toString(), "", "")
+              val child = AttenChild(document[FIRST_NAME].toString(), document[LAST_NAME].toString(), document[IS_ACTIVE].toString(),
+                  document[BIRTH_DATE].toString(), "", "")
               Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
               children.add(child)
-              getLatestAttendanceData(child)
+              getLatestAttendanceData(document, child)
             }
-
-            if (activity.getFragmentRefreshListener() != null) {
-              activity.getFragmentRefreshListener()?.onRefresh(children)
-            }
-
           } else {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)

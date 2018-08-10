@@ -44,15 +44,15 @@ class Attendance : Fragment() {
 
   private fun setRefreshListener() {
     (activity as MainActivity).setFragmentRefreshListener(object : MainActivity.FragmentRefreshListener {
-      override fun onRefresh(children: java.util.ArrayList<AttenChild>) {
-        refreshData(children)
+      override fun onRefresh(children: java.util.ArrayList<AttenChild>, position: Int) {
+        refreshData(children, position)
       }
     })
   }
 
-  private fun refreshData(children: ArrayList<AttenChild>) {
+  private fun refreshData(children: ArrayList<AttenChild>, position: Int) {
     this.children = children
-    adapter.refreshData(this.children)
+    adapter.refreshData(this.children, position)
   }
 
   private fun setupRecyclerView(view: View) {

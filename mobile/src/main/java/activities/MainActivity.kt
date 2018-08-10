@@ -9,6 +9,7 @@ import attendance.AttendanceAdapter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
+import core.CHECK_IN
 import fragments.Attendance
 import fragments.Billing
 import fragments.Dashboard
@@ -18,20 +19,16 @@ import java.util.*
 
 class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
   override fun onChildCardClicked(childRef: String) {
-    attendancePresenter.postAttendance(childRef)
+    //todo?
   }
 
-  override fun onChildCardLongClicked(childRef: String) {
-    Snackbar.make(
-        this.coordinator_layout, // Parent view
-        "LONG CLICKED", // Message to show
-        Snackbar.LENGTH_SHORT // How long to display the message.
-    ).show()
+  override fun onChildCardLongClicked(childRef: String, position: Int) {
+    attendancePresenter.postAttendance(childRef, position)
   }
 
   private var doubleBackToExitPressedOnce = false
-  val children: ArrayList<AttenChild> = ArrayList()
-  val attendancePresenter = AttendancePresenter()
+  private val children: ArrayList<AttenChild> = ArrayList()
+  private val attendancePresenter = AttendancePresenter()
 
 
   fun getFragmentRefreshListener(): FragmentRefreshListener? {
@@ -64,82 +61,17 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     updateChildData()
   }
 
-  fun updateChildData() {
-    attendancePresenter.getChildData(FirebaseAuth.getInstance().currentUser)
-
-//    children.clear()
-//
-//    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
-//        .collection(COLLECTION_REGISTRATION_DATA)
-//    d.get()
-//        .addOnCompleteListener { task ->
-//
-//          if (task.isSuccessful) {
-//            children.clear()
-//
-//            for (document in task.result) {
-//              val child = AttenChild("", "", "", "", "", "")
-//              child.firstName = document[FIRST_NAME].toString()
-//              child.lastName = document[LAST_NAME].toString()
-//              child.birthDate = document[BIRTH_DATE].toString()
-//              child.isActive = document[IS_ACTIVE].toString()
-//
-//              Log.d("Firestore", document.id + " => " + document.data)
-//
-//              children.add(child)
-//              getLatestAttendanceData(child)
-//            }
-//
-//            if (getFragmentRefreshListener() != null) {
-//              getFragmentRefreshListener()?.onRefresh(children)
-//            }
-//
-//          } else {
-//            Log.d("Firestore", "Error getting documents: ", task.exception)
-//          }
-//        }
+  fun updateChildAttendanceData(attenMap: HashMap<String, Any>, position: Int) {
+    children[position].checkInTime = attenMap[CHECK_IN].toString()
+    fragmentRefreshListener?.onRefresh(children, position)
   }
 
-//  private fun getLatestAttendanceData(child: AttenChild) {
-//    var checkIn = ""
-//    var checkOut = ""
-//
-//    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-//        .collection(COLLECTION_REGISTRATION_DATA).document(child.lastName + "_" + child.firstName).collection(COLLECTION_ATTENDANCE_DATA)
-//    d.orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get()
-//        .addOnCompleteListener { task ->
-//
-//          if (task.isSuccessful) {
-//
-//            for (doc in task.result.documents) {
-//              if (doc.contains("checkIn")) {
-//                checkIn = doc["checkIn"].toString()
-//
-//              }
-//              if (doc.contains("checkOut")) {
-//                checkOut = doc["checkOut"].toString()
-//              }
-//
-//              if (checkIn != "" && checkOut == "") {
-//                child.checkInTime = checkIn
-//              }
-//
-//              Log.d("Firestore", doc.id + " => " + checkIn + "::" + checkOut)
-//              break
-//            }
-//
-//            if (getFragmentRefreshListener() != null) {
-//              getFragmentRefreshListener()?.onRefresh(children)
-//            }
-//
-//          } else {
-//            Log.d("Firestore", "Error getting documents: ", task.exception)
-//          }
-//        }
-//  }
+  fun updateChildData() {
+    attendancePresenter.getChildData(FirebaseAuth.getInstance().currentUser)
+  }
 
   interface FragmentRefreshListener {
-    fun onRefresh(children: ArrayList<AttenChild>)
+    fun onRefresh(children: ArrayList<AttenChild>, position: Int)
   }
 
   override fun onBackPressed() {

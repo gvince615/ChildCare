@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   lateinit var items: ArrayList<AttenChild>
@@ -31,7 +30,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   interface CardItemListener {
     fun onChildCardClicked(childRef: String)
-    fun onChildCardLongClicked(childRef: String)
+    fun onChildCardLongClicked(childRef: String, position: Int)
   }
 
   override fun getItemCount(): Int {
@@ -43,12 +42,9 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.cv.setOnClickListener {
-      cardItemListener.onChildCardClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString())
-    }
 
     holder.cv.setOnLongClickListener {
-      cardItemListener.onChildCardLongClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString())
+      cardItemListener.onChildCardLongClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position)
 
       false
     }
@@ -57,9 +53,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     holder.tvLastName.text = items[position].lastName
 
     if (items[position].isActive == ACTIVE) {
-      holder.tvIsActive.text = ""
-      holder.cv.isEnabled = true
-      if (items[position].checkInTime != "") {
+      if (items[position].checkInTime != "" && items[position].checkInTime != "null") {
         val dateFormat = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US)
         val date = dateFormat.parse(items[position].checkInTime)
         val df = SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US)
@@ -76,8 +70,12 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
   }
 
-  fun refreshData(children: ArrayList<AttenChild>) {
+  fun refreshData(children: ArrayList<AttenChild>, pos: Int) {
     this.items = children
+
+    if (pos != -1) {
+      notifyItemInserted(pos)
+    }
     notifyDataSetChanged()
   }
 }
