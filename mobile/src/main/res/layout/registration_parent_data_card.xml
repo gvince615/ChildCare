@@ -36,7 +36,7 @@
           android:gravity="start|center"
           android:paddingStart="10dp"
           android:text="Parent Information"
-          android:textColor="@color/darker_grey"
+          android:textColor="@color/colorBlack"
           android:textSize="22sp"
           android:textStyle="bold"
           />
@@ -48,6 +48,7 @@
           android:backgroundTint="@android:color/transparent"
           android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
+          android:tint="@color/colorBlack"
           android:src="@android:drawable/ic_menu_close_clear_cancel"
 
           />
@@ -61,6 +62,7 @@
         android:layout_weight="2"
         android:orientation="vertical"
         android:padding="10dp"
+        android:background="@color/colorYellow"
         >
 
       <android.support.design.widget.TextInputLayout
@@ -74,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name"
+            android:inputType="textPersonName"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -89,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Last Name"
+            android:inputType="textPersonName"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -104,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Primary Phone Number"
+            android:inputType="phone"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -118,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Secondary Phone Number"
+            android:inputType="phone"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -133,6 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
+            android:inputType="textEmailAddress"
             />
 
       </android.support.design.widget.TextInputLayout>

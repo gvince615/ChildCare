@@ -6,6 +6,7 @@ import android.os.Handler
 import android.support.design.widget.Snackbar
 import attendance.AttenChild
 import attendance.AttendanceAdapter
+import attendance.AttendancePresenter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R

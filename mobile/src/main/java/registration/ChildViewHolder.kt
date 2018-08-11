@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_child_data_card.view.*
@@ -20,7 +19,6 @@ import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var childCardView: CardView = itemView.childDataCardView
-  var childDeleteButton: ImageButton = itemView.delete_child_card_button
   var childImage: ImageView = itemView.child_image
   var childFirstNameLayout: TextInputLayout = itemView.child_first_name
   var childLastNameLayout: TextInputLayout = itemView.child_last_name
@@ -51,60 +49,56 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         holder.childIsActive.setChecked(false)
       }
 
-
-      holder.childDOBLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.birthDate)
-      holder.childLAddressLn1Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn1)
-      holder.childLAddressLn2Layout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressLn2)
-      holder.childLAddressCityLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressCity)
-      holder.childLAddressStateLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressState)
-      holder.childLAddressZipLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.addressZip)
+      holder.childDOBLayout.editText?.setText(listItem.`object`.birthDate)
+      holder.childLAddressLn1Layout.editText?.setText(listItem.`object`.addressLn1)
+      holder.childLAddressLn2Layout.editText?.setText(listItem.`object`.addressLn2)
+      holder.childLAddressCityLayout.editText?.setText(listItem.`object`.addressCity)
+      holder.childLAddressStateLayout.editText?.setText(listItem.`object`.addressState)
+      holder.childLAddressZipLayout.editText?.setText(listItem.`object`.addressZip)
 
       holder.childFirstNameLayout.editText?.onChange {
         holder.childFirstNameLayout.error = if (holder.childFirstNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
-        (listItem as RegistrationCardItem<Child>).`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()!!
+        listItem.`object`.firstName = holder.childFirstNameLayout.editText?.text?.toString()!!
       }
       holder.childLastNameLayout.editText?.onChange {
         holder.childLastNameLayout.error = if (holder.childLastNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"
-        (listItem as RegistrationCardItem<Child>).`object`.lastName = holder.childLastNameLayout.editText?.text?.toString()!!
+        listItem.`object`.lastName = holder.childLastNameLayout.editText?.text?.toString()!!
       }
       holder.childDOBLayout.editText?.onChange {
         holder.childDOBLayout.error = if (holder.childDOBLayout.editText?.text.toString()
                 .matches("([0-9]{2})/([0-9]{2})/([0-9]{4})".toRegex())) null else "Please enter a valid date (MM/DD/YYYY)"
 
-        (listItem as RegistrationCardItem<Child>).`object`.birthDate = holder.childDOBLayout.editText?.text?.toString()!!
+        listItem.`object`.birthDate = holder.childDOBLayout.editText?.text?.toString()!!
       }
       holder.childLAddressLn1Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressLn1 = holder.childLAddressLn1Layout.editText?.text?.toString()!!
+        listItem.`object`.addressLn1 = holder.childLAddressLn1Layout.editText?.text?.toString()!!
       }
       holder.childLAddressLn2Layout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressLn2 = holder.childLAddressLn2Layout.editText?.text?.toString()!!
+        listItem.`object`.addressLn2 = holder.childLAddressLn2Layout.editText?.text?.toString()!!
       }
       holder.childLAddressCityLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressCity = holder.childLAddressCityLayout.editText?.text?.toString()!!
+        listItem.`object`.addressCity = holder.childLAddressCityLayout.editText?.text?.toString()!!
       }
       holder.childLAddressStateLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressState = holder.childLAddressStateLayout.editText?.text?.toString()!!
+        listItem.`object`.addressState = holder.childLAddressStateLayout.editText?.text?.toString()!!
       }
       holder.childLAddressZipLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Child>).`object`.addressZip = holder.childLAddressZipLayout.editText?.text?.toString()!!
+        listItem.`object`.addressZip = holder.childLAddressZipLayout.editText?.text?.toString()!!
       }
-
 
       holder.childIsActive.setOnCheckedChangeListener { buttonView, isChecked ->
         if (isChecked)
-          ((listItem as RegistrationCardItem<Child>).`object`.isActive) = "Active"
+          (listItem.`object`.isActive) = "Active"
         else
-          ((listItem as RegistrationCardItem<Child>).`object`.isActive) = "Inactive"
+          (listItem.`object`.isActive) = "Inactive"
       }
 
       holder.childImage.setOnClickListener {
-
+        //todo  picture
       }
-      holder.childDeleteButton.setOnClickListener {
 
-      }
       holder.childCardView.setOnClickListener {
-        listener?.onChildCardClicked("clicked")
+
       }
     }
 
@@ -113,7 +107,6 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())
         }
-
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
       })

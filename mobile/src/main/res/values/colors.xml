@@ -30,6 +30,7 @@
 
   <color name="colorWhiteTrans">#66ffffff</color>
   <color name="colorWhite">#ffffff</color>
+  <color name="colorGreyTrans">#7f3a3f41</color>
 
   <color name="lighter_grey">#B0BEC5</color>
   <color name="light_grey">#607D8B</color>

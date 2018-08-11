@@ -22,7 +22,6 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   var parentDeleteButton: ImageButton = itemView.delete_parent_card_button
   var parentFirstNameLayout: TextInputLayout = itemView.parent_first_name
   var parentLastNameLayout: TextInputLayout = itemView.parent_last_name
-
   var parentEmailLayout: TextInputLayout = itemView.parent_email
   var parentPhoneNumber1Layout: TextInputLayout = itemView.parent_contact_num_1
   var parentPhoneNumber2Layout: TextInputLayout = itemView.parent_contact_num_2
@@ -65,12 +64,12 @@ class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         (listItem as RegistrationCardItem<Parent>).`object`.phoneNumber2 = holder.parentPhoneNumber2Layout.editText?.text?.toString()!!
       }
 
-      holder.parentCardView.setOnClickListener {
-        listener?.onParentCardClicked("Parent Card Clicked")
+      holder.parentDeleteButton.setOnClickListener {
+        listener?.onDeleteCardBtnTapped(holder.adapterPosition)
       }
 
-      holder.parentDeleteButton.setOnClickListener {
-        listener?.onParentCardClicked("Delete Parent Card Clicked")
+      holder.parentCardView.setOnClickListener {
+
       }
     }
 

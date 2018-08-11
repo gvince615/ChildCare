@@ -76,7 +76,6 @@ class Attendance : Fragment() {
               Log.w(FIRESTORE_TAG, "Error deleting document", e)
             }
       }
-
       override fun onEditClicked(position: Int) {
         var childToLoad = adapter.items[position].lastName + "_" + adapter.items[position].firstName
         val intent = Intent(activity, RegistrationActivity::class.java).putExtra(CHILD_TO_LOAD, childToLoad)

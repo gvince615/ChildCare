@@ -1,12 +1,12 @@
-package fragments
+package core
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.support.v7.widget.helper.ItemTouchHelper.*
+import android.util.Log
 import android.view.MotionEvent
 
 
@@ -33,7 +33,7 @@ internal class SwipeController(private val context: Context, private val buttons
   }
 
   override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
+    Log.d("", "")
   }
 
   override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
@@ -63,7 +63,6 @@ internal class SwipeController(private val context: Context, private val buttons
     currentItemViewHolder = viewHolder
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->
@@ -71,7 +70,8 @@ internal class SwipeController(private val context: Context, private val buttons
       if (swipeBack) {
         if (dX < -buttonWidth)
           buttonShowedState = ButtonsState.RIGHT_VISIBLE
-        else if (dX > buttonWidth) buttonShowedState = ButtonsState.LEFT_VISIBLE
+        else if (dX > buttonWidth)
+          buttonShowedState = ButtonsState.LEFT_VISIBLE
 
         if (buttonShowedState != ButtonsState.GONE) {
           setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -82,7 +82,6 @@ internal class SwipeController(private val context: Context, private val buttons
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchDownListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->
@@ -93,7 +92,6 @@ internal class SwipeController(private val context: Context, private val buttons
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   private fun setTouchUpListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
       isCurrentlyActive: Boolean) {
     recyclerView.setOnTouchListener { v, event ->

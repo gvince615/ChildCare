@@ -53,6 +53,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     holder.tvLastName.text = items[position].lastName
 
     if (items[position].isActive == ACTIVE) {
+      holder.cv.isEnabled = true
       if (items[position].checkInTime != "" && items[position].checkInTime != "null") {
         val dateFormat = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US)
         val date = dateFormat.parse(items[position].checkInTime)

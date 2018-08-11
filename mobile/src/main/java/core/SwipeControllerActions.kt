@@ -1,4 +1,4 @@
-package fragments
+package core
 
 abstract class SwipeControllerActions {
 

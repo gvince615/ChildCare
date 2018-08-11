@@ -3,6 +3,7 @@ package activities
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -19,8 +20,6 @@ import registration.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
-
-
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
 
@@ -34,7 +33,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     if (intent.hasExtra("childToLoad")) {
       var childToLoad = intent.getStringExtra("childToLoad")
-      // todo - do stuff to load all child data
       registrationPresenter = RegistrationPresenter()
       registrationPresenter.setUp(this, childToLoad)
       registrationPresenter.loadChild()
@@ -73,6 +71,9 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     menu.close(true)
   }
 
+  override fun onDeleteCardBtnTapped(adapterPosition: Int) {
+    adapter.deleteCard(adapterPosition)
+  }
 
   private fun setUpRecyclerView() {
     adapter = RegistrationAdapter(this, list, this)
@@ -80,12 +81,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     val llm = LinearLayoutManager(applicationContext)
     registration_rv.layoutManager = llm
     registration_rv.itemAnimator = DefaultItemAnimator()
+
+    childMenuButtonClicked()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_save -> {
-        Toast.makeText(this, "Registration saved ", Toast.LENGTH_SHORT).show()
         saveRegistration()
       }
 
@@ -114,6 +116,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         }
       }
       finish()
+    } else {
+      val snackbar = Snackbar
+          .make(reg_coordinator_layout, "Unable to save registration with empty fields.", Snackbar.LENGTH_LONG)
+      snackbar.show()
     }
   }
 
@@ -185,14 +191,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.registration_menu, menu)
     return true
-  }
-
-  override fun onParentCardClicked(message: String) {
-    showToast("Parent:$message")
-  }
-
-  override fun onChildCardClicked(message: String) {
-    showToast("Parent:$message")
   }
 
   fun showToast(message: String) {

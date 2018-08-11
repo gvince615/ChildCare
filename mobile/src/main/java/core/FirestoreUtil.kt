@@ -2,6 +2,7 @@ package core
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
@@ -62,6 +63,7 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(LAST_NAME).toString() + "_" + childData?.get(FIRST_NAME).toString())
         .collection(COLLECTION_PARENTS).document(parentData[LAST_NAME].toString() + "_" + parentData[FIRST_NAME].toString())
         .set(parentData).addOnSuccessListener {
+          Toast.makeText(context, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(context.getString(R.string.registration_activity_tag), context.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
           Log.e(context.getString(R.string.registration_activity_tag), context.getString(R.string.parent_data_update_failed))

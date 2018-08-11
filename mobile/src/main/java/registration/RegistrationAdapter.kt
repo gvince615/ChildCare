@@ -58,13 +58,14 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   fun setUpForEdit() {
-
-
     notifyDataSetChanged()
   }
 
+  fun deleteCard(adapterPosition: Int) {
+    list.removeAt(adapterPosition)
+    notifyItemRemoved(adapterPosition)  }
+
   interface CardItemListener {
-    fun onParentCardClicked(message: String)
-    fun onChildCardClicked(message: String)
+    fun onDeleteCardBtnTapped(adapterPosition: Int)
   }
 }

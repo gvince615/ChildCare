@@ -1,7 +1,7 @@
-package activities
+package attendance
 
+import activities.MainActivity
 import android.util.Log
-import attendance.AttenChild
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot

@@ -47,6 +47,7 @@
           android:backgroundTint="@android:color/transparent"
           android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
+          android:tint="@color/colorBlack"
           android:src="@android:drawable/ic_menu_close_clear_cancel"
 
           />

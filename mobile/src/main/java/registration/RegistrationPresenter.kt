@@ -1,5 +1,6 @@
-package activities
+package registration
 
+import activities.RegistrationActivity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -7,9 +8,6 @@ import core.COLLECTION_PARENTS
 import core.COLLECTION_REGISTRATION_DATA
 import core.COLLECTION_USER_DATA
 import core.PREFIX_UID
-import registration.Child
-import registration.FullChildRegistrationData
-import registration.Parent
 
 class RegistrationPresenter {
 
