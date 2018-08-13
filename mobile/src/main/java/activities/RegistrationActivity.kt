@@ -66,7 +66,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child("", "", "", "", "", "", "", "", ""))
+    adapter.addChild(Child("", "", "", "Active", "", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }

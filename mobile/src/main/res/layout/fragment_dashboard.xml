@@ -114,7 +114,7 @@
         <LinearLayout
             android:id="@+id/setup_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorYellow"
             android:gravity="center"
             android:orientation="vertical"
@@ -124,17 +124,21 @@
 
           <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@color/colorWhiteTrans"
               android:gravity="center"
               android:orientation="vertical"
               >
 
             <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:padding="10dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/ic_tab_five"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setup"
                 />
           </LinearLayout>
         </LinearLayout>
@@ -205,7 +209,7 @@
         <LinearLayout
             android:id="@+id/registration_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorRed"
             android:gravity="center"
             android:orientation="vertical"
@@ -215,18 +219,24 @@
 
           <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@color/colorWhiteTrans"
               android:gravity="center"
               android:orientation="vertical"
               >
 
             <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:padding="10dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/baseline_assignment_ind_white_18dp"
                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Child Registration"
+                />
+
           </LinearLayout>
         </LinearLayout>
 
