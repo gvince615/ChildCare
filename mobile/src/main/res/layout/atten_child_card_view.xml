@@ -11,21 +11,30 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:padding="5dp"
     >
+
 
   <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_margin="10dp"
-      android:background="@color/colorWhiteTrans"
+      android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:paddingEnd="3dp"
+      android:paddingStart="3dp"
+      android:paddingTop="3dp"
+
       >
 
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhiteTrans"
+        android:orientation="vertical"
         >
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
 
         <ImageView
             android:id="@+id/child_image"
@@ -35,68 +44,103 @@
             android:transitionName="simple_activity_transition"
             />
 
-      <LinearLayout
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/child_image"
+            android:layout_toStartOf="@id/check_info_layout"
+            android:orientation="vertical"
+
+            >
+          <TextView
+              android:id="@+id/tv_first_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="5dp"
+              android:layout_marginStart="10dp"
+              android:layout_marginTop="5dp"
+              android:text="FirstName"
+              android:textSize="19sp"
+              />
+          <TextView
+              android:id="@+id/tv_last_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="5dp"
+              android:layout_marginStart="10dp"
+              android:text="LastName"
+              android:textSize="19sp"
+
+              />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/check_info_layout"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="end"
+            android:orientation="vertical"
+            >
+          <TextView
+              android:id="@+id/tv_active"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="5dp"
+              android:layout_marginEnd="5dp"
+              android:layout_marginStart="5dp"
+              android:layout_marginTop="10dp"
+              android:text=""
+              />
+          <TextView
+              android:id="@+id/tv_check_in_time"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="10dp"
+              android:layout_marginEnd="5dp"
+              android:layout_marginStart="5dp"
+              android:layout_marginTop="5dp"
+              android:text="10:48:00 AM"
+              />
+        </LinearLayout>
+      </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        >
+      <Button
+          android:id="@+id/edit_card_btn"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:layout_centerVertical="true"
-          android:layout_toStartOf="@id/check_info_layout"
-          android:layout_toEndOf="@id/child_image"
+          android:layout_height="match_parent"
+          android:layout_marginBottom="0dp"
+          android:layout_marginTop="0dp"
+          android:layout_weight="1"
+          android:text="@string/edit"
+          android:layout_marginEnd="50dp"
+          android:textAlignment="textStart"
+          android:theme="@style/PrimaryFlatButton"
+          />
+      <Button
+          android:id="@+id/check_in_out_btn"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginBottom="0dp"
+          android:layout_marginTop="0dp"
+          android:layout_weight="1"
+          android:text="@string/check_in"
+          android:layout_marginStart="50dp"
+          android:textAlignment="textEnd"
+          android:theme="@style/PrimaryFlatButton"
+          />
 
-          >
-        <TextView
-            android:id="@+id/tv_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:textSize="19sp"
-            android:text="lll"
-            />
-        <TextView
-            android:id="@+id/tv_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginStart="10dp"
-            android:textSize="19sp"
-            android:text="lll"
+    </LinearLayout>
 
-            />
-      </LinearLayout>
-
-      <LinearLayout
-          android:id="@+id/check_info_layout"
-          android:layout_width="90dp"
-          android:layout_height="wrap_content"
-          android:layout_alignParentEnd="true"
-          android:layout_centerVertical="true"
-          android:orientation="vertical"
-          android:gravity="end"
-          >
-        <TextView
-            android:id="@+id/tv_active"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:text="Active"
-            />
-        <TextView
-            android:id="@+id/tv_check_in_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:text="10:48:00 AM"
-            />
-      </LinearLayout>
-    </RelativeLayout>
 
   </LinearLayout>
 

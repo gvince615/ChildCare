@@ -15,5 +15,8 @@
   <string name="child_data_succeeded">child data added or updated</string>
   <string name="child_data_update_failed">child data failed to add or update</string>
   <string name="encrypt_tag">ENCRYPT</string>
+  <string name="edit">Edit</string>
+  <string name="check_in">Check In</string>
+  <string name="check_out">Check Out</string>
 
 </resources>

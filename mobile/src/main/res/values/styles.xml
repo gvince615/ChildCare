@@ -54,6 +54,13 @@
     <item name="colorAccent">@color/colorPurpleAccent</item>
   </style>
 
+  <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+    <item name="android:buttonStyle">
+      @style/Widget.AppCompat.Button.Borderless.Colored
+    </item>
+    <item name="colorAccent">@color/colorWhite</item>
+  </style>
+
 
   <style name="BillingCardTheme" parent="TodoTheme">
     <!-- Customize your theme here. -->

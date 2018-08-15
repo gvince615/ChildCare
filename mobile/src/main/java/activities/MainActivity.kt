@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.view.View
 import attendance.AttenChild
 import attendance.AttendanceAdapter
 import attendance.AttendancePresenter
@@ -19,12 +20,14 @@ import java.util.*
 
 
 class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
-  override fun onChildCardClicked(childRef: String) {
-    //todo?
+
+  override fun editChildClicked(childRef: String, position: Int) {
+
+    fragmentRefreshListener?.editChildClicked(childRef, position)
   }
 
-  override fun onChildCardLongClicked(childRef: String, position: Int) {
-    attendancePresenter.postAttendance(childRef, position)
+  override fun checkInOutBtnClicked(childRef: String, position: Int, view: View) {
+    attendancePresenter.postAttendance(childRef, position, view)
   }
 
   private var doubleBackToExitPressedOnce = false
@@ -73,6 +76,8 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
 
   interface FragmentRefreshListener {
     fun onRefresh(children: ArrayList<AttenChild>, position: Int)
+    fun editChildClicked(childRef: String, position: Int)
+    fun setProgress(visible: Int)
   }
 
   override fun onBackPressed() {
@@ -92,5 +97,13 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
         .make(coordinator_layout, "Press back again to sign out.", Snackbar.LENGTH_LONG)
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+  }
+
+  fun showProgress() {
+    fragmentRefreshListener?.setProgress(View.VISIBLE)
+  }
+
+  fun hideProgress() {
+    fragmentRefreshListener?.setProgress(View.GONE)
   }
 }

@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
@@ -40,7 +39,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       setUpRecyclerView()
     }
 
-    child_menu_item.setOnClickListener { childMenuButtonClicked() }
+
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     medical_menu_item.setOnClickListener { medicalMenuButtonClicked() }
     billing_menu_item.setOnClickListener { billingMenuButtonClicked() }
@@ -193,13 +192,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return true
   }
 
-  fun showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-  }
-
   fun setDataCards(fullChildRegistrationData: FullChildRegistrationData) {
-
-
     list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
 
     for (parent in fullChildRegistrationData.parents) {
@@ -217,10 +210,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   fun showProgress() {
-    progress_layout.visibility = View.VISIBLE
+    progress_layout_reg.visibility = View.VISIBLE
   }
 
   fun hideProgress() {
-    progress_layout.visibility = View.GONE
+    progress_layout_reg.visibility = View.GONE
   }
 }

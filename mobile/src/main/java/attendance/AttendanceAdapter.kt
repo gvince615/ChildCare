@@ -29,8 +29,8 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   }
 
   interface CardItemListener {
-    fun onChildCardClicked(childRef: String)
-    fun onChildCardLongClicked(childRef: String, position: Int)
+    fun editChildClicked(childRef: String, position: Int)
+    fun checkInOutBtnClicked(childRef: String, position: Int, view: View)
   }
 
   override fun getItemCount(): Int {
@@ -43,33 +43,49 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-    holder.cv.setOnLongClickListener {
-      cardItemListener.onChildCardLongClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position)
+    holder.editCardBtn.setOnClickListener {
+      cardItemListener.editChildClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position)
+    }
 
-      false
+    holder.checkInOutBtn.setOnClickListener {
+      cardItemListener.checkInOutBtnClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position, it)
     }
 
     holder.tvFirstName.text = items[position].firstName
     holder.tvLastName.text = items[position].lastName
 
-    if (items[position].isActive == ACTIVE) {
-      holder.cv.isEnabled = true
-      if (items[position].checkInTime != "" && items[position].checkInTime != "null") {
-        val dateFormat = SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US)
-        val date = dateFormat.parse(items[position].checkInTime)
-        val df = SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US)
-        df.format(date)
-        holder.tvCheckInTime.text = df.format(date).toString()
-        holder.cv.isActivated = true
-      } else {
-        holder.tvCheckInTime.text = ""
-        holder.cv.isActivated = false
-      }
+    if (childIsActive(position)) {
+      handleChildIsActive(holder, position)
     } else {
-      holder.tvIsActive.text = INACTIVE
-      holder.cv.isEnabled = false
+      handleChildIsInactive(holder)
     }
   }
+
+  private fun handleChildIsInactive(holder: ViewHolder) {
+    holder.tvIsActive.text = INACTIVE
+    holder.cv.isEnabled = false
+  }
+
+  private fun handleChildIsActive(holder: ViewHolder, position: Int) {
+    holder.cv.isEnabled = true
+    holder.tvIsActive.text = ""
+    if (hasCheckInTime(position)) {
+      SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US).format(
+          SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).parse(items[position].checkInTime))
+      holder.tvCheckInTime.text = SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US).format(
+          SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).parse(items[position].checkInTime)).toString()
+      holder.checkInOutBtn.text = context.getText(R.string.check_out)
+      holder.cv.isActivated = true
+    } else {
+      holder.tvCheckInTime.text = ""
+      holder.cv.isActivated = false
+      holder.checkInOutBtn.text = context.getText(R.string.check_in)
+    }
+  }
+
+  private fun hasCheckInTime(position: Int) = items[position].checkInTime != "" && items[position].checkInTime != "null"
+
+  private fun childIsActive(position: Int) = items[position].isActive == ACTIVE
 
   fun refreshData(children: ArrayList<AttenChild>, pos: Int) {
     this.items = children
@@ -87,4 +103,6 @@ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   val tvLastName: TextView = view.tv_last_name
   val tvIsActive: TextView = view.tv_active
   val tvCheckInTime: TextView = view.tv_check_in_time
+  val checkInOutBtn: TextView = view.check_in_out_btn
+  val editCardBtn: TextView = view.edit_card_btn
 }

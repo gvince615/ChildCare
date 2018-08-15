@@ -37,7 +37,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/registration_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             >
 
         </android.support.v7.widget.RecyclerView>
@@ -65,15 +65,6 @@
       >
 
     <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/child_menu_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/account_child_white_48x48"
-        fab:fab_colorNormal="@color/colorBlue"
-        fab:fab_label="Add Child Data Card"
-        fab:fab_size="mini"
-        />
-    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/parent_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,8 +77,8 @@
         android:id="@+id/medical_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/hospital_white_48x48"
-        fab:fab_colorNormal="@color/colorPurple"
+        android:src="@drawable/heart"
+        fab:fab_colorNormal="@color/colorWhite"
         fab:fab_label="Add Medical Data Card"
         fab:fab_size="mini"
         />
@@ -95,8 +86,8 @@
         android:id="@+id/billing_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/money_48x48"
-        fab:fab_colorNormal="@color/colorGreen"
+        android:src="@drawable/banknote"
+        fab:fab_colorNormal="@color/colorWhite"
         fab:fab_label="Add Billing Data Card"
         fab:fab_size="mini"
         />
@@ -104,10 +95,10 @@
   </com.github.clans.fab.FloatingActionMenu>
 
   <RelativeLayout
-      android:id="@+id/progress_layout"
+      android:id="@+id/progress_layout_reg"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/colorWhite"
+      android:background="@color/colorGreyTrans"
       android:gravity="center"
       android:visibility="gone"
       >

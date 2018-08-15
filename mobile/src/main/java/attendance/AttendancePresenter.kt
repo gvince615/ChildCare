@@ -2,6 +2,7 @@ package attendance
 
 import activities.MainActivity
 import android.util.Log
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -24,7 +25,9 @@ class AttendancePresenter {
     this.children = children
   }
 
-  fun postAttendance(childReference: String, position: Int) {
+  fun postAttendance(childReference: String, position: Int, view: View) {
+
+    activity.showProgress()
 
     this.childReference = childReference
 
@@ -56,6 +59,8 @@ class AttendancePresenter {
             postNew(position)
           }
         }
+    activity.hideProgress()
+
   }
 
   private fun postNew(position: Int) {
