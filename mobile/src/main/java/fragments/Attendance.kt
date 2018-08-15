@@ -36,8 +36,8 @@ class Attendance : Fragment() {
 
   private fun setRefreshListener() {
     (activity as MainActivity).setFragmentRefreshListener(object : MainActivity.FragmentRefreshListener {
-      override fun setProgress(visibility: Int) {
-        setProgressVisibility(visibility)
+      override fun setProgress(visibleState: Int) {
+        setProgressVisibility(visibleState)
       }
 
       override fun editChildClicked(childRef: String, position: Int) {
@@ -56,8 +56,8 @@ class Attendance : Fragment() {
     })
   }
 
-  private fun setProgressVisibility(visibility: Int) {
-    progress_layout_atten.visibility = visibility
+  private fun setProgressVisibility(visibleState: Int) {
+    progress_layout_atten.visibility = visibleState
   }
 
   private fun refreshData(children: ArrayList<AttenChild>, position: Int) {

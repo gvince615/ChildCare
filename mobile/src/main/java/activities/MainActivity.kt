@@ -77,7 +77,7 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
   interface FragmentRefreshListener {
     fun onRefresh(children: ArrayList<AttenChild>, position: Int)
     fun editChildClicked(childRef: String, position: Int)
-    fun setProgress(visible: Int)
+    fun setProgress(visibleState: Int)
   }
 
   override fun onBackPressed() {

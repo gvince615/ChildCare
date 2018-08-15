@@ -8,10 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.vince.childcare.R
-import core.ACTIVE
-import core.CHILD_ATTEN_CARD_TIME_FORMAT
-import core.FIRESTORE_DATE_TIME_FORMAT
-import core.INACTIVE
+import core.*
 import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,7 +65,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   private fun handleChildIsActive(holder: ViewHolder, position: Int) {
     holder.cv.isEnabled = true
-    holder.tvIsActive.text = ""
+    holder.tvIsActive.text = getAgeFromBirthDate(position)
     if (hasCheckInTime(position)) {
       SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US).format(
           SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).parse(items[position].checkInTime))
@@ -81,6 +78,27 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
       holder.cv.isActivated = false
       holder.checkInOutBtn.text = context.getText(R.string.check_in)
     }
+  }
+
+  private fun getAgeFromBirthDate(position: Int): String? {
+    var year = SimpleDateFormat(CHILD_ATTEN_BIRTHYEAR_FORMAT, Locale.US).format(
+        SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
+    var month = SimpleDateFormat(CHILD_ATTEN_BIRTHMONTH_FORMAT, Locale.US).format(
+        SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
+    var day = SimpleDateFormat(CHILD_ATTEN_BIRTH_DAY_FORMAT, Locale.US).format(
+        SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
+    var today = GregorianCalendar()
+
+    when {
+      month.toInt() < today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + "yrs old"
+      month.toInt() > today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + "yrs old"
+      month.toInt() == today.get(Calendar.MONTH) + 1 -> when {
+        day.toInt() < today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + "yrs old"
+        day.toInt() > today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + "yrs old"
+        day.toInt() == today.get(Calendar.DAY_OF_MONTH) -> return "Happy " + ((today.get(Calendar.YEAR) - year.toInt())).toString() + " Birthday"
+      }
+    }
+    return ""
   }
 
   private fun hasCheckInTime(position: Int) = items[position].checkInTime != "" && items[position].checkInTime != "null"
