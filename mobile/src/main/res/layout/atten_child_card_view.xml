@@ -36,19 +36,29 @@
           android:layout_height="wrap_content"
           >
 
-        <ImageView
-            android:id="@+id/child_image"
+        <LinearLayout
+            android:id="@+id/image_layout"
             android:layout_width="75dp"
-            android:layout_height="90dp"
-            android:src="@drawable/account_child_white_48x48"
-            android:transitionName="simple_activity_transition"
-            />
+            android:layout_height="80dp"
+            android:padding="3dp"
+            android:backgroundTint="@color/child_card_state"
+            >
+
+          <ImageView
+              android:id="@+id/child_image"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@drawable/account_child_white_48x48"
+              android:scaleType="centerCrop"
+              android:transitionName="simple_activity_transition"
+              />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/child_image"
+            android:layout_toEndOf="@id/image_layout"
             android:layout_toStartOf="@id/check_info_layout"
             android:orientation="vertical"
 
@@ -123,6 +133,7 @@
           android:layout_weight="1"
           android:text="@string/edit"
           android:textAlignment="textStart"
+          android:foreground="?android:attr/selectableItemBackground"
           android:theme="@style/PrimaryFlatButton"
           />
       <Button
@@ -134,6 +145,7 @@
           android:layout_weight="1"
           android:text="@string/check_in"
           android:textAlignment="textEnd"
+          android:foreground="?android:attr/selectableItemBackground"
           android:theme="@style/PrimaryFlatButton"
           />
 

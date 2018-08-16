@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -19,6 +20,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
@@ -58,16 +60,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   override fun childImageClicked(it: View?) {
     this.imageView = it as ImageView
-    val customSnackbar = CustomSnackbar.make(reg_coordinator_layout, 500)
 
-    customSnackbar.setText("Choose Image Source")
-    customSnackbar.setAction1("Take Picture", View.OnClickListener {
-      openCameraIntent()
-    })
-    customSnackbar.setAction2("Select Picture", View.OnClickListener {
-    })
-
-    customSnackbar.show()
+    val snackbar = Snackbar
+        .make(reg_coordinator_layout, "Snap a photo...", Snackbar.LENGTH_LONG)
+        .setAction("Open Camera") {
+          openCameraIntent()
+        }
+    snackbar.show()
   }
 
   private fun openCameraIntent() {
@@ -87,8 +86,16 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
-        imageView.setImageBitmap(imageBitmap)
-        (list[0].`object` as Child).childImageUri = saveImageToInternalStorage(imageBitmap).toString()
+
+        val matrix = Matrix()
+        matrix.postRotate(90F)
+        val rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
+        (list[0].`object` as Child).childImageUri = saveImageToInternalStorage(rotatedBitmap).toString()
+
+        Glide.with(this)
+            .load((list[0].`object` as Child).childImageUri)
+            .into(imageView)
+
       }
     }
   }
