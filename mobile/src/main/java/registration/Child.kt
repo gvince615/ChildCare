@@ -1,7 +1,7 @@
 package registration
 
 data class Child(
-
+    var childImageUri: String = "",
     var firstName: String = "",
     var lastName: String = "",
     var birthDate: String = "",
@@ -13,6 +13,6 @@ data class Child(
     var addressState: String = "",
     var addressZip: String = "") {
 
-  constructor() : this("", "", "", "", "", "", "", "", "", "")
+  constructor() : this("", "", "", "", "", "", "", "", "", "", "")
 }
 

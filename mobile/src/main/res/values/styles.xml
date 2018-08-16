@@ -55,6 +55,8 @@
   </style>
 
   <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+    <item name="android:backgroundTint">@color/fui_transparent</item>
+    <item name="android:elevation">0dp</item>
     <item name="android:buttonStyle">
       @style/Widget.AppCompat.Button.Borderless.Colored
     </item>

@@ -1,11 +1,13 @@
 package attendance
 
 import android.content.Context
+import android.net.Uri
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.vince.childcare.R
 import core.*
@@ -48,6 +50,10 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
       cardItemListener.checkInOutBtnClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position, it)
     }
 
+    if (items[position].childImageUri != "") {
+      holder.ivChildImage.setImageURI(Uri.parse(items[position].childImageUri))
+    }
+
     holder.tvFirstName.text = items[position].firstName
     holder.tvLastName.text = items[position].lastName
 
@@ -81,13 +87,13 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   }
 
   private fun getAgeFromBirthDate(position: Int): String? {
-    var year = SimpleDateFormat(CHILD_ATTEN_BIRTHYEAR_FORMAT, Locale.US).format(
+    val year = SimpleDateFormat(CHILD_ATTEN_BIRTHYEAR_FORMAT, Locale.US).format(
         SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
-    var month = SimpleDateFormat(CHILD_ATTEN_BIRTHMONTH_FORMAT, Locale.US).format(
+    val month = SimpleDateFormat(CHILD_ATTEN_BIRTHMONTH_FORMAT, Locale.US).format(
         SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
-    var day = SimpleDateFormat(CHILD_ATTEN_BIRTH_DAY_FORMAT, Locale.US).format(
+    val day = SimpleDateFormat(CHILD_ATTEN_BIRTH_DAY_FORMAT, Locale.US).format(
         SimpleDateFormat(FIRESTORE_BIRTHDATE_FORMAT, Locale.US).parse(items[position].birthDate))
-    var today = GregorianCalendar()
+    val today = GregorianCalendar()
 
     when {
       month.toInt() < today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + "yrs old"
@@ -117,6 +123,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   val cv: CardView = view.atten_card_view
+  val ivChildImage: ImageView = view.child_image
   val tvFirstName: TextView = view.tv_first_name
   val tvLastName: TextView = view.tv_last_name
   val tvIsActive: TextView = view.tv_active

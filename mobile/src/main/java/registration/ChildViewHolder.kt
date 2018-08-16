@@ -1,8 +1,8 @@
 package registration
 
 import android.content.Context
+import android.net.Uri
 import android.support.design.widget.TextInputLayout
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 
 class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-  var childCardView: CardView = itemView.childDataCardView
   var childImage: ImageView = itemView.child_image
   var childFirstNameLayout: TextInputLayout = itemView.child_first_name
   var childLastNameLayout: TextInputLayout = itemView.child_last_name
@@ -38,17 +37,13 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      holder.childFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.firstName)
-      holder.childLastNameLayout.editText?.setText((listItem as RegistrationCardItem<Child>).`object`.lastName)
-
-
-      if ((listItem as RegistrationCardItem<Child>).`object`.isActive == "Active"){
-        holder.childIsActive.setChecked(true)
-      }
-      else{
-        holder.childIsActive.setChecked(false)
+      if ((listItem as RegistrationCardItem<Child>).`object`.childImageUri != "") {
+        holder.childImage.setImageURI(Uri.parse((listItem).`object`.childImageUri))
       }
 
+      holder.childFirstNameLayout.editText?.setText((listItem).`object`.firstName)
+      holder.childLastNameLayout.editText?.setText((listItem).`object`.lastName)
+      holder.childIsActive.isChecked = (listItem.`object`.isActive) == "Active"
       holder.childDOBLayout.editText?.setText(listItem.`object`.birthDate)
       holder.childLAddressLn1Layout.editText?.setText(listItem.`object`.addressLn1)
       holder.childLAddressLn2Layout.editText?.setText(listItem.`object`.addressLn2)
@@ -94,11 +89,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       }
 
       holder.childImage.setOnClickListener {
-        //todo  picture
-      }
-
-      holder.childCardView.setOnClickListener {
-
+        listener?.childImageClicked(it)
       }
     }
 

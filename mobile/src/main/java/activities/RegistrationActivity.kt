@@ -2,33 +2,45 @@ package activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import core.FirestoreUtil
-import core.HashMapUtil
+import core.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import registration.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
+  private lateinit var imageView: ImageView
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
-
   val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration)
-
-
 
     if (intent.hasExtra("childToLoad")) {
       var childToLoad = intent.getStringExtra("childToLoad")
@@ -39,12 +51,67 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       setUpRecyclerView()
     }
 
-
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     medical_menu_item.setOnClickListener { medicalMenuButtonClicked() }
     billing_menu_item.setOnClickListener { billingMenuButtonClicked() }
-
   }
+
+  override fun childImageClicked(it: View?) {
+    this.imageView = it as ImageView
+    val customSnackbar = CustomSnackbar.make(reg_coordinator_layout, 500)
+
+    customSnackbar.setText("Choose Image Source")
+    customSnackbar.setAction1("Take Picture", View.OnClickListener {
+      openCameraIntent()
+    })
+    customSnackbar.setAction2("Select Picture", View.OnClickListener {
+    })
+
+    customSnackbar.show()
+  }
+
+  private fun openCameraIntent() {
+
+    PermissionUtil.handlePermission(this, ACTION_UPLOAD_PERMISSION, PermissionUtil.Permission.WRITE_EXTERNAL_STORAGE)
+    if (PermissionUtil.handlePermission(this, ACTION_UPLOAD_PERMISSION, PermissionUtil.Permission.WRITE_EXTERNAL_STORAGE)) {
+      val pictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+      if (pictureIntent.resolveActivity(packageManager) != null) {
+        startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE)
+      }
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
+      if (data != null && data.extras != null) {
+        val imageBitmap = data.extras.get("data") as Bitmap
+        imageView.setImageBitmap(imageBitmap)
+        (list[0].`object` as Child).childImageUri = saveImageToInternalStorage(imageBitmap).toString()
+      }
+    }
+  }
+
+  private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
+
+    val wrapper = ContextWrapper(applicationContext)
+    var file = wrapper.getDir("images", Context.MODE_PRIVATE)
+
+    file = File(file, "${UUID.randomUUID()}.jpg")
+
+    try {
+      val stream: OutputStream = FileOutputStream(file)
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+      stream.flush()
+      stream.close()
+    } catch (e: IOException) { // Catch the exception
+      e.printStackTrace()
+    }
+    hideProgress()
+    return Uri.parse(file.absolutePath)
+  }
+
 
   private fun billingMenuButtonClicked() {
 //    cards.add(BillingData())
@@ -207,6 +274,35 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     adapter.setUpForEdit()
 
+  }
+
+  private fun getOutputMediaFileUri(type: Int): Uri? {
+    return Uri.fromFile(getOutputMediaFile(type))
+  }
+
+  private fun getOutputMediaFile(type: Int): File? {
+
+    // Check that the SDCard is mounted
+    val mediaStorageDir = File(
+        Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES)
+    // Create the storage directory(MyCameraVideo) if it does not exist
+    if (!mediaStorageDir.exists()) {
+      if (!mediaStorageDir.mkdirs()) {
+        Log.e("Item Attachment",
+            "Failed to create directory MyCameraVideo.")
+        return null
+      }
+    }
+
+    val mediaFile: File
+
+    if (type == 1) {
+      mediaFile = File(mediaStorageDir.path + File.separator + ".jpg")
+    } else {
+      return null
+    }
+
+    return mediaFile
   }
 
   fun showProgress() {

@@ -2,6 +2,7 @@ package registration
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 
 class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -67,5 +68,6 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   interface CardItemListener {
     fun onDeleteCardBtnTapped(adapterPosition: Int)
+    fun childImageClicked(it: View?)
   }
 }
