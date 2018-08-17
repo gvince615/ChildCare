@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 
 
 open class BaseActivity : AppCompatActivity() {
 
-  private lateinit var firebaseAnalytics: FirebaseAnalytics
-  private lateinit var firebaseAuth: FirebaseAuth
+  lateinit var firebaseAnalytics: FirebaseAnalytics
+  lateinit var firebaseAuth: FirebaseAuth
+  lateinit var firebaseStorage: FirebaseStorage
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -18,5 +20,7 @@ open class BaseActivity : AppCompatActivity() {
 
     firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     firebaseAuth = FirebaseAuth.getInstance()
+    firebaseStorage = FirebaseStorage.getInstance()
+
   }
 }

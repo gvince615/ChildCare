@@ -1,7 +1,6 @@
 package attendance
 
 import android.content.Context
-import android.net.Uri
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,6 +13,7 @@ import core.*
 import kotlinx.android.synthetic.main.atten_child_card_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
@@ -51,7 +51,8 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
 
     if (items[position].childImageUri != "") {
-      holder.ivChildImage.setImageURI(Uri.parse(items[position].childImageUri))
+      DownloadImageTask(holder.ivChildImage)
+          .execute(items[position].childImageUri)
     }
 
     holder.tvFirstName.text = items[position].firstName

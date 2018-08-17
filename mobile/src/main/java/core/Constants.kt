@@ -3,9 +3,8 @@ package core
 val SIGN_IN_REQUEST_CODE = 123
 
 val FIRESTORE_TAG = "Firestore:"
-
 val CHILD_TO_LOAD = "childToLoad"
-
+val STORAGE_PATH_CHILD_IMAGES = "childImages/"
 val COLLECTION_USER_DATA = "userData"
 val COLLECTION_REGISTRATION_DATA = "registrationData"
 val COLLECTION_PARENTS = "parentData"
@@ -36,6 +35,8 @@ val ACTION_FINGERPRINT_PERMISSION = 704
 val ACTION_CAMERA_PERMISSION = 705
 
 val REQUEST_CAPTURE_IMAGE = 100
+
+
 
 
 

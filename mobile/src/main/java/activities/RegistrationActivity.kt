@@ -10,12 +10,10 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -44,14 +42,17 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration)
 
+    registrationPresenter = RegistrationPresenter()
+
     if (intent.hasExtra("childToLoad")) {
       var childToLoad = intent.getStringExtra("childToLoad")
-      registrationPresenter = RegistrationPresenter()
       registrationPresenter.setUp(this, childToLoad)
       registrationPresenter.loadChild()
     } else {
       setUpRecyclerView()
+      registrationPresenter.setUp(this)
     }
+
 
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     medical_menu_item.setOnClickListener { medicalMenuButtonClicked() }
@@ -80,24 +81,27 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
   }
 
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
-
-        val matrix = Matrix()
-        matrix.postRotate(90F)
-        val rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
-        (list[0].`object` as Child).childImageUri = saveImageToInternalStorage(rotatedBitmap).toString()
-
-        Glide.with(this)
-            .load((list[0].`object` as Child).childImageUri)
-            .into(imageView)
-
+        saveAndSetImage(imageBitmap)
       }
     }
+  }
+
+  private var childImage: Uri? = null
+
+  private fun saveAndSetImage(imageBitmap: Bitmap) {
+    val matrix = Matrix()
+    matrix.postRotate(90F)
+    val rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
+    childImage = saveImageToInternalStorage(rotatedBitmap)
+    Glide.with(this)
+        .load(childImage.toString())
+        .into(imageView)
   }
 
   private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
@@ -176,19 +180,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     if (validationSuccess()) {
 
-      val childCard: HashMap<String, Any>? = saveAndGetChildCard()
-
-      for (card in adapter.getList()) {
-        when (card.viewType) {
-          RegistrationCardItem.PARENT -> {
-
-            FirestoreUtil(FirebaseFirestore.getInstance(), this)
-                .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
-                    childCard)
-          }
-        }
-      }
-      finish()
+      saveChildCard()
     } else {
       val snackbar = Snackbar
           .make(reg_coordinator_layout, "Unable to save registration with empty fields.", Snackbar.LENGTH_LONG)
@@ -231,19 +223,12 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return false
   }
 
-  private fun saveAndGetChildCard(): HashMap<String, Any>? {
-    for (card in adapter.getList()) {
-      when (card.viewType) {
-        RegistrationCardItem.CHILD -> {
-
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
-
-          return HashMapUtil().createChildMap(card)
-        }
-      }
+  private fun saveChildCard() {
+    if (childImage != null) {
+      registrationPresenter.uploadFile(childImage!!, firebaseStorage.reference)
+    } else {
+      onChildImageUploaded("")
     }
-    return null
   }
 
   override fun onBackPressed() {
@@ -283,40 +268,34 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   }
 
-  private fun getOutputMediaFileUri(type: Int): Uri? {
-    return Uri.fromFile(getOutputMediaFile(type))
-  }
-
-  private fun getOutputMediaFile(type: Int): File? {
-
-    // Check that the SDCard is mounted
-    val mediaStorageDir = File(
-        Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES)
-    // Create the storage directory(MyCameraVideo) if it does not exist
-    if (!mediaStorageDir.exists()) {
-      if (!mediaStorageDir.mkdirs()) {
-        Log.e("Item Attachment",
-            "Failed to create directory MyCameraVideo.")
-        return null
-      }
-    }
-
-    val mediaFile: File
-
-    if (type == 1) {
-      mediaFile = File(mediaStorageDir.path + File.separator + ".jpg")
-    } else {
-      return null
-    }
-
-    return mediaFile
-  }
-
   fun showProgress() {
     progress_layout_reg.visibility = View.VISIBLE
   }
 
   fun hideProgress() {
     progress_layout_reg.visibility = View.GONE
+  }
+
+  fun onChildImageUploaded(url: String) {
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.CHILD -> {
+
+          if (url != "") {
+            (card as RegistrationCardItem<Child>).`object`.childImageUri = url
+          }
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createChildMap(list[0] as RegistrationCardItem<Child>))
+        }
+
+        RegistrationCardItem.PARENT -> {
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+                  HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
+        }
+      }
+      finish()
+    }
   }
 }

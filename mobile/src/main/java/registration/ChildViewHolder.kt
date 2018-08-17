@@ -1,7 +1,6 @@
 package registration
 
 import android.content.Context
-import android.net.Uri
 import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -13,6 +12,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import com.vince.childcare.R
+import core.DownloadImageTask
 import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 
 
@@ -38,7 +38,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
       if ((listItem as RegistrationCardItem<Child>).`object`.childImageUri != "") {
-        holder.childImage.setImageURI(Uri.parse((listItem).`object`.childImageUri))
+        DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUri)
       }
 
       holder.childFirstNameLayout.editText?.setText((listItem).`object`.firstName)
@@ -98,6 +98,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
       })

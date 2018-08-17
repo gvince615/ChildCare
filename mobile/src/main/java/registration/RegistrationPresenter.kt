@@ -1,13 +1,17 @@
 package registration
 
 import activities.RegistrationActivity
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import core.COLLECTION_PARENTS
-import core.COLLECTION_REGISTRATION_DATA
-import core.COLLECTION_USER_DATA
-import core.PREFIX_UID
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import core.*
+import java.io.File
+
+
+
 
 class RegistrationPresenter {
 
@@ -66,8 +70,60 @@ class RegistrationPresenter {
 
   }
 
+  fun uploadFile(filePath: Uri, storageReference: StorageReference) {
+
+    //checking if file is available
+    if (filePath != null) {
+      //displaying progress dialog while image is uploading
+      activity.showProgress()
+
+      val file = Uri.fromFile(File(filePath.toString()))
+      val ref = storageReference.child(FirebaseAuth.getInstance().currentUser?.uid + "/" + STORAGE_PATH_CHILD_IMAGES + file.lastPathSegment)
+      val uploadTask: UploadTask = ref.putFile(file)
+
+
+      val urlTask = uploadTask.continueWithTask { task ->
+        if (!task.isSuccessful) {
+          throw task.exception!!
+        }
+
+        ref.downloadUrl
+      }.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+          activity.onChildImageUploaded(task.result.toString())
+        } else {
+          activity.hideProgress()
+          //Toast.makeText(activity.applicationContext, task.result, Toast.LENGTH_LONG).show()
+        }
+      }
+
+
+//
+//      uploadTask
+//        .addOnFailureListener {
+//          activity.hideProgress()
+//          Toast.makeText(activity.applicationContext, it.message, Toast.LENGTH_LONG).show()
+//        }
+//        .addOnSuccessListener {
+//          //dismissing the progress dialog
+//          activity.hideProgress()
+//          //displaying success toast
+//          Toast.makeText(activity.applicationContext, "File Uploaded ", Toast.LENGTH_LONG).show()
+//
+//          activity.onChildImageUploaded(it. downloadUrl.toString())
+//
+//        }
+    } else {
+      //display an error if no file is selected
+    }
+  }
+
   fun setUp(registrationActivity: RegistrationActivity, childToLoad: String) {
     this.activity = registrationActivity
     this.childToLoad = childToLoad
+  }
+
+  fun setUp(registrationActivity: RegistrationActivity) {
+    this.activity = registrationActivity
   }
 }
