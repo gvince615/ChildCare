@@ -87,21 +87,24 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
-        saveAndSetImage(imageBitmap)
+        var rotatedImage = saveImage(imageBitmap)
+
+        Glide.with(this)
+            .asBitmap()
+            .load(rotatedImage)
+            .into(imageView)
       }
     }
   }
 
   private var childImage: Uri? = null
-
-  private fun saveAndSetImage(imageBitmap: Bitmap) {
+  private fun saveImage(imageBitmap: Bitmap): Bitmap? {
+    childImage = null
     val matrix = Matrix()
     matrix.postRotate(90F)
     val rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
     childImage = saveImageToInternalStorage(rotatedBitmap)
-    Glide.with(this)
-        .load(childImage.toString())
-        .into(imageView)
+    return rotatedBitmap
   }
 
   private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
@@ -109,7 +112,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     val wrapper = ContextWrapper(applicationContext)
     var file = wrapper.getDir("images", Context.MODE_PRIVATE)
 
-    file = File(file, "${UUID.randomUUID()}.jpg")
+    var card = adapter.getList()[0]
+    var childName = (card.`object` as Child).firstName + (card.`object` as Child).lastName
+
+    file = File(file, "$childName.jpg")
 
     try {
       val stream: OutputStream = FileOutputStream(file)
@@ -143,7 +149,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child("", "", "", "Active", "", "", "", "", ""))
+    adapter.addChild(Child("", "", "", "", "Active", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -168,12 +174,27 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         saveRegistration()
       }
 
+      R.id.menu_delete -> {
+        deleteRegistration()
+      }
+
       android.R.id.home -> {
         onBackPressed()
         return true
       }
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  private fun deleteRegistration() {
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.CHILD -> {
+          registrationPresenter.deleteChildDataDocument((card as RegistrationCardItem<Child>).`object`.lastName + "_" + card.`object`.firstName)
+        }
+      }
+    }
+    finish()
   }
 
   private fun saveRegistration() {
@@ -224,10 +245,17 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun saveChildCard() {
-    if (childImage != null) {
-      registrationPresenter.uploadFile(childImage!!, firebaseStorage.reference)
-    } else {
-      onChildImageUploaded("")
+    for (card in adapter.getList()) {
+      when (card.viewType) {
+        RegistrationCardItem.CHILD -> {
+
+          if (childImage != null) {
+            registrationPresenter.uploadFile(childImage!!, firebaseStorage.reference)
+          } else {
+            onChildImageUploaded("")
+          }
+        }
+      }
     }
   }
 
@@ -282,20 +310,26 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         RegistrationCardItem.CHILD -> {
 
           if (url != "") {
-            (card as RegistrationCardItem<Child>).`object`.childImageUri = url
+            (card as RegistrationCardItem<Child>).`object`.childImageUrl = url
           }
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveChildDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createChildMap(list[0] as RegistrationCardItem<Child>))
+          registrationPresenter.saveChildDataDocument(FirebaseAuth.getInstance().currentUser,
+              HashMapUtil().createChildMap(list[0] as RegistrationCardItem<Child>))
         }
 
         RegistrationCardItem.PARENT -> {
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-              .saveParentDataDocument(FirebaseAuth.getInstance().currentUser, HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
-                  HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
+          registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser,
+              HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+              HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
         }
       }
       finish()
     }
+  }
+
+  fun onDeleteChildSuccess() {
+
   }
 }

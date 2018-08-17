@@ -3,20 +3,58 @@ package registration
 import activities.RegistrationActivity
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.vince.childcare.R
 import core.*
 import java.io.File
-
-
 
 
 class RegistrationPresenter {
 
   lateinit var activity: RegistrationActivity
   var childToLoad: String = ""
+
+  fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: HashMap<String, Any>) {
+
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData[LAST_NAME].toString() + "_" + childData[FIRST_NAME].toString())
+        .set(childData).addOnSuccessListener {
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_update_failed))
+        }
+  }
+
+  fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(LAST_NAME).toString() + "_" + childData?.get(FIRST_NAME).toString())
+        .collection(COLLECTION_PARENTS).document(parentData[LAST_NAME].toString() + "_" + parentData[FIRST_NAME].toString())
+        .set(parentData).addOnSuccessListener {
+          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+        }
+  }
+
+  fun deleteChildDataDocument(childToDelete: String) {
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childToDelete)
+        .delete()
+        .addOnSuccessListener {
+          activity.onDeleteChildSuccess()
+          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully deleted!")
+        }
+        .addOnFailureListener { e ->
+          //todo failed
+          Log.w(FIRESTORE_TAG, "Error deleting document", e)
+        }
+  }
 
   fun loadChild() {
     var childRef = childToLoad
@@ -81,7 +119,6 @@ class RegistrationPresenter {
       val ref = storageReference.child(FirebaseAuth.getInstance().currentUser?.uid + "/" + STORAGE_PATH_CHILD_IMAGES + file.lastPathSegment)
       val uploadTask: UploadTask = ref.putFile(file)
 
-
       val urlTask = uploadTask.continueWithTask { task ->
         if (!task.isSuccessful) {
           throw task.exception!!
@@ -93,26 +130,9 @@ class RegistrationPresenter {
           activity.onChildImageUploaded(task.result.toString())
         } else {
           activity.hideProgress()
-          //Toast.makeText(activity.applicationContext, task.result, Toast.LENGTH_LONG).show()
+          Toast.makeText(activity.applicationContext, task.result.toString(), Toast.LENGTH_LONG).show()
         }
       }
-
-
-//
-//      uploadTask
-//        .addOnFailureListener {
-//          activity.hideProgress()
-//          Toast.makeText(activity.applicationContext, it.message, Toast.LENGTH_LONG).show()
-//        }
-//        .addOnSuccessListener {
-//          //dismissing the progress dialog
-//          activity.hideProgress()
-//          //displaying success toast
-//          Toast.makeText(activity.applicationContext, "File Uploaded ", Toast.LENGTH_LONG).show()
-//
-//          activity.onChildImageUploaded(it. downloadUrl.toString())
-//
-//        }
     } else {
       //display an error if no file is selected
     }

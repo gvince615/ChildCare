@@ -1,7 +1,7 @@
 package registration
 
 data class Child(
-    var childImageUri: String = "",
+    var childImageUrl: String = "",
     var firstName: String = "",
     var lastName: String = "",
     var birthDate: String = "",

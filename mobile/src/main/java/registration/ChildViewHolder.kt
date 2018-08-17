@@ -37,8 +37,8 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      if ((listItem as RegistrationCardItem<Child>).`object`.childImageUri != "") {
-        DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUri)
+      if ((listItem as RegistrationCardItem<Child>).`object`.childImageUrl != "") {
+        DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUrl)
       }
 
       holder.childFirstNameLayout.editText?.setText((listItem).`object`.firstName)

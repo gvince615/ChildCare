@@ -11,7 +11,7 @@ class HashMapUtil {
   fun createChildMap(card: RegistrationCardItem<Child>): HashMap<String, Any> {
 
     val childMap = HashMap<String, Any>()
-    card.`object`.childImageUri.let { childMap.put("childImageUri", it) }
+    card.`object`.childImageUrl.let { childMap.put("childImageUrl", it) }
     card.`object`.firstName.let { childMap.put("firstName", it) }
     card.`object`.lastName.let { childMap.put("lastName", it) }
     card.`object`.birthDate.let { childMap.put("birthDate", it) }

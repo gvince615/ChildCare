@@ -15,7 +15,6 @@ import java.util.*
 
 class AttendancePresenter {
 
-  var alreadyCheckedIn: Boolean = false
   lateinit var childReference: String
   lateinit var activity: MainActivity
   private lateinit var children: ArrayList<AttenChild>
