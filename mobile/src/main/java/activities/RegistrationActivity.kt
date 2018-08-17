@@ -305,12 +305,14 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   fun onChildImageUploaded(url: String) {
+    var chilCard: RegistrationCardItem<Child>? = null
+
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
-
+          chilCard = card as RegistrationCardItem<Child>
           if (url != "") {
-            (card as RegistrationCardItem<Child>).`object`.childImageUrl = url
+            card.`object`.childImageUrl = url
           }
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
@@ -322,7 +324,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
           registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser,
               HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
-              HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
+              chilCard?.let { HashMapUtil().createChildMap(it) })
         }
       }
       finish()
