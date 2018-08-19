@@ -1,7 +1,9 @@
 package attendance
 
-class AttenChild(childImageUri: String?, firstName: String?, lastName: String?, isActive: String?, birthDate: String?, enrollmentDate: String?,
+class AttenChild(childId: String?, childImageUri: String?, firstName: String?, lastName: String?, isActive: String?, birthDate: String?,
+    enrollmentDate: String?,
     checkInTime: String?) {
+  internal var childId = childId
   internal var childImageUri = childImageUri
   internal var firstName = firstName
   internal var lastName = lastName

@@ -32,6 +32,8 @@ dependencies {
   implementation 'com.android.support:wear:27.1.1'
   implementation 'com.google.firebase:firebase-auth:16.0.2'
   implementation 'com.google.firebase:firebase-firestore:17.0.2'
+  implementation 'com.google.firebase:firebase-crash:11.8.0'
+  implementation 'com.google.firebase:firebase-messaging:11.8.0'
   compileOnly 'com.google.android.wearable:wearable:2.3.0'
   implementation 'com.google.firebase:firebase-core:16.0.1'
   implementation 'com.firebaseui:firebase-ui-auth:4.0.0'

@@ -21,9 +21,8 @@ import java.util.*
 
 class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
 
-  override fun editChildClicked(childRef: String, position: Int) {
-
-    fragmentRefreshListener?.editChildClicked(childRef, position)
+  override fun childClicked(childRef: String, position: Int) {
+    fragmentRefreshListener?.childClicked(childRef, position)
   }
 
   override fun checkInOutBtnClicked(childRef: String, position: Int, view: View) {
@@ -70,13 +69,13 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     fragmentRefreshListener?.onRefresh(children, position)
   }
 
-  fun updateChildData() {
+  private fun updateChildData() {
     attendancePresenter.getChildData(FirebaseAuth.getInstance().currentUser)
   }
 
   interface FragmentRefreshListener {
     fun onRefresh(children: ArrayList<AttenChild>, position: Int)
-    fun editChildClicked(childRef: String, position: Int)
+    fun childClicked(childRef: String, position: Int)
     fun setProgress(visibleState: Int)
   }
 

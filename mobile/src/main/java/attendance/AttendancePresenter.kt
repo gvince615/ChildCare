@@ -30,7 +30,9 @@ class AttendancePresenter {
 
     this.childReference = childReference
 
-    var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+    var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA)
 
     ref.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
@@ -58,7 +60,6 @@ class AttendancePresenter {
             postNew(position)
           }
         }
-    activity.hideProgress()
 
   }
 
@@ -70,10 +71,13 @@ class AttendancePresenter {
     attenMap[CHECK_OUT] = ""
     attenMap[TIME_STAMP] = FieldValue.serverTimestamp()
 
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA).document()
         .set(attenMap)
         .addOnSuccessListener {
+          activity.hideProgress()
 
           activity.updateChildAttendanceData(attenMap, position)
 
@@ -81,6 +85,8 @@ class AttendancePresenter {
         }
         .addOnFailureListener { e ->
           //todo
+          activity.hideProgress()
+
           Log.w(FIRESTORE_TAG, "Error writing document", e)
         }
   }
@@ -95,6 +101,7 @@ class AttendancePresenter {
     FirebaseFirestore.getInstance().document(doc.reference.path)
         .update(attenMap)
         .addOnSuccessListener {
+          activity.hideProgress()
 
           activity.updateChildAttendanceData(attenMap, position)
 
@@ -102,6 +109,8 @@ class AttendancePresenter {
         }
         .addOnFailureListener { e ->
           //todo
+          activity.hideProgress()
+
           Log.w(FIRESTORE_TAG, "Error writing document", e)
         }
   }
@@ -130,16 +139,18 @@ class AttendancePresenter {
   }
 
   fun getChildData(currentUser: FirebaseUser?) {
-    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + currentUser?.uid)
+    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
     d.get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-              val child = AttenChild(document[CHILD_IMAGE_URI].toString(), document[FIRST_NAME].toString(), document[LAST_NAME].toString(),
-                  document[IS_ACTIVE].toString(),
-                  document[BIRTH_DATE].toString(), "", "")
+              val child = AttenChild(document[CHILD_ID].toString(), document[CHILD_IMAGE_URI].toString(), document[FIRST_NAME].toString(),
+                  document[LAST_NAME].toString(),
+                  document[IS_ACTIVE].toString(), document[BIRTH_DATE].toString(), "", "")
               Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
               children.add(child)
               getLatestAttendanceData(document, child)

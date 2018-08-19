@@ -38,14 +38,17 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private lateinit var registrationPresenter: RegistrationPresenter
   val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
+  private var isInEditMode: Boolean = false
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration)
 
     registrationPresenter = RegistrationPresenter()
-
-    if (intent.hasExtra("childToLoad")) {
-      var childToLoad = intent.getStringExtra("childToLoad")
+    isInEditMode = false
+    if (intent.hasExtra(CHILD_ID)) {
+      isInEditMode = true
+      var childToLoad = intent.getStringExtra(CHILD_ID)
       registrationPresenter.setUp(this, childToLoad)
       registrationPresenter.loadChild()
     } else {
@@ -149,7 +152,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child("", "", "", "", "Active", "", "", "", ""))
+    adapter.addChild(Child("", "", "", "", "", "Active", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -190,7 +193,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
-          registrationPresenter.deleteChildDataDocument((card as RegistrationCardItem<Child>).`object`.lastName + "_" + card.`object`.firstName)
+          registrationPresenter.deleteChildDataDocument((card as RegistrationCardItem<Child>).`object`.childId)
         }
       }
     }
@@ -311,6 +314,15 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
           chilCard = card as RegistrationCardItem<Child>
+
+          if (!isInEditMode) {
+
+            card.`object`.childId =
+                "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
+                "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
+                "-" + ((Math.random() * 9000).toInt() + 1000).toString()
+          }
+
           if (url != "") {
             card.`object`.childImageUrl = url
           }

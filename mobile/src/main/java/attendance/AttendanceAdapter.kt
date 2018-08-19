@@ -28,7 +28,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   }
 
   interface CardItemListener {
-    fun editChildClicked(childRef: String, position: Int)
+    fun childClicked(childRef: String, position: Int)
     fun checkInOutBtnClicked(childRef: String, position: Int, view: View)
   }
 
@@ -42,19 +42,18 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-    holder.editCardBtn.setOnClickListener {
-      cardItemListener.editChildClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position)
+    holder.cv.setOnClickListener {
+      cardItemListener.childClicked(holder.tvChildId.text.toString(), position)
     }
 
     holder.checkInOutBtn.setOnClickListener {
-      cardItemListener.checkInOutBtnClicked(holder.tvLastName.text.toString() + "_" + holder.tvFirstName.text.toString(), position, it)
+      cardItemListener.checkInOutBtnClicked(holder.tvChildId.text.toString(), position, it)
     }
 
     if (items[position].childImageUri != "") {
-      DownloadImageTask(holder.ivChildImage)
-          .execute(items[position].childImageUri)
+      DownloadImageTask(holder.ivChildImage).execute(items[position].childImageUri)
     }
-
+    holder.tvChildId.text = items[position].childId
     holder.tvFirstName.text = items[position].firstName
     holder.tvLastName.text = items[position].lastName
 
@@ -97,11 +96,11 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     val today = GregorianCalendar()
 
     when {
-      month.toInt() < today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + "yrs old"
-      month.toInt() > today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + "yrs old"
+      month.toInt() < today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + " yrs old"
+      month.toInt() > today.get(Calendar.MONTH) + 1 -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + " yrs old"
       month.toInt() == today.get(Calendar.MONTH) + 1 -> when {
-        day.toInt() < today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + "yrs old"
-        day.toInt() > today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + "yrs old"
+        day.toInt() < today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt())).toString() + " yrs old"
+        day.toInt() > today.get(Calendar.DAY_OF_MONTH) -> return ((today.get(Calendar.YEAR) - year.toInt()) - 1).toString() + " yrs old"
         day.toInt() == today.get(Calendar.DAY_OF_MONTH) -> return "Happy " + ((today.get(Calendar.YEAR) - year.toInt())).toString() + " Birthday"
       }
     }
@@ -124,11 +123,11 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   val cv: CardView = view.atten_card_view
+  val tvChildId: TextView = view.tv_child_id
   val ivChildImage: ImageView = view.child_image
   val tvFirstName: TextView = view.tv_first_name
   val tvLastName: TextView = view.tv_last_name
   val tvIsActive: TextView = view.tv_active
   val tvCheckInTime: TextView = view.tv_check_in_time
   val checkInOutBtn: TextView = view.check_in_out_btn
-  val editCardBtn: TextView = view.edit_card_btn
 }

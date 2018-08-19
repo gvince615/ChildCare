@@ -21,6 +21,16 @@
       android:padding="5dp"
       android:theme="@style/ChildCardTheme"
       >
+    <View
+        android:layout_width="fill_parent"
+        android:id="@+id/focus_view"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        >
+      <requestFocus />
+    </View>
+
     <LinearLayout
         android:id="@+id/card_header"
         android:layout_width="match_parent"
@@ -38,71 +48,46 @@
           android:textStyle="bold"
           android:padding="3dp"
           />
+      <EditText
+          android:id="@+id/child_id"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:text="ID"
+          android:enabled="false"
+          android:visibility="gone"
+
+          />
     </LinearLayout>
 
     <!--data-->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/child_small_card_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBlue"
-        android:gravity="start"
+        android:layout_height="200dp"
+        android:background="@color/fui_transparent"
         android:orientation="horizontal"
-        android:weightSum="2"
 
         >
       <ImageView
           android:id="@+id/child_image"
-          android:layout_width="90dp"
-          android:layout_height="110dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:foreground="?android:attr/selectableItemBackground"
           android:padding="1dp"
           android:src="@drawable/account_child_white_48x48"
           android:transitionName="simple_activity_transition"
-          />
-      <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
           android:layout_gravity="center"
-          android:layout_weight="2"
-          android:orientation="vertical"
-          >
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/child_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_first_name"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:inputType="textPersonName"
-              android:hint="First Name"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/child_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/input_last_name"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:inputType="textPersonName"
-              android:hint="Last Name"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-      </LinearLayout>
+          />
+      <ImageView
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_alignParentBottom="true"
+          android:layout_alignParentEnd="true"
+          android:src="@android:drawable/ic_menu_edit"
+          />
 
 
-    </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,7 +95,37 @@
         android:orientation="vertical"
 
         >
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/child_first_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
 
+        <EditText
+            android:id="@+id/input_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="First Name"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:id="@+id/child_last_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <EditText
+            android:id="@+id/input_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Last Name"
+            />
+
+      </android.support.design.widget.TextInputLayout>
 
       <android.support.design.widget.TextInputLayout
           android:id="@+id/input_layout_dob"

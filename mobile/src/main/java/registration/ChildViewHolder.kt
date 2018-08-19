@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 
 class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+  var childId: EditText = itemView.child_id
   var childImage: ImageView = itemView.child_image
   var childFirstNameLayout: TextInputLayout = itemView.child_first_name
   var childLastNameLayout: TextInputLayout = itemView.child_last_name
@@ -41,6 +42,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUrl)
       }
 
+      holder.childId.setText((listItem).`object`.childId)
       holder.childFirstNameLayout.editText?.setText((listItem).`object`.firstName)
       holder.childLastNameLayout.editText?.setText((listItem).`object`.lastName)
       holder.childIsActive.isChecked = (listItem.`object`.isActive) == "Active"
@@ -50,6 +52,10 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.childLAddressCityLayout.editText?.setText(listItem.`object`.addressCity)
       holder.childLAddressStateLayout.editText?.setText(listItem.`object`.addressState)
       holder.childLAddressZipLayout.editText?.setText(listItem.`object`.addressZip)
+
+      holder.childId.onChange {
+        listItem.`object`.childId = holder.childId.text?.toString()!!
+      }
 
       holder.childFirstNameLayout.editText?.onChange {
         holder.childFirstNameLayout.error = if (holder.childFirstNameLayout.editText?.text.toString().length > 1) null else "Minimum length of 2"

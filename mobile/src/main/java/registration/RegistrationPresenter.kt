@@ -21,8 +21,9 @@ class RegistrationPresenter {
 
   fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: HashMap<String, Any>) {
 
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childData[LAST_NAME].toString() + "_" + childData[FIRST_NAME].toString())
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData[CHILD_ID].toString())
         .set(childData).addOnSuccessListener {
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_succeeded))
         }.addOnFailureListener {
@@ -31,8 +32,9 @@ class RegistrationPresenter {
   }
 
   fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: HashMap<String, Any>, childData: HashMap<String, Any>?) {
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(LAST_NAME).toString() + "_" + childData?.get(FIRST_NAME).toString())
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .collection(COLLECTION_PARENTS).document(parentData[LAST_NAME].toString() + "_" + parentData[FIRST_NAME].toString())
         .set(parentData).addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
@@ -43,7 +45,9 @@ class RegistrationPresenter {
   }
 
   fun deleteChildDataDocument(childToDelete: String) {
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childToDelete)
         .delete()
         .addOnSuccessListener {
@@ -63,7 +67,9 @@ class RegistrationPresenter {
 
     activity.showProgress()
 
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
         .get()
         .addOnCompleteListener { task ->
@@ -75,7 +81,8 @@ class RegistrationPresenter {
                 child.isActive = document["isActive"].toString()
 
                 FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-                    PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+                    FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+                        PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
                     .collection(COLLECTION_REGISTRATION_DATA).document(childRef).collection(COLLECTION_PARENTS)
                     .get()
                     .addOnCompleteListener { task ->
@@ -116,7 +123,8 @@ class RegistrationPresenter {
       activity.showProgress()
 
       val file = Uri.fromFile(File(filePath.toString()))
-      val ref = storageReference.child(FirebaseAuth.getInstance().currentUser?.uid + "/" + STORAGE_PATH_CHILD_IMAGES + file.lastPathSegment)
+      val ref = storageReference.child(FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+          PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid + "/" + STORAGE_PATH_CHILD_IMAGES + file.lastPathSegment)
       val uploadTask: UploadTask = ref.putFile(file)
 
       val urlTask = uploadTask.continueWithTask { task ->

@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import attendance.AttenChild
 import attendance.AttendanceAdapter
 import com.vince.childcare.R
-import core.CHILD_TO_LOAD
+import core.CHILD_ID
 import kotlinx.android.synthetic.main.fragment_attendance.*
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
 
@@ -40,8 +40,8 @@ class Attendance : Fragment() {
         setProgressVisibility(visibleState)
       }
 
-      override fun editChildClicked(childRef: String, position: Int) {
-        val intent = Intent(activity, RegistrationActivity::class.java).putExtra(CHILD_TO_LOAD, childRef)
+      override fun childClicked(childRef: String, position: Int) {
+        val intent = Intent(activity, RegistrationActivity::class.java).putExtra(CHILD_ID, childRef)
         val options = activity?.let {
           ActivityOptionsCompat.makeSceneTransitionAnimation(it,
               rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image),

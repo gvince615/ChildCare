@@ -17,7 +17,8 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
 
     firebaseUser?.uid?.let {
       // define path to document here
-      db.collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser.uid).set(user).addOnSuccessListener {
+      db.collection(COLLECTION_USER_DATA).document(user["name"].toString().replace(" ", "") + PREFIX_UID + firebaseUser.uid).set(
+          user).addOnSuccessListener {
         Log.d(context.getString(R.string.login_activity_tag), context.getString(R.string.data_update_succeeded))
       }.addOnFailureListener {
         Log.e(context.getString(R.string.login_activity_tag), context.getString(R.string.data_update_failed))
@@ -28,7 +29,7 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
   fun retrieveChildDataCollection(firebaseUser: FirebaseUser?): ArrayList<Any> {
     val children = ArrayList<Any>()
 
-    db.collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
+    db.collection(COLLECTION_USER_DATA).document(firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA)
         .get()
         .addOnCompleteListener { task ->
