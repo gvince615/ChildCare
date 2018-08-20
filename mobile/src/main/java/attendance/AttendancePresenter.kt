@@ -137,7 +137,7 @@ class AttendancePresenter {
         }
   }
 
-  fun activateChild(childRef: String, position: Int) {
+  fun activateChild(childRef: String) {
 
     activity.showProgress()
     val childMap = HashMap<String, Any>()

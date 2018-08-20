@@ -20,18 +20,6 @@ import java.util.*
 
 
 class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
-  override fun activateChild(childRef: String, position: Int) {
-    attendancePresenter.activateChild(childRef, position)
-  }
-
-  override fun childClicked(childRef: String, position: Int) {
-    fragmentRefreshListener?.childClicked(childRef, position)
-  }
-
-  override fun checkInOutBtnClicked(childRef: String, position: Int) {
-    attendancePresenter.postAttendance(childRef, position)
-  }
-
   private var doubleBackToExitPressedOnce = false
   private val children: ArrayList<AttenChild> = ArrayList()
   private val attendancePresenter = AttendancePresenter()
@@ -99,6 +87,18 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
         .make(coordinator_layout, "Press back again to sign out.", Snackbar.LENGTH_LONG)
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+  }
+
+  override fun activateChild(childRef: String) {
+    attendancePresenter.activateChild(childRef)
+  }
+
+  override fun childClicked(childRef: String, position: Int) {
+    fragmentRefreshListener?.childClicked(childRef, position)
+  }
+
+  override fun checkInOutBtnClicked(childRef: String, position: Int) {
+    attendancePresenter.postAttendance(childRef, position)
   }
 
   fun showProgress() {
