@@ -116,9 +116,15 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     var file = wrapper.getDir("images", Context.MODE_PRIVATE)
 
     var card = adapter.getList()[0]
-    var childName = (card.`object` as Child).firstName + (card.`object` as Child).lastName
 
-    file = File(file, "$childName.jpg")
+    if (!isInEditMode) {
+      (card as RegistrationCardItem<Child>).`object`.childId =
+          "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
+          "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
+          "-" + ((Math.random() * 9000).toInt() + 1000).toString()
+    }
+
+    file = File(file, (list[0] as RegistrationCardItem<Child>).`object`.childId + ".jpg")
 
     try {
       val stream: OutputStream = FileOutputStream(file)
@@ -253,7 +259,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         RegistrationCardItem.CHILD -> {
 
           if (childImage != null) {
-            registrationPresenter.uploadFile(childImage!!, firebaseStorage.reference)
+            registrationPresenter.uploadChildImage(childImage, firebaseStorage.reference)
           } else {
             onChildImageUploaded("")
           }
@@ -314,14 +320,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
           chilCard = card as RegistrationCardItem<Child>
-
-          if (!isInEditMode) {
-
-            card.`object`.childId =
-                "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
-                "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
-                "-" + ((Math.random() * 9000).toInt() + 1000).toString()
-          }
 
           if (url != "") {
             card.`object`.childImageUrl = url

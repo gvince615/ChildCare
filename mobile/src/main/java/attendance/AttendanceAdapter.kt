@@ -50,7 +50,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
       cardItemListener.checkInOutBtnClicked(holder.tvChildId.text.toString(), position, it)
     }
 
-    if (items[position].childImageUri != "") {
+    if (items[position].childImageUri != "" || items[position].childImageUri != "null") {
       DownloadImageTask(holder.ivChildImage).execute(items[position].childImageUri)
     }
     holder.tvChildId.text = items[position].childId

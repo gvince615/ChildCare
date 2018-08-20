@@ -115,7 +115,7 @@ class RegistrationPresenter {
 
   }
 
-  fun uploadFile(filePath: Uri, storageReference: StorageReference) {
+  fun uploadChildImage(filePath: Uri?, storageReference: StorageReference) {
 
     //checking if file is available
     if (filePath != null) {
