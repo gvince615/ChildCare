@@ -2,7 +2,6 @@ package attendance
 
 import activities.MainActivity
 import android.util.Log
-import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -24,7 +23,7 @@ class AttendancePresenter {
     this.children = children
   }
 
-  fun postAttendance(childReference: String, position: Int, view: View) {
+  fun postAttendance(childReference: String, position: Int) {
 
     activity.showProgress()
 
@@ -135,6 +134,29 @@ class AttendancePresenter {
           if (activity.getFragmentRefreshListener() != null) {
             activity.getFragmentRefreshListener()?.onRefresh(children, -1)
           }
+        }
+  }
+
+  fun activateChild(childRef: String, position: Int) {
+
+    activity.showProgress()
+    val childMap = HashMap<String, Any>()
+    childMap[IS_ACTIVE] = "Active"
+
+    var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA).document(childRef)
+
+    ref.update(childMap)
+        .addOnSuccessListener {
+          activity.hideProgress()
+          activity.updateChildData()
+          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+        }
+        .addOnFailureListener { e ->
+          //todo
+          activity.hideProgress()
+          Log.w(FIRESTORE_TAG, "Error writing document", e)
         }
   }
 

@@ -29,7 +29,8 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   interface CardItemListener {
     fun childClicked(childRef: String, position: Int)
-    fun checkInOutBtnClicked(childRef: String, position: Int, view: View)
+    fun checkInOutBtnClicked(childRef: String, position: Int)
+    fun activateChild(toString: String, position: Int)
   }
 
   override fun getItemCount(): Int {
@@ -47,7 +48,11 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
 
     holder.checkInOutBtn.setOnClickListener {
-      cardItemListener.checkInOutBtnClicked(holder.tvChildId.text.toString(), position, it)
+      if (!holder.cv.isEnabled) {
+        cardItemListener.activateChild(holder.tvChildId.text.toString(), position)
+      } else {
+        cardItemListener.checkInOutBtnClicked(holder.tvChildId.text.toString(), position)
+      }
     }
 
     if (items[position].childImageUri != "" || items[position].childImageUri != "null") {
@@ -66,6 +71,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   private fun handleChildIsInactive(holder: ViewHolder) {
     holder.tvIsActive.text = INACTIVE
+    holder.checkInOutBtn.text = context.getText(R.string.activate)
     holder.cv.isEnabled = false
   }
 

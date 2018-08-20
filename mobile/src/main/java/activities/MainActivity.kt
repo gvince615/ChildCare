@@ -20,13 +20,16 @@ import java.util.*
 
 
 class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
+  override fun activateChild(childRef: String, position: Int) {
+    attendancePresenter.activateChild(childRef, position)
+  }
 
   override fun childClicked(childRef: String, position: Int) {
     fragmentRefreshListener?.childClicked(childRef, position)
   }
 
-  override fun checkInOutBtnClicked(childRef: String, position: Int, view: View) {
-    attendancePresenter.postAttendance(childRef, position, view)
+  override fun checkInOutBtnClicked(childRef: String, position: Int) {
+    attendancePresenter.postAttendance(childRef, position)
   }
 
   private var doubleBackToExitPressedOnce = false
@@ -69,7 +72,7 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     fragmentRefreshListener?.onRefresh(children, position)
   }
 
-  private fun updateChildData() {
+  fun updateChildData() {
     attendancePresenter.getChildData(FirebaseAuth.getInstance().currentUser)
   }
 
