@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/childDataCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +13,6 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:padding="5dp"
     >
   <LinearLayout
       android:layout_width="match_parent"
@@ -22,8 +22,8 @@
       android:theme="@style/ChildCardTheme"
       >
     <View
-        android:layout_width="fill_parent"
         android:id="@+id/focus_view"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -41,53 +41,24 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:gravity="start|center"
+          android:padding="3dp"
           android:paddingStart="10dp"
           android:text="Child Information"
           android:textColor="@color/colorBlack"
           android:textSize="22sp"
           android:textStyle="bold"
-          android:padding="3dp"
           />
       <EditText
           android:id="@+id/child_id"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:text="ID"
           android:enabled="false"
+          android:text="ID"
           android:visibility="gone"
 
           />
     </LinearLayout>
 
-    <!--data-->
-    <RelativeLayout
-        android:id="@+id/child_small_card_layout"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/fui_transparent"
-        android:orientation="horizontal"
-
-        >
-      <ImageView
-          android:id="@+id/child_image"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:foreground="?android:attr/selectableItemBackground"
-          android:padding="1dp"
-          android:src="@drawable/account_child_white_48x48"
-          android:transitionName="simple_activity_transition"
-          android:layout_gravity="center"
-          />
-      <ImageView
-          android:layout_width="30dp"
-          android:layout_height="30dp"
-          android:layout_alignParentBottom="true"
-          android:layout_alignParentEnd="true"
-          android:src="@android:drawable/ic_menu_edit"
-          />
-
-
-    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,53 +66,95 @@
         android:orientation="vertical"
 
         >
-      <android.support.design.widget.TextInputLayout
-          android:id="@+id/child_first_name"
+
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:weightSum="2"
           >
 
-        <EditText
-            android:id="@+id/input_first_name"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1"
+            >
+          <de.hdodenhof.circleimageview.CircleImageView
+              android:id="@+id/child_image"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_centerInParent="true"
+              android:src="@drawable/account_child_white_48x48"
+              app:civ_border_color="@color/colorBlueDark"
+              app:civ_border_width="3dp"
+              />
+
+          <ImageView
+              android:layout_width="30dp"
+              android:layout_height="30dp"
+              android:layout_alignParentBottom="true"
+              android:backgroundTint="@color/colorBlueAccent"
+              android:src="@drawable/baseline_add_a_photo_white_18dp"
+              />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="First Name"
-            />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+          <android.support.design.widget.TextInputLayout
+              android:id="@+id/child_first_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              >
 
-      </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/input_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="First Name"
+                android:inputType="textPersonName"
+                />
 
-      <android.support.design.widget.TextInputLayout
-          android:id="@+id/child_last_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          >
+          </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Last Name"
-            />
+          <android.support.design.widget.TextInputLayout
+              android:id="@+id/child_last_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              >
 
-      </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/input_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name"
+                android:inputType="textPersonName"
+                />
 
-      <android.support.design.widget.TextInputLayout
-          android:id="@+id/input_layout_dob"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          >
+          </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_dob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:hint="Date of Birth"
-            />
+          <android.support.design.widget.TextInputLayout
+              android:id="@+id/input_layout_dob"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              >
 
-      </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/input_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Date of Birth"
+                android:inputType="date"
+                />
+
+          </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+      </LinearLayout>
 
       <android.support.design.widget.TextInputLayout
           android:id="@+id/input_layout_address_ln_1"
@@ -227,20 +240,20 @@
 
       <LinearLayout
           android:id="@+id/check_layout"
-          android:paddingTop="10dp"
-          android:paddingStart="5dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal"
           android:gravity="start|center"
+          android:orientation="horizontal"
+          android:paddingStart="5dp"
+          android:paddingTop="10dp"
           >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:gravity="start"
             android:text="Set child as Active?"
+            android:textSize="18sp"
             />
 
         <CheckBox

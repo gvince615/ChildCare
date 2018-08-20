@@ -10,16 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageView
 import com.vince.childcare.R
 import core.DownloadImageTask
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.registration_child_data_card.view.*
 
 
 class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var childId: EditText = itemView.child_id
-  var childImage: ImageView = itemView.child_image
+  var childImage: CircleImageView = itemView.child_image
   var childFirstNameLayout: TextInputLayout = itemView.child_first_name
   var childLastNameLayout: TextInputLayout = itemView.child_last_name
   var childIsActive: CheckBox = itemView.active_checkbox

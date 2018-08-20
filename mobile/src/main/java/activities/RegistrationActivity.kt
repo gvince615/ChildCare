@@ -17,12 +17,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
 import core.*
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_registration.*
 import registration.*
 import java.io.File
@@ -33,7 +33,7 @@ import java.util.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
-  private lateinit var imageView: ImageView
+  private lateinit var imageView: CircleImageView
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
   val list: MutableList<RegistrationCardItem<*>> = ArrayList()
@@ -63,7 +63,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   override fun childImageClicked(it: View?) {
-    this.imageView = it as ImageView
+    this.imageView = it as CircleImageView
 
     val snackbar = Snackbar
         .make(reg_coordinator_layout, "Snap a photo...", Snackbar.LENGTH_LONG)
