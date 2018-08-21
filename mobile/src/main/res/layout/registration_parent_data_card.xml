@@ -8,7 +8,7 @@
     android:layout_marginStart="10dp"
     android:layout_marginTop="5dp"
     android:animateLayoutChanges="true"
-    android:backgroundTint="@color/colorYellowDark"
+    android:backgroundTint="@color/colorYellow"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -19,7 +19,7 @@
       android:layout_height="match_parent"
       android:orientation="vertical"
       android:padding="5dp"
-      android:theme="@style/ParentCardTheme"
+      android:theme="@style/YellowTheme"
       >
 
     <LinearLayout
@@ -62,7 +62,7 @@
         android:layout_weight="2"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@color/colorYellow"
+        android:background="@color/colorWhiteTrans"
         >
 
       <android.support.design.widget.TextInputLayout

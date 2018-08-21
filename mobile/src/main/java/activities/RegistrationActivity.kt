@@ -58,7 +58,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
 
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
-    medical_menu_item.setOnClickListener { medicalMenuButtonClicked() }
+    pediatrician_menu_item.setOnClickListener { pediatricianMenuButtonClicked() }
+    medication_menu_item.setOnClickListener { medicationMenuButtonClicked() }
     billing_menu_item.setOnClickListener { billingMenuButtonClicked() }
   }
 
@@ -140,14 +141,20 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
 
   private fun billingMenuButtonClicked() {
-//    cards.add(BillingData())
-//    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    adapter.addBilling(BillingData())
+    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
-  private fun medicalMenuButtonClicked() {
-//    cards.add(MedicalData())
-//    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+  private fun medicationMenuButtonClicked() {
+    adapter.addMedication(MedicationData())
+    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    menu.close(true)
+  }
+
+  private fun pediatricianMenuButtonClicked() {
+    adapter.addPediatrician(PediatricianData())
+    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 

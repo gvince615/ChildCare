@@ -210,7 +210,7 @@
             android:id="@+id/registration_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorRed"
+            android:background="@color/colorOrange"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="5dp"

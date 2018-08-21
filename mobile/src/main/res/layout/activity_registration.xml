@@ -14,7 +14,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="5dp"
-      android:background="@color/colorRed"
+      android:background="@color/colorOrange"
       android:orientation="vertical"
       android:padding="5dp"
       android:transitionName="simple_activity_transition"
@@ -57,7 +57,7 @@
       fab:menu_animationDelayPerItem="50"
       fab:menu_backgroundColor="@color/colorGreyTrans"
       fab:menu_buttonSpacing="0dp"
-      fab:menu_colorNormal="@color/colorRedAccent"
+      fab:menu_colorNormal="@color/colorOrangeAccent"
       fab:menu_fab_label="Available Data Cards"
       fab:menu_fab_size="normal"
       fab:menu_icon="@drawable/fab_add"
@@ -70,16 +70,25 @@
         android:layout_height="wrap_content"
         android:src="@drawable/account_circle_white_48x48"
         fab:fab_colorNormal="@color/colorYellow"
-        fab:fab_label="Add Parent/Guardian Data Card"
+        fab:fab_label="Add Parent/Guardian Card"
         fab:fab_size="mini"
         />
     <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/medical_menu_item"
+        android:id="@+id/pediatrician_menu_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/heart"
+        android:src="@drawable/doctor"
         fab:fab_colorNormal="@color/colorWhite"
-        fab:fab_label="Add Medical Data Card"
+        fab:fab_label="Add Pediatrician Card"
+        fab:fab_size="mini"
+        />
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/medication_menu_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pill"
+        fab:fab_colorNormal="@color/colorWhite"
+        fab:fab_label="Add Medication Card"
         fab:fab_size="mini"
         />
     <com.github.clans.fab.FloatingActionButton
@@ -88,7 +97,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/banknote"
         fab:fab_colorNormal="@color/colorWhite"
-        fab:fab_label="Add Billing Data Card"
+        fab:fab_label="Add Billing Card"
         fab:fab_size="mini"
         />
 

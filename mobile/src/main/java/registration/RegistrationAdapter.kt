@@ -16,20 +16,13 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     this.list = data
   }
 
-  fun addParent(parent: Parent) {
-    list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
-    notifyItemInserted(list.size)
-  }
-
-  fun addChild(child: Child) {
-    list.add(RegistrationCardItem(child, RegistrationCardItem.CHILD))
-    notifyItemInserted(list.size)
-  }
-
   override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     when (viewType) {
       RegistrationCardItem.PARENT -> return ParentViewHolder.create(context, viewGroup)
       RegistrationCardItem.CHILD -> return ChildViewHolder.create(context, viewGroup)
+      RegistrationCardItem.PEDIATRICIAN -> return PediatricianViewHolder.create(context, viewGroup)
+      RegistrationCardItem.MEDICATION -> return MedicationViewHolder.create(context, viewGroup)
+      RegistrationCardItem.BILLING -> return BillingViewHolder.create(context, viewGroup)
     }
     throw RuntimeException()
   }
@@ -39,6 +32,9 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     when (getItemViewType(position)) {
       RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder, list[position], listener)
       RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position], listener)
+      RegistrationCardItem.PEDIATRICIAN -> PediatricianViewHolder.bind(viewHolder as PediatricianViewHolder, list[position], listener)
+      RegistrationCardItem.MEDICATION -> MedicationViewHolder.bind(viewHolder as MedicationViewHolder, list[position], listener)
+      RegistrationCardItem.BILLING -> BillingViewHolder.bind(viewHolder as BillingViewHolder, list[position], listener)
     }
   }
 
@@ -64,7 +60,33 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   fun deleteCard(adapterPosition: Int) {
     list.removeAt(adapterPosition)
-    notifyItemRemoved(adapterPosition)  }
+    notifyItemRemoved(adapterPosition)
+  }
+
+  fun addParent(parent: Parent) {
+    list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+    notifyItemInserted(list.size)
+  }
+
+  fun addChild(child: Child) {
+    list.add(RegistrationCardItem(child, RegistrationCardItem.CHILD))
+    notifyItemInserted(list.size)
+  }
+
+  fun addPediatrician(pediatricianData: PediatricianData) {
+    list.add(RegistrationCardItem(pediatricianData, RegistrationCardItem.PEDIATRICIAN))
+    notifyItemInserted(list.size)
+  }
+
+  fun addMedication(medicationData: MedicationData) {
+    list.add(RegistrationCardItem(medicationData, RegistrationCardItem.MEDICATION))
+    notifyItemInserted(list.size)
+  }
+
+  fun addBilling(billingData: BillingData) {
+    list.add(RegistrationCardItem(billingData, RegistrationCardItem.BILLING))
+    notifyItemInserted(list.size)
+  }
 
   interface CardItemListener {
     fun onDeleteCardBtnTapped(adapterPosition: Int)
