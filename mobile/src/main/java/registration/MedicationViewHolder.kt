@@ -9,11 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_medication_data_card.view.*
 
 
 class MedicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+  var medicationDeleteButton: ImageButton = itemView.delete_medication_card_button
 
   var medNameLayout: TextInputLayout = itemView.input_layout_med_name
   var medDoseLayout: TextInputLayout = itemView.input_layout_med_dose
@@ -39,6 +42,10 @@ class MedicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.medTimeLayout.editText?.setText((listItem as RegistrationCardItem<MedicationData>).`object`.medTime)
       holder.medTimeLayout.editText?.onChange {
         (listItem as RegistrationCardItem<MedicationData>).`object`.medTime = holder.medTimeLayout.editText?.text?.toString()!!
+      }
+
+      holder.medicationDeleteButton.setOnClickListener {
+        listener?.onDeleteCardBtnTapped(holder.adapterPosition)
       }
     }
 

@@ -9,11 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import com.vince.childcare.R
-import kotlinx.android.synthetic.main.registration_medical_data_card.view.*
+import kotlinx.android.synthetic.main.registration_pediatrician_data_card.view.*
 
 
 class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+  var pediatricianDeleteButton: ImageButton = itemView.delete_pediatrician_card_button
 
   var pedNameLayout: TextInputLayout = itemView.input_layout_ped_name
   var pedOfficeNameLayout: TextInputLayout = itemView.input_layout_ped_office_name
@@ -22,7 +25,7 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
   companion object {
 
     fun create(context: Context, parent: ViewGroup): PediatricianViewHolder {
-      return PediatricianViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_medical_data_card, parent, false))
+      return PediatricianViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_pediatrician_data_card, parent, false))
     }
 
     fun bind(holder: PediatricianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
@@ -40,6 +43,11 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
       holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeNum)
       holder.pedOfficeNumberLayout.editText?.onChange {
         (listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeNum = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
+      }
+
+
+      holder.pediatricianDeleteButton.setOnClickListener {
+        listener?.onDeleteCardBtnTapped(holder.adapterPosition)
       }
     }
 

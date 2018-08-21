@@ -8,10 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import com.vince.childcare.R
+import kotlinx.android.synthetic.main.registration_billing_data_card.view.*
 
 
 class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+  var billingDeleteButton: ImageButton = itemView.delete_billing_card_button
+
 
 //  var medNameLayout: TextInputLayout = itemView.input_layout_ped_name
 //  var medDoseLayout: TextInputLayout = itemView.input_layout_ped_office_name
@@ -38,6 +43,10 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 //      holder.medTimeLayout.editText?.onChange {
 //        (listItem as RegistrationCardItem<MedicationData>).`object`.medTime = holder.medTimeLayout.editText?.text?.toString()!!
 //      }
+
+      holder.billingDeleteButton.setOnClickListener {
+        listener?.onDeleteCardBtnTapped(holder.adapterPosition)
+      }
     }
 
 
