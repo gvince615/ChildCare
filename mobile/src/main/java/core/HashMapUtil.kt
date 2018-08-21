@@ -1,10 +1,6 @@
 package core
 
-import registration.Child
-import registration.Parent
-import registration.PediatricianData
-import registration.RegistrationCardItem
-
+import registration.*
 
 
 class HashMapUtil {
@@ -48,6 +44,15 @@ class HashMapUtil {
 
     return pediatricianMap
 
+  }
+
+  fun createMedicationMap(card: RegistrationCardItem<MedicationData>): HashMap<String, Any> {
+    val medicationMap = HashMap<String, Any>()
+    card.`object`.medName.let { medicationMap.put("medicationName", it) }
+    card.`object`.medTime.let { medicationMap.put("medicationTime", it) }
+    card.`object`.medDose.let { medicationMap.put("medicationDose", it) }
+
+    return medicationMap
   }
 
 }

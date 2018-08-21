@@ -349,6 +349,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
               HashMapUtil().createPediatricianMap(card as RegistrationCardItem<PediatricianData>),
               chilCard?.let { HashMapUtil().createChildMap(it) })
         }
+
+        RegistrationCardItem.MEDICATION -> {
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+          registrationPresenter.saveMedicationDataDocument(FirebaseAuth.getInstance().currentUser,
+              HashMapUtil().createMedicationMap(card as RegistrationCardItem<MedicationData>),
+              chilCard?.let { HashMapUtil().createChildMap(it) })
+        }
       }
       finish()
     }

@@ -185,8 +185,21 @@ class RegistrationPresenter {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
-        .collection(COLLECTION_MEDICAL).document()
+        .collection(COLLECTION_MEDICAL).document(DOCUMENT_MEDICAL)
         .set(pediatricianMap).addOnSuccessListener {
+          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+        }
+  }
+
+  fun saveMedicationDataDocument(currentUser: FirebaseUser?, medicationMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
+        .collection(COLLECTION_MEDICAL).document(DOCUMENT_MEDICAL).collection(COLLECTION_MEDICATION).document()
+        .set(medicationMap).addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
