@@ -2,6 +2,7 @@ package core
 
 import registration.Child
 import registration.Parent
+import registration.PediatricianData
 import registration.RegistrationCardItem
 
 
@@ -37,6 +38,16 @@ class HashMapUtil {
     card.`object`.phoneNumber2.let { parentMap.put("phoneNumber2", it) }
 
     return parentMap
+  }
+
+  fun createPediatricianMap(card: RegistrationCardItem<PediatricianData>): HashMap<String, Any> {
+    val pediatricianMap = HashMap<String, Any>()
+    card.`object`.pedName.let { pediatricianMap.put("pedName", it) }
+    card.`object`.pedOfficeName.let { pediatricianMap.put("pedOfficeName", it) }
+    card.`object`.pedOfficeNum.let { pediatricianMap.put("pedOfficeNumber", it) }
+
+    return pediatricianMap
+
   }
 
 }

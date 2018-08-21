@@ -45,7 +45,6 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         (listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeNum = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
       }
 
-
       holder.pediatricianDeleteButton.setOnClickListener {
         listener?.onDeleteCardBtnTapped(holder.adapterPosition)
       }

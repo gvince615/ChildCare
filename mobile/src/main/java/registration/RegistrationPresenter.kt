@@ -105,6 +105,32 @@ class RegistrationPresenter {
                       }
                       activity.hideProgress()
                     }
+
+//                FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+//                    FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+//                        PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+//                    .collection(COLLECTION_REGISTRATION_DATA).document(childRef).collection(COLLECTION_MEDICAL)
+//                    .get()
+//                    .addOnCompleteListener { task ->
+//                      if (task.isSuccessful) {
+//                        for (document in task.result) {
+//                          var pediatrician = document.toObject(PediatricianData::class.java)
+//                          parentList.add(pediatrician)
+//                          Log.d("FIRESTORE", document.id + " => " + document.data)
+//                        }
+//
+//                        var fullChildRegistrationData = FullChildRegistrationData(child, parentList, pediatrician)
+//
+//                        activity.setDataCards(FullChildRegistrationData(child, parentList))
+//
+//
+//                        Log.d("CHILD_REG_DATA", "child data documents: " + fullChildRegistrationData.toString())
+//
+//                      } else {
+//                        Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+//                      }
+//                      activity.hideProgress()
+//                    }
               }
               Log.d("FIRESTORE", document.id + " => " + document.data)
             }
@@ -153,5 +179,18 @@ class RegistrationPresenter {
 
   fun setUp(registrationActivity: RegistrationActivity) {
     this.activity = registrationActivity
+  }
+
+  fun savePediatricianDataDocument(currentUser: FirebaseUser?, pediatricianMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
+        .collection(COLLECTION_MEDICAL).document()
+        .set(pediatricianMap).addOnSuccessListener {
+          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+        }
   }
 }

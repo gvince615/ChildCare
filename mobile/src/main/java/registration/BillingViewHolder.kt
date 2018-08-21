@@ -17,7 +17,6 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var billingDeleteButton: ImageButton = itemView.delete_billing_card_button
 
-
 //  var medNameLayout: TextInputLayout = itemView.input_layout_ped_name
 //  var medDoseLayout: TextInputLayout = itemView.input_layout_ped_office_name
 //  var medTimeLayout: TextInputLayout = itemView.input_layout_ped_contact_num_1

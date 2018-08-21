@@ -56,7 +56,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       registrationPresenter.setUp(this)
     }
 
-
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     pediatrician_menu_item.setOnClickListener { pediatricianMenuButtonClicked() }
     medication_menu_item.setOnClickListener { medicationMenuButtonClicked() }
@@ -341,6 +340,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
           registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser,
               HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
+              chilCard?.let { HashMapUtil().createChildMap(it) })
+        }
+
+        RegistrationCardItem.PEDIATRICIAN -> {
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+          registrationPresenter.savePediatricianDataDocument(FirebaseAuth.getInstance().currentUser,
+              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<PediatricianData>),
               chilCard?.let { HashMapUtil().createChildMap(it) })
         }
       }
