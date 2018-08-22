@@ -4,11 +4,10 @@ import activities.MainActivity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
+import com.google.gson.Gson
 import core.*
+import registration.Child
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -137,21 +136,41 @@ class AttendancePresenter {
         }
   }
 
+  private fun getChild(document: DocumentSnapshot): Child? {
+    return if (document.contains(CHILD)) {
+      val gson = Gson()
+      gson.fromJson<Child>(gson.toJsonTree(document[CHILD]), Child::class.java)
+    } else {
+      null
+    }
+  }
+
   fun activateChild(childRef: String) {
-
     activity.showProgress()
-    val childMap = HashMap<String, Any>()
-    childMap[IS_ACTIVE] = "Active"
 
-    var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
-            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA).document(childRef)
-
-    ref.update(childMap)
+            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childRef)
+        .get()
         .addOnSuccessListener {
-          activity.hideProgress()
-          activity.updateChildData()
-          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+
+
+          var childData = getChild(it)
+          childData?.isActive = ACTIVE
+          var childMap = HashMapUtil().createChildMap(childData!!)
+
+          it.reference.update(CHILD, childMap)
+              .addOnSuccessListener {
+                activity.hideProgress()
+                activity.updateChildData()
+                Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+              }
+              .addOnFailureListener { e ->
+                //todo
+                activity.hideProgress()
+                Log.w(FIRESTORE_TAG, "Error writing document", e)
+              }
         }
         .addOnFailureListener { e ->
           //todo
@@ -163,25 +182,33 @@ class AttendancePresenter {
   fun getChildData(currentUser: FirebaseUser?) {
     var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") +
-            PREFIX_UID + currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA)
+            PREFIX_UID + currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA)
     d.get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-              val child = AttenChild(document[CHILD_ID].toString(), document[CHILD_IMAGE_URL].toString(), document[FIRST_NAME].toString(),
-                  document[LAST_NAME].toString(),
-                  document[IS_ACTIVE].toString(), document[BIRTH_DATE].toString(), "", "")
-              Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
-              children.add(child)
-              getLatestAttendanceData(document, child)
+              val child = getAttenChildData(document)
+              if (child != null) {
+                children.add(child)
+                getLatestAttendanceData(document, child)
+                Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
+              }
             }
           } else {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
           }
         }
+  }
+
+  private fun getAttenChildData(document: QueryDocumentSnapshot): AttenChild? {
+    return if (document.contains(CHILD)) {
+      val gson = Gson()
+      gson.fromJson<AttenChild>(gson.toJsonTree(document[CHILD]), AttenChild::class.java)
+    } else {
+      null
+    }
   }
 
 }

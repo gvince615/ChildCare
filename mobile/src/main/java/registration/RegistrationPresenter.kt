@@ -24,10 +24,14 @@ class RegistrationPresenter {
 
   fun saveChildDataDocument(firebaseUser: FirebaseUser?, childData: HashMap<String, Any>) {
 
+    val child = HashMap<String, Any>()
+    child[CHILD] = childData
+
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData[CHILD_ID].toString())
-        .set(childData).addOnSuccessListener {
+        .set(child)
+        .addOnSuccessListener {
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_succeeded))
         }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_update_failed))
@@ -39,7 +43,6 @@ class RegistrationPresenter {
         firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .update(GUARDIANS, parentData)
-
         .addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
@@ -79,25 +82,15 @@ class RegistrationPresenter {
           if (task.isSuccessful) {
             for (document in task.result) {
               if (document.id == childRef) {
-                child = Child()
-                child.childId = document[CHILD_ID].toString()
-                child.childImageUrl = document[CHILD_IMAGE_URL].toString()
-                child.firstName = document[FIRST_NAME].toString()
-                child.lastName = document[LAST_NAME].toString()
-                child.birthDate = document[BIRTH_DATE].toString()
-                child.enrollmentDate = document[ENROLLMENT_DATE].toString()
-                child.addressLn1 = document[ADDRESS_LN_1].toString()
-                child.addressLn2 = document[ADDRESS_LN_2].toString()
-                child.addressCity = document[ADDRESS_CITY].toString()
-                child.addressState = document[ADDRESS_STATE].toString()
-                child.addressZip = document[ADDRESS_ZIP].toString()
-                child.isActive = document[IS_ACTIVE].toString()
-                child.guardians = getGuardians(document)
-                child.medications = getMedications(document)
-                child.pediatrician = getPediatrician(document)
-                child.billing = getBilling(document)
 
-                activity.setDataCards(FullChildRegistrationData(child))
+                var childData = ChildData()
+                childData.child = getChild(document)
+                childData.guardians = getGuardians(document)
+                childData.medications = getMedications(document)
+                childData.pediatrician = getPediatrician(document)
+                childData.billing = getBilling(document)
+
+                activity.setDataCards(FullChildRegistrationData(childData))
 
               }
               Log.d("FIRESTORE", document.id + " => " + document.data)
@@ -108,6 +101,15 @@ class RegistrationPresenter {
           }
         }
 
+  }
+
+  private fun getChild(document: QueryDocumentSnapshot): Child? {
+    return if (document.contains(CHILD)) {
+      val gson = Gson()
+      gson.fromJson<Child>(gson.toJsonTree(document[CHILD]), Child::class.java)
+    } else {
+      null
+    }
   }
 
   private fun getBilling(document: QueryDocumentSnapshot): Billing? {

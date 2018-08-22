@@ -90,6 +90,7 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
   }
 
   override fun activateChild(childRef: String) {
+
     attendancePresenter.activateChild(childRef)
   }
 

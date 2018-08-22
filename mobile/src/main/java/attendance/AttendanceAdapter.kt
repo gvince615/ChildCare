@@ -55,8 +55,8 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
       }
     }
 
-    if (items[position].childImageUri != "" || items[position].childImageUri != "null") {
-      DownloadImageTask(holder.ivChildImage).execute(items[position].childImageUri)
+    if (items[position].childImageUrl != "" || items[position].childImageUrl != "null") {
+      DownloadImageTask(holder.ivChildImage).execute(items[position].childImageUrl)
     }
     holder.tvChildId.text = items[position].childId
     holder.tvFirstName.text = items[position].firstName
@@ -116,7 +116,8 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     return ""
   }
 
-  private fun hasCheckInTime(position: Int) = items[position].checkInTime != "" && items[position].checkInTime != "null"
+  private fun hasCheckInTime(
+      position: Int) = items[position].checkInTime != "" && items[position].checkInTime != "null" && items[position].checkInTime != null
 
   private fun childIsActive(position: Int) = items[position].isActive == ACTIVE
 

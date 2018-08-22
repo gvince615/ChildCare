@@ -55,4 +55,23 @@ class HashMapUtil {
     return medicationMap
   }
 
+  fun createChildMap(card: Child): HashMap<String, Any> {
+    val childMap = HashMap<String, Any>()
+    card.childId.let { childMap.put("childId", it) }
+    card.childImageUrl.let { childMap.put("childImageUrl", it) }
+    card.firstName.let { childMap.put("firstName", it) }
+    card.lastName.let { childMap.put("lastName", it) }
+    card.birthDate.let { childMap.put("birthDate", it) }
+    card.isActive?.let { childMap.put("isActive", it) }
+    card.enrollmentDate.let { childMap.put("enrollmentDate", it) }
+    card.addressLn1.let { childMap.put("addressLn1", it) }
+    card.addressLn2.let { childMap.put("addressLn2", it) }
+    card.addressCity.let { childMap.put("addressCity", it) }
+    card.addressState.let { childMap.put("addressState", it) }
+    card.addressZip.let { childMap.put("addressZip", it) }
+
+    return childMap
+
+  }
+
 }

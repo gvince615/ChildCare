@@ -158,15 +158,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun parentMenuButtonClicked() {
-    adapter.addParent(Guardian("", "", "", "", ""))
+    adapter.addParent(Guardian())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child("", "", "", "", "",
-        "Active", "", "", "", "",
-        guardians = null, medications = null, pediatrician = null, billing = null))
+    adapter.addChild(Child())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -297,26 +295,28 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   fun setDataCards(fullChildRegistrationData: FullChildRegistrationData) {
-    list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
+    if (fullChildRegistrationData.childData.child != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.child, RegistrationCardItem.CHILD))
+    }
 
-    if (fullChildRegistrationData.child.guardians != null) {
-      for (parent in fullChildRegistrationData.child.guardians!!) {
+    if (fullChildRegistrationData.childData.guardians != null) {
+      for (parent in fullChildRegistrationData.childData.guardians!!) {
         list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
       }
     }
 
-    if (fullChildRegistrationData.child.pediatrician != null) {
-      list.add(RegistrationCardItem(fullChildRegistrationData.child.pediatrician, RegistrationCardItem.PEDIATRICIAN))
+    if (fullChildRegistrationData.childData.pediatrician != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.pediatrician, RegistrationCardItem.PEDIATRICIAN))
     }
 
-    if (fullChildRegistrationData.child.medications != null) {
-      for (medication in fullChildRegistrationData.child.medications!!) {
+    if (fullChildRegistrationData.childData.medications != null) {
+      for (medication in fullChildRegistrationData.childData.medications!!) {
         list.add(RegistrationCardItem(medication, RegistrationCardItem.MEDICATION))
       }
     }
 
-    if (fullChildRegistrationData.child.billing != null) {
-      list.add(RegistrationCardItem(fullChildRegistrationData.child.pediatrician, RegistrationCardItem.PEDIATRICIAN))
+    if (fullChildRegistrationData.childData.billing != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.pediatrician, RegistrationCardItem.PEDIATRICIAN))
     }
 
     adapter = RegistrationAdapter(this, list, this)

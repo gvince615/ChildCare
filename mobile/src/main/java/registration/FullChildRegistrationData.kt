@@ -1,5 +1,5 @@
 package registration
 
 data class FullChildRegistrationData(
-    var child: Child
+    var childData: ChildData
 )
