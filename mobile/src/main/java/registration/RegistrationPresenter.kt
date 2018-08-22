@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.vince.childcare.R
 import core.*
 import java.io.File
+import java.util.*
 
 
 class RegistrationPresenter {
@@ -33,12 +34,13 @@ class RegistrationPresenter {
         }
   }
 
-  fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+  fun saveParentDataDocument(firebaseUser: FirebaseUser?, parentData: ArrayList<Any>, childData: HashMap<String, Any>?) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
-        .collection(COLLECTION_PARENTS).document(parentData[LAST_NAME].toString() + "_" + parentData[FIRST_NAME].toString())
-        .set(parentData).addOnSuccessListener {
+        .update(GUARDIANS, parentData)
+
+        .addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
@@ -64,7 +66,6 @@ class RegistrationPresenter {
 
   fun loadChild() {
     var childRef = childToLoad
-    var parentList: ArrayList<Parent> = ArrayList()
     var child: Child
 
     activity.showProgress()
@@ -78,10 +79,20 @@ class RegistrationPresenter {
           if (task.isSuccessful) {
             for (document in task.result) {
               if (document.id == childRef) {
-
-                child = document.toObject(Child::class.java)
+                child = Child()
+                child.childId = document[CHILD_ID].toString()
+                child.childImageUrl = document[CHILD_IMAGE_URL].toString()
+                child.firstName = document[FIRST_NAME].toString()
+                child.lastName = document[LAST_NAME].toString()
+                child.birthDate = document[BIRTH_DATE].toString()
+                child.enrollmentDate = document[ENROLLMENT_DATE].toString()
+                child.addressLn1 = document[ADDRESS_LN_1].toString()
+                child.addressLn2 = document[ADDRESS_LN_2].toString()
+                child.addressCity = document[ADDRESS_CITY].toString()
+                child.addressState = document[ADDRESS_STATE].toString()
+                child.addressZip = document[ADDRESS_ZIP].toString()
                 child.isActive = document[IS_ACTIVE].toString()
-                child.parents = getParents(document)
+                child.guardians = getGuardians(document)
                 child.medications = getMedications(document)
                 child.pediatrician = getPediatrician(document)
                 child.billing = getBilling(document)
@@ -100,20 +111,18 @@ class RegistrationPresenter {
   }
 
   private fun getBilling(document: QueryDocumentSnapshot): Billing? {
-    var billing = Billing()
-    return if (document.contains("billing")) {
+    return if (document.contains(core.BILLING)) {
       val gson = Gson()
-      gson.fromJson<Billing>(gson.toJsonTree(billing), Billing::class.java)
+      gson.fromJson<Billing>(gson.toJsonTree(document[BILLING]), Billing::class.java)
     } else {
       null
     }
   }
 
   private fun getPediatrician(document: QueryDocumentSnapshot): Pediatrician? {
-    var pediatrician = Pediatrician()
-    return if (document.contains("pediatrician")) {
+    return if (document.contains(PEDIATRICIAN)) {
       val gson = Gson()
-      gson.fromJson<Pediatrician>(gson.toJsonTree(pediatrician), Pediatrician::class.java)
+      gson.fromJson<Pediatrician>(gson.toJsonTree(document[PEDIATRICIAN]), Pediatrician::class.java)
     } else {
       null
     }
@@ -121,8 +130,8 @@ class RegistrationPresenter {
 
   private fun getMedications(document: QueryDocumentSnapshot): ArrayList<Medication>? {
     val medications = ArrayList<Medication>()
-    return if (document.contains("medications")) {
-      for (medication in document["medications"] as ArrayList<*>) {
+    return if (document.contains(MEDICATIONS)) {
+      for (medication in document[MEDICATIONS] as ArrayList<*>) {
         val gson = Gson()
         medications.add(gson.fromJson<Medication>(gson.toJsonTree(medication), Medication::class.java))
       }
@@ -132,12 +141,12 @@ class RegistrationPresenter {
     }
   }
 
-  private fun getParents(document: QueryDocumentSnapshot): ArrayList<Parent>? {
-    val guardians = ArrayList<Parent>()
-    return if (document.contains("guardians")) {
-      for (guardian in document["guardians"] as ArrayList<*>) {
+  private fun getGuardians(document: QueryDocumentSnapshot): ArrayList<Guardian>? {
+    val guardians = ArrayList<Guardian>()
+    return if (document.contains(GUARDIANS)) {
+      for (guardian in document[GUARDIANS] as ArrayList<*>) {
         val gson = Gson()
-        guardians.add(gson.fromJson<Parent>(gson.toJsonTree(guardian), Parent::class.java))
+        guardians.add(gson.fromJson<Guardian>(gson.toJsonTree(guardian), Guardian::class.java))
       }
       guardians
     } else {
@@ -189,38 +198,43 @@ class RegistrationPresenter {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
-        .collection(COLLECTION_MEDICAL).document(DOCUMENT_MEDICAL)
-        .set(pediatricianMap).addOnSuccessListener {
+        .update(PEDIATRICIAN, pediatricianMap)
+
+        .addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
-        }.addOnFailureListener {
+        }
+
+        .addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
         }
   }
 
-  fun saveMedicationDataDocument(currentUser: FirebaseUser?, medicationMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+  fun saveMedicationDataDocument(currentUser: FirebaseUser?, medicationMap: ArrayList<Any>, childData: HashMap<String, Any>?) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
-        .collection(COLLECTION_MEDICAL).document(DOCUMENT_MEDICAL).collection(COLLECTION_MEDICATION).document()
-        .set(medicationMap).addOnSuccessListener {
+        .update(MEDICATIONS, medicationMap)
+        .addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
-          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_update_failed))
         }
   }
 
 
-  fun saveBillingDataDocument(currentUser: FirebaseUser?, medicationMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+  fun saveBillingDataDocument(currentUser: FirebaseUser?, billingMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
-        .collection(COLLECTION_BILLING).document()
-        .set(medicationMap).addOnSuccessListener {
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString()).collection(COLLECTION_BILLING).document()
+        .update("billing", billingMap)
+        .addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
-        }.addOnFailureListener {
+        }
+
+        .addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
         }
   }

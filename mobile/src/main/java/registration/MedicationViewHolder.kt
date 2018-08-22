@@ -30,18 +30,18 @@ class MedicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(holder: MedicationViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      holder.medNameLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medName)
+      holder.medNameLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medicationName)
       holder.medNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Medication>).`object`.medName = holder.medNameLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Medication>).`object`.medicationName = holder.medNameLayout.editText?.text?.toString()!!
       }
 
-      holder.medDoseLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medDose)
+      holder.medDoseLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medicationDose)
       holder.medDoseLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Medication>).`object`.medDose = holder.medDoseLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Medication>).`object`.medicationDose = holder.medDoseLayout.editText?.text?.toString()!!
       }
-      holder.medTimeLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medTime)
+      holder.medTimeLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medicationTime)
       holder.medTimeLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Medication>).`object`.medTime = holder.medTimeLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Medication>).`object`.medicationTime = holder.medTimeLayout.editText?.text?.toString()!!
       }
 
       holder.medicationDeleteButton.setOnClickListener {

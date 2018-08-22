@@ -13,7 +13,7 @@ data class Child(
     var addressCity: String = "",
     var addressState: String = "",
     var addressZip: String = "",
-    var parents: ArrayList<Parent>?,
+    var guardians: ArrayList<Guardian>?,
     var medications: ArrayList<Medication>?,
     var pediatrician: Pediatrician?,
     var billing: Billing?

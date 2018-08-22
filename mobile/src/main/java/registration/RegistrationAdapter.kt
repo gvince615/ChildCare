@@ -18,7 +18,7 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     when (viewType) {
-      RegistrationCardItem.PARENT -> return ParentViewHolder.create(context, viewGroup)
+      RegistrationCardItem.PARENT -> return GuardianViewHolder.create(context, viewGroup)
       RegistrationCardItem.CHILD -> return ChildViewHolder.create(context, viewGroup)
       RegistrationCardItem.PEDIATRICIAN -> return PediatricianViewHolder.create(context, viewGroup)
       RegistrationCardItem.MEDICATION -> return MedicationViewHolder.create(context, viewGroup)
@@ -30,7 +30,7 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
   override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
 
     when (getItemViewType(position)) {
-      RegistrationCardItem.PARENT -> ParentViewHolder.bind(viewHolder as ParentViewHolder, list[position], listener)
+      RegistrationCardItem.PARENT -> GuardianViewHolder.bind(viewHolder as GuardianViewHolder, list[position], listener)
       RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position], listener)
       RegistrationCardItem.PEDIATRICIAN -> PediatricianViewHolder.bind(viewHolder as PediatricianViewHolder, list[position], listener)
       RegistrationCardItem.MEDICATION -> MedicationViewHolder.bind(viewHolder as MedicationViewHolder, list[position], listener)
@@ -63,8 +63,8 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     notifyItemRemoved(adapterPosition)
   }
 
-  fun addParent(parent: Parent) {
-    list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+  fun addParent(guardian: Guardian) {
+    list.add(RegistrationCardItem(guardian, RegistrationCardItem.PARENT))
     notifyItemInserted(list.size)
   }
 

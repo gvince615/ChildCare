@@ -170,7 +170,7 @@ class AttendancePresenter {
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-              val child = AttenChild(document[CHILD_ID].toString(), document[CHILD_IMAGE_URI].toString(), document[FIRST_NAME].toString(),
+              val child = AttenChild(document[CHILD_ID].toString(), document[CHILD_IMAGE_URL].toString(), document[FIRST_NAME].toString(),
                   document[LAST_NAME].toString(),
                   document[IS_ACTIVE].toString(), document[BIRTH_DATE].toString(), "", "")
               Log.d(FIRESTORE_TAG, document.id + " => " + document.data)

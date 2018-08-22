@@ -1,7 +1,7 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="AppTheme" guardian="Theme.AppCompat.Light.DarkActionBar">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,59 +9,59 @@
     <item name="android:windowContentTransitions">true</item>
   </style>
 
-  <style name="OrangeTheme" parent="AppTheme">
+  <style name="OrangeTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorOrange</item>
     <item name="colorPrimaryDark">@color/colorOrangeDark</item>
     <item name="colorAccent">@color/colorOrangeAccent</item>
   </style>
 
-  <style name="BlueTheme" parent="AppTheme">
+  <style name="BlueTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorBlue</item>
     <item name="colorPrimaryDark">@color/colorBlueDark</item>
     <item name="colorAccent">@color/colorBlueAccent</item>
   </style>
 
-  <style name="RedTheme" parent="AppTheme">
+  <style name="RedTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorRed</item>
     <item name="colorPrimaryDark">@color/colorRedDark</item>
     <item name="colorAccent">@color/colorRedAccent</item>
   </style>
 
-  <style name="GreenTheme" parent="AppTheme">
+  <style name="GreenTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorGreen</item>
     <item name="colorPrimaryDark">@color/colorGreenDark</item>
     <item name="colorAccent">@color/colorGreenAccent</item>
   </style>
 
-  <style name="YellowTheme" parent="AppTheme">
+  <style name="YellowTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorYellow</item>
     <item name="colorPrimaryDark">@color/colorYellowDark</item>
     <item name="colorAccent">@color/colorYellowAccent</item>
   </style>
 
-  <style name="ChildCardTheme" parent="BlueTheme">
+  <style name="ChildCardTheme" guardian="BlueTheme">
     <!-- Customize your theme here. -->
 
   </style>
 
-  <style name="ParentCardTheme" parent="YellowTheme">
+  <style name="ParentCardTheme" guardian="YellowTheme">
     <!-- Customize your theme here. -->
 
   </style>
 
-  <style name="MedicalCardTheme" parent="AppTheme">
+  <style name="MedicalCardTheme" guardian="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPurple</item>
     <item name="colorPrimaryDark">@color/colorPurpleDark</item>
     <item name="colorAccent">@color/colorPurpleAccent</item>
   </style>
 
-  <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+  <style name="PrimaryFlatButton" guardian="Theme.AppCompat.Light">
     <item name="android:backgroundTint">@color/fui_transparent</item>
     <item name="android:elevation">0dp</item>
     <item name="android:buttonStyle">
@@ -71,7 +71,7 @@
   </style>
 
 
-  <style name="BillingCardTheme" parent="GreenTheme">
+  <style name="BillingCardTheme" guardian="GreenTheme">
     <!-- Customize your theme here. -->
 
   </style>

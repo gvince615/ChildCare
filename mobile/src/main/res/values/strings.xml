@@ -10,8 +10,8 @@
   <!--login activity-->
   <string name="title_activity_registration">Registration</string>
   <string name="registration_activity_tag">REGISTRATION</string>
-  <string name="parent_data_succeeded">parent data added or updated</string>
-  <string name="parent_data_update_failed">parent data failed to add or update</string>
+  <string name="parent_data_succeeded">guardian data added or updated</string>
+  <string name="parent_data_update_failed">guardian data failed to add or update</string>
   <string name="child_data_succeeded">child data added or updated</string>
   <string name="child_data_update_failed">child data failed to add or update</string>
   <string name="encrypt_tag">ENCRYPT</string>
@@ -19,5 +19,6 @@
   <string name="check_in">Check In</string>
   <string name="check_out">Check Out</string>
   <string name="activate">Activate Child</string>
+  <string name="medication_data_update_failed">medication data failed to update</string>
 
 </resources>

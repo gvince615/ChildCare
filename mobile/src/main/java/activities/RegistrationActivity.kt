@@ -158,7 +158,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun parentMenuButtonClicked() {
-    adapter.addParent(Parent("", "", "", "", ""))
+    adapter.addParent(Guardian("", "", "", "", ""))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -166,7 +166,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun childMenuButtonClicked() {
     adapter.addChild(Child("", "", "", "", "",
         "Active", "", "", "", "",
-        parents = null, medications = null, pediatrician = null, billing = null))
+        guardians = null, medications = null, pediatrician = null, billing = null))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -240,7 +240,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun lessThanMinimum(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Parent).firstName.length < 2 || (card.`object` as Parent).lastName.length < 2 || (card.`object` as Parent).phoneNumber1.length < 12)
+        return ((card.`object` as Guardian).firstName.length < 2 || (card.`object` as Guardian).lastName.length < 2 || (card.`object` as Guardian).phoneNumber1.length < 12)
       }
       RegistrationCardItem.CHILD -> {
         return ((card.`object` as Child).firstName.length < 2 || (card.`object` as Child).lastName.length < 2 || (card.`object` as Child).birthDate.length < 10)
@@ -252,7 +252,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun emptyFields(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Parent).firstName.isEmpty() || (card.`object` as Parent).lastName.isEmpty() || (card.`object` as Parent).phoneNumber1.isEmpty())
+        return ((card.`object` as Guardian).firstName.isEmpty() || (card.`object` as Guardian).lastName.isEmpty() || (card.`object` as Guardian).phoneNumber1.isEmpty())
       }
       RegistrationCardItem.CHILD -> {
         return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty() || (card.`object` as Child).birthDate.isEmpty())
@@ -299,8 +299,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   fun setDataCards(fullChildRegistrationData: FullChildRegistrationData) {
     list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
 
-    if (fullChildRegistrationData.child.parents != null) {
-      for (parent in fullChildRegistrationData.child.parents!!) {
+    if (fullChildRegistrationData.child.guardians != null) {
+      for (parent in fullChildRegistrationData.child.guardians!!) {
         list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
       }
     }
@@ -339,12 +339,14 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   fun onChildImageUploaded(url: String) {
     var chilCard: RegistrationCardItem<Child>? = null
+    var parents = ArrayList<Any>()
+    var medications = ArrayList<Any>()
+
 
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
           chilCard = card as RegistrationCardItem<Child>
-
           if (url != "") {
             card.`object`.childImageUrl = url
           }
@@ -356,9 +358,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
         RegistrationCardItem.PARENT -> {
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-          registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createParentMap(card as RegistrationCardItem<Parent>),
-              chilCard?.let { HashMapUtil().createChildMap(it) })
+          parents.add(HashMapUtil().createParentMap(card as RegistrationCardItem<Guardian>))
         }
 
         RegistrationCardItem.PEDIATRICIAN -> {
@@ -369,12 +369,22 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         }
 
         RegistrationCardItem.MEDICATION -> {
+
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
-          registrationPresenter.saveMedicationDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createMedicationMap(card as RegistrationCardItem<Medication>),
-              chilCard?.let { HashMapUtil().createChildMap(it) })
+          medications.add(HashMapUtil().createMedicationMap(card as RegistrationCardItem<Medication>))
+
         }
       }
+
+      if (parents.isNotEmpty()) {
+        registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser, parents,
+            chilCard?.let { HashMapUtil().createChildMap(it) })
+      }
+      if (medications.isNotEmpty()) {
+        registrationPresenter.saveMedicationDataDocument(FirebaseAuth.getInstance().currentUser, medications,
+            chilCard?.let { HashMapUtil().createChildMap(it) })
+      }
+
       finish()
     }
   }

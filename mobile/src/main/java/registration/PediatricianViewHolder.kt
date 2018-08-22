@@ -40,9 +40,9 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
       }
 
-      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNum)
+      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNumber)
       holder.pedOfficeNumberLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNum = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNumber = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
       }
 
       holder.pediatricianDeleteButton.setOnClickListener {
