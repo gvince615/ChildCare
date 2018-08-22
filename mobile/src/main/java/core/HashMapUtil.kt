@@ -36,7 +36,7 @@ class HashMapUtil {
     return parentMap
   }
 
-  fun createPediatricianMap(card: RegistrationCardItem<PediatricianData>): HashMap<String, Any> {
+  fun createPediatricianMap(card: RegistrationCardItem<Pediatrician>): HashMap<String, Any> {
     val pediatricianMap = HashMap<String, Any>()
     card.`object`.pedName.let { pediatricianMap.put("pedName", it) }
     card.`object`.pedOfficeName.let { pediatricianMap.put("pedOfficeName", it) }
@@ -46,7 +46,7 @@ class HashMapUtil {
 
   }
 
-  fun createMedicationMap(card: RegistrationCardItem<MedicationData>): HashMap<String, Any> {
+  fun createMedicationMap(card: RegistrationCardItem<Medication>): HashMap<String, Any> {
     val medicationMap = HashMap<String, Any>()
     card.`object`.medName.let { medicationMap.put("medicationName", it) }
     card.`object`.medTime.let { medicationMap.put("medicationTime", it) }

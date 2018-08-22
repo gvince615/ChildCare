@@ -140,19 +140,19 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
 
   private fun billingMenuButtonClicked() {
-    adapter.addBilling(BillingData())
+    adapter.addBilling(Billing())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun medicationMenuButtonClicked() {
-    adapter.addMedication(MedicationData())
+    adapter.addMedication(Medication())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun pediatricianMenuButtonClicked() {
-    adapter.addPediatrician(PediatricianData())
+    adapter.addPediatrician(Pediatrician())
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -164,7 +164,9 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   private fun childMenuButtonClicked() {
-    adapter.addChild(Child("", "", "", "", "", "Active", "", "", "", ""))
+    adapter.addChild(Child("", "", "", "", "",
+        "Active", "", "", "", "",
+        parents = null, medications = null, pediatrician = null, billing = null))
     registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
@@ -297,8 +299,24 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   fun setDataCards(fullChildRegistrationData: FullChildRegistrationData) {
     list.add(RegistrationCardItem(fullChildRegistrationData.child, RegistrationCardItem.CHILD))
 
-    for (parent in fullChildRegistrationData.parents) {
-      list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+    if (fullChildRegistrationData.child.parents != null) {
+      for (parent in fullChildRegistrationData.child.parents!!) {
+        list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+      }
+    }
+
+    if (fullChildRegistrationData.child.pediatrician != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.child.pediatrician, RegistrationCardItem.PEDIATRICIAN))
+    }
+
+    if (fullChildRegistrationData.child.medications != null) {
+      for (medication in fullChildRegistrationData.child.medications!!) {
+        list.add(RegistrationCardItem(medication, RegistrationCardItem.MEDICATION))
+      }
+    }
+
+    if (fullChildRegistrationData.child.billing != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.child.pediatrician, RegistrationCardItem.PEDIATRICIAN))
     }
 
     adapter = RegistrationAdapter(this, list, this)
@@ -346,14 +364,14 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         RegistrationCardItem.PEDIATRICIAN -> {
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
           registrationPresenter.savePediatricianDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<PediatricianData>),
+              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<Pediatrician>),
               chilCard?.let { HashMapUtil().createChildMap(it) })
         }
 
         RegistrationCardItem.MEDICATION -> {
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
           registrationPresenter.saveMedicationDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createMedicationMap(card as RegistrationCardItem<MedicationData>),
+              HashMapUtil().createMedicationMap(card as RegistrationCardItem<Medication>),
               chilCard?.let { HashMapUtil().createChildMap(it) })
         }
       }

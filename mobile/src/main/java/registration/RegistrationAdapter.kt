@@ -73,18 +73,18 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     notifyItemInserted(list.size)
   }
 
-  fun addPediatrician(pediatricianData: PediatricianData) {
-    list.add(RegistrationCardItem(pediatricianData, RegistrationCardItem.PEDIATRICIAN))
+  fun addPediatrician(pediatrician: Pediatrician) {
+    list.add(RegistrationCardItem(pediatrician, RegistrationCardItem.PEDIATRICIAN))
     notifyItemInserted(list.size)
   }
 
-  fun addMedication(medicationData: MedicationData) {
-    list.add(RegistrationCardItem(medicationData, RegistrationCardItem.MEDICATION))
+  fun addMedication(medication: Medication) {
+    list.add(RegistrationCardItem(medication, RegistrationCardItem.MEDICATION))
     notifyItemInserted(list.size)
   }
 
-  fun addBilling(billingData: BillingData) {
-    list.add(RegistrationCardItem(billingData, RegistrationCardItem.BILLING))
+  fun addBilling(billing: Billing) {
+    list.add(RegistrationCardItem(billing, RegistrationCardItem.BILLING))
     notifyItemInserted(list.size)
   }
 

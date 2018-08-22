@@ -12,8 +12,15 @@ data class Child(
     var addressLn2: String = "",
     var addressCity: String = "",
     var addressState: String = "",
-    var addressZip: String = "") {
+    var addressZip: String = "",
+    var parents: ArrayList<Parent>?,
+    var medications: ArrayList<Medication>?,
+    var pediatrician: Pediatrician?,
+    var billing: Billing?
+) {
 
-  constructor() : this("", "", "", "", "", "", "", "", "", "", "", "")
+  constructor() : this("", "", "", "", "",
+      "", "", "", "", "", "",
+      "", null, null, null, null)
 }
 

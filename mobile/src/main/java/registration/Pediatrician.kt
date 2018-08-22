@@ -1,6 +1,6 @@
 package registration
 
-data class PediatricianData(
+data class Pediatrician(
     var pedName: String = "",
     var pedOfficeName: String = "",
     var pedOfficeNum: String = "") {

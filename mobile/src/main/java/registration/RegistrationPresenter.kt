@@ -7,8 +7,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.google.gson.Gson
 import com.vince.childcare.R
 import core.*
 import java.io.File
@@ -78,67 +80,69 @@ class RegistrationPresenter {
               if (document.id == childRef) {
 
                 child = document.toObject(Child::class.java)
-                child.isActive = document["isActive"].toString()
+                child.isActive = document[IS_ACTIVE].toString()
+                child.parents = getParents(document)
+                child.medications = getMedications(document)
+                child.pediatrician = getPediatrician(document)
+                child.billing = getBilling(document)
 
-                FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-                    FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
-                        PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-                    .collection(COLLECTION_REGISTRATION_DATA).document(childRef).collection(COLLECTION_PARENTS)
-                    .get()
-                    .addOnCompleteListener { task ->
-                      if (task.isSuccessful) {
-                        for (document in task.result) {
-                          var parent = document.toObject(Parent::class.java)
-                          parentList.add(parent)
-                          Log.d("FIRESTORE", document.id + " => " + document.data)
-                        }
+                activity.setDataCards(FullChildRegistrationData(child))
 
-                        var fullChildRegistrationData = FullChildRegistrationData(child, parentList)
-
-                        activity.setDataCards(FullChildRegistrationData(child, parentList))
-
-
-                        Log.d("CHILD_REG_DATA", "child data documents: " + fullChildRegistrationData.toString())
-
-                      } else {
-                        Log.d("FIRESTORE", "Error getting documents: ", task.exception)
-                      }
-                      activity.hideProgress()
-                    }
-
-//                FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-//                    FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
-//                        PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-//                    .collection(COLLECTION_REGISTRATION_DATA).document(childRef).collection(COLLECTION_MEDICAL)
-//                    .get()
-//                    .addOnCompleteListener { task ->
-//                      if (task.isSuccessful) {
-//                        for (document in task.result) {
-//                          var pediatrician = document.toObject(PediatricianData::class.java)
-//                          parentList.add(pediatrician)
-//                          Log.d("FIRESTORE", document.id + " => " + document.data)
-//                        }
-//
-//                        var fullChildRegistrationData = FullChildRegistrationData(child, parentList, pediatrician)
-//
-//                        activity.setDataCards(FullChildRegistrationData(child, parentList))
-//
-//
-//                        Log.d("CHILD_REG_DATA", "child data documents: " + fullChildRegistrationData.toString())
-//
-//                      } else {
-//                        Log.d("FIRESTORE", "Error getting documents: ", task.exception)
-//                      }
-//                      activity.hideProgress()
-//                    }
               }
               Log.d("FIRESTORE", document.id + " => " + document.data)
             }
+            activity.hideProgress()
           } else {
             Log.d("FIRESTORE", "Error getting documents: ", task.exception)
           }
         }
 
+  }
+
+  private fun getBilling(document: QueryDocumentSnapshot): Billing? {
+    var billing = Billing()
+    return if (document.contains("billing")) {
+      val gson = Gson()
+      gson.fromJson<Billing>(gson.toJsonTree(billing), Billing::class.java)
+    } else {
+      null
+    }
+  }
+
+  private fun getPediatrician(document: QueryDocumentSnapshot): Pediatrician? {
+    var pediatrician = Pediatrician()
+    return if (document.contains("pediatrician")) {
+      val gson = Gson()
+      gson.fromJson<Pediatrician>(gson.toJsonTree(pediatrician), Pediatrician::class.java)
+    } else {
+      null
+    }
+  }
+
+  private fun getMedications(document: QueryDocumentSnapshot): ArrayList<Medication>? {
+    val medications = ArrayList<Medication>()
+    return if (document.contains("medications")) {
+      for (medication in document["medications"] as ArrayList<*>) {
+        val gson = Gson()
+        medications.add(gson.fromJson<Medication>(gson.toJsonTree(medication), Medication::class.java))
+      }
+      medications
+    } else {
+      null
+    }
+  }
+
+  private fun getParents(document: QueryDocumentSnapshot): ArrayList<Parent>? {
+    val guardians = ArrayList<Parent>()
+    return if (document.contains("guardians")) {
+      for (guardian in document["guardians"] as ArrayList<*>) {
+        val gson = Gson()
+        guardians.add(gson.fromJson<Parent>(gson.toJsonTree(guardian), Parent::class.java))
+      }
+      guardians
+    } else {
+      null
+    }
   }
 
   fun uploadChildImage(filePath: Uri?, storageReference: StorageReference) {
@@ -199,6 +203,20 @@ class RegistrationPresenter {
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .collection(COLLECTION_MEDICAL).document(DOCUMENT_MEDICAL).collection(COLLECTION_MEDICATION).document()
+        .set(medicationMap).addOnSuccessListener {
+          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+        }.addOnFailureListener {
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+        }
+  }
+
+
+  fun saveBillingDataDocument(currentUser: FirebaseUser?, medicationMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+        currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
+        .collection(COLLECTION_BILLING).document()
         .set(medicationMap).addOnSuccessListener {
           Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))

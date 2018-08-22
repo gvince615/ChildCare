@@ -30,19 +30,19 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     fun bind(holder: PediatricianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      holder.pedNameLayout.editText?.setText((listItem as RegistrationCardItem<PediatricianData>).`object`.pedName)
+      holder.pedNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedName)
       holder.pedNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<PediatricianData>).`object`.pedName = holder.pedNameLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedName = holder.pedNameLayout.editText?.text?.toString()!!
       }
 
-      holder.pedOfficeNameLayout.editText?.setText((listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeName)
+      holder.pedOfficeNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeName)
       holder.pedOfficeNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
       }
 
-      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeNum)
+      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNum)
       holder.pedOfficeNumberLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<PediatricianData>).`object`.pedOfficeNum = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNum = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
       }
 
       holder.pediatricianDeleteButton.setOnClickListener {
