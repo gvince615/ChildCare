@@ -32,6 +32,7 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childData[CHILD_ID].toString())
         .set(child)
         .addOnSuccessListener {
+          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_succeeded))
         }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.child_data_update_failed))
@@ -44,8 +45,6 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .update(GUARDIANS, parentData)
         .addOnSuccessListener {
-          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
-          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
         }
@@ -203,7 +202,6 @@ class RegistrationPresenter {
         .update(PEDIATRICIAN, pediatricianMap)
 
         .addOnSuccessListener {
-          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }
 
@@ -218,7 +216,6 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .update(MEDICATIONS, medicationMap)
         .addOnSuccessListener {
-          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_update_failed))
@@ -232,7 +229,6 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString()).collection(COLLECTION_BILLING).document()
         .update("billing", billingMap)
         .addOnSuccessListener {
-          Toast.makeText(activity.applicationContext, "Registration saved ", Toast.LENGTH_SHORT).show()
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
         }
 

@@ -7,9 +7,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import com.vince.childcare.R
+import fr.ganfra.materialspinner.MaterialSpinner
 import kotlinx.android.synthetic.main.registration_billing_data_card.view.*
 
 
@@ -17,9 +19,11 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var billingDeleteButton: ImageButton = itemView.delete_billing_card_button
 
-//  var medNameLayout: TextInputLayout = itemView.input_layout_ped_name
-//  var medDoseLayout: TextInputLayout = itemView.input_layout_ped_office_name
-//  var medTimeLayout: TextInputLayout = itemView.input_layout_ped_contact_num_1
+  var billingCycleSpinner: MaterialSpinner = itemView.billing_cycle_spinner
+  var hourlyRateSpinner: MaterialSpinner = itemView.hourly_rate_spinner
+  var maxHoursSpinner: MaterialSpinner = itemView.max_billable_hours_spinner
+  var minTimeSpinner: MaterialSpinner = itemView.min_billable_time_spinner
+  var roundUpRuleSpinner: MaterialSpinner = itemView.round_up_rule_spinner
 
   companion object {
 
@@ -27,9 +31,15 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return BillingViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_billing_data_card, parent, false))
     }
 
-    fun bind(holder: BillingViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
+    fun bind(context: Context, holder: BillingViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
+      holder.billingCycleSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.billing_cycle_items, android.R.layout.simple_list_item_1)
+      holder.hourlyRateSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.hourly_rate_items, android.R.layout.simple_list_item_1)
+      holder.maxHoursSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.max_billable_hours_items, android.R.layout.simple_list_item_1)
+      holder.minTimeSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.min_billable_time_items, android.R.layout.simple_list_item_1)
+      holder.roundUpRuleSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.round_up_rule_items, android.R.layout.simple_list_item_1)
 
-//      holder.medNameLayout.editText?.setText((listItem as RegistrationCardItem<MedicationData>).`object`.medName)
+
+//      holder.billingCycleSpinner.editText?.setText((listItem as RegistrationCardItem<MedicationData>).`object`.medName)
 //      holder.medNameLayout.editText?.onChange {
 //        (listItem as RegistrationCardItem<MedicationData>).`object`.medName = holder.medNameLayout.editText?.text?.toString()!!
 //      }

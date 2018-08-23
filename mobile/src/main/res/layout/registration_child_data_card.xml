@@ -21,15 +21,6 @@
       android:padding="5dp"
       android:theme="@style/BlueTheme"
       >
-    <View
-        android:id="@+id/focus_view"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        >
-      <requestFocus />
-    </View>
 
     <LinearLayout
         android:id="@+id/card_header"
@@ -38,23 +29,29 @@
         android:orientation="horizontal"
         >
       <TextView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:layout_weight="1"
           android:gravity="start|center"
           android:padding="3dp"
-          android:paddingStart="10dp"
-          android:text="Child Information"
+          android:text="Child"
           android:textColor="@color/colorBlack"
           android:textSize="22sp"
           android:textStyle="bold"
           />
-      <EditText
+      <TextView
           android:id="@+id/child_id"
           android:layout_width="0dp"
           android:layout_height="match_parent"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:layout_weight="1"
           android:enabled="false"
-          android:text="ID"
-          android:visibility="gone"
+          android:gravity="center|end"
+          android:text="ID_1234-5678-9101"
+          android:visibility="visible"
 
           />
     </LinearLayout>
@@ -72,6 +69,7 @@
           android:layout_height="wrap_content"
           android:orientation="horizontal"
           android:weightSum="2"
+          android:layout_marginEnd="5dp"
           >
 
         <RelativeLayout
@@ -85,8 +83,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_centerInParent="true"
+              android:layout_margin="5dp"
               android:src="@drawable/account_child_white_48x48"
-              app:civ_border_color="@color/colorBlueDark"
+              app:civ_border_color="@color/colorBlue"
               app:civ_border_width="3dp"
               />
 
@@ -94,6 +93,13 @@
               android:layout_width="30dp"
               android:layout_height="30dp"
               android:layout_alignParentBottom="true"
+              android:layout_marginBottom="15dp"
+              android:layout_marginStart="24dp"
+              android:background="@color/colorGreyTrans"
+              android:paddingBottom="3dp"
+              android:paddingEnd="3dp"
+              android:paddingStart="1dp"
+              android:paddingTop="2dp"
               android:src="@drawable/baseline_add_a_photo_white_18dp"
               />
         </RelativeLayout>
@@ -104,138 +110,116 @@
             android:layout_weight="1.2"
             android:orientation="vertical"
             >
-          <android.support.design.widget.TextInputLayout
+
+          <com.rengwuxian.materialedittext.MaterialEditText
               android:id="@+id/child_first_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              >
+              android:hint="@string/first_name"
+              android:inputType="textPersonName"
+              app:met_floatingLabel="highlight"
+              app:met_maxCharacters="20"
+              app:met_minCharacters="2"
+              app:met_singleLineEllipsis="true"
+              app:met_primaryColor="@color/colorBlueAccent"
+              />
 
-            <EditText
-                android:id="@+id/input_first_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="First Name"
-                android:inputType="textPersonName"
-                />
-
-          </android.support.design.widget.TextInputLayout>
-
-          <android.support.design.widget.TextInputLayout
+          <com.rengwuxian.materialedittext.MaterialEditText
               android:id="@+id/child_last_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              >
+              android:hint="@string/last_name"
+              android:inputType="textPersonName"
+              app:met_floatingLabel="highlight"
+              app:met_maxCharacters="20"
+              app:met_minCharacters="2"
+              app:met_singleLineEllipsis="true"
+              app:met_primaryColor="@color/colorBlueAccent"
+              />
 
-            <EditText
-                android:id="@+id/input_last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Last Name"
-                android:inputType="textPersonName"
-                />
-
-          </android.support.design.widget.TextInputLayout>
-
-          <android.support.design.widget.TextInputLayout
-              android:id="@+id/input_layout_dob"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              >
-
-            <EditText
-                android:id="@+id/input_dob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Date of Birth"
-                android:inputType="date"
-                />
-
-          </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
       </LinearLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
+          android:id="@+id/input_layout_dob"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/date_of_birth"
+          android:inputType="date"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="10"
+          app:met_minCharacters="10"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          app:met_singleLineEllipsis="true"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
+
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_address_ln_1"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/addy_ln_1"
+          android:inputType="textPostalAddress"
+          app:met_floatingLabel="highlight"
+          app:met_singleLineEllipsis="true"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
 
-        <EditText
-            android:id="@+id/input_address_ln_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Address Line 1"
-            android:inputType="textPostalAddress"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_address_ln_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/addy_ln_1"
+          android:inputType="textPostalAddress"
+          app:met_floatingLabel="highlight"
+          app:met_singleLineEllipsis="true"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
 
-        <EditText
-            android:id="@+id/input_address_ln_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Address Line 2"
-            android:inputType="textPostalAddress"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_city"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/city"
+          android:inputType="textPostalAddress"
+          app:met_floatingLabel="highlight"
+          app:met_singleLineEllipsis="true"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
 
-        <EditText
-            android:id="@+id/input_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="City"
-            android:inputType="textCapWords"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_state"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/state"
+          android:inputType="textPostalAddress"
+          app:met_floatingLabel="highlight"
+          app:met_singleLineEllipsis="true"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
 
-        <EditText
-            android:id="@+id/input_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="State"
-            android:inputType="textCapCharacters"
-            android:maxEms="2"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_zip"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
-
-        <EditText
-            android:id="@+id/input_zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Zip Code"
-            android:inputType="number"
-            android:maxEms="5"
-            />
-
-      </android.support.design.widget.TextInputLayout>
+          android:hint="@string/zip"
+          android:inputType="textPostalAddress"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="10"
+          app:met_minCharacters="5"
+          app:met_singleLineEllipsis="true"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          app:met_primaryColor="@color/colorBlueAccent"
+          />
 
       <LinearLayout
           android:id="@+id/check_layout"
@@ -251,7 +235,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Set child as Active?"
+            android:text="@string/set_child_as_active"
             android:textSize="18sp"
             />
 
@@ -260,7 +244,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
-            android:gravity="start"
+            android:gravity="center"
             />
 
       </LinearLayout>

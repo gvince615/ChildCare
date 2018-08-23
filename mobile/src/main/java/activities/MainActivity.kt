@@ -10,6 +10,7 @@ import attendance.AttendanceAdapter
 import attendance.AttendancePresenter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crash.FirebaseCrash
 import com.vince.childcare.R
 import core.CHECK_IN
 import fragments.Attendance
@@ -39,6 +40,7 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    FirebaseCrash.log("Activity created")
     val fragmentList = Arrays.asList(
         Dashboard(),
         Attendance(),
@@ -50,8 +52,8 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
     attendancePresenter.setUp(this, children)
   }
 
-  override fun onPostResume() {
-    super.onPostResume()
+  override fun onResume() {
+    super.onResume()
     updateChildData()
   }
 

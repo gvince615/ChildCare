@@ -20,5 +20,59 @@
   <string name="check_out">Check Out</string>
   <string name="activate">Activate Child</string>
   <string name="medication_data_update_failed">medication data failed to update</string>
+  <string name="first_name">First Name</string>
+  <string name="last_name">Last Name</string>
+  <string name="date_of_birth">Date of Birth</string>
+  <string name="addy_ln_1">Address Line 1</string>
+  <string name="city">City</string>
+  <string name="state">State</string>
+  <string name="zip">Zip Code</string>
+  <string name="set_child_as_active">Set child as Active?</string>
 
+
+  <string-array name="billing_cycle_items">
+    <item>Daily</item>
+    <item>Weekly</item>
+    <item>BiMonthly</item>
+    <item>Monthly</item>
+  </string-array>
+
+  <string-array name="hourly_rate_items">
+    <item>$1.00 per Hour</item>
+    <item>$2.00 per Hour</item>
+    <item>$3.00 per Hour</item>
+    <item>$4.00 per Hour</item>
+    <item>$5.00 per Hour</item>
+    <item>$6.00 per Hour</item>
+    <item>$7.00 per Hour</item>
+    <item>$8.00 per Hour</item>
+    <item>$9.00 per Hour</item>
+    <item>$10.00 per Hour</item>
+  </string-array>
+
+  <string-array name="max_billable_hours_items">
+    <item>1 Hour   = Daily Rate</item>
+    <item>2 Hours  = Daily Rate</item>
+    <item>3 Hours  = Daily Rate</item>
+    <item>4 Hours  = Daily Rate</item>
+    <item>5 Hours  = Daily Rate</item>
+    <item>6 Hours  = Daily Rate</item>
+    <item>7 Hours  = Daily Rate</item>
+    <item>8 Hours  = Daily Rate</item>
+    <item>9 Hours  = Daily Rate</item>
+    <item>10 Hours = Daily Rate</item>
+  </string-array>
+
+  <string-array name="min_billable_time_items">
+    <item>15 minutes</item>
+    <item>30 minutes</item>
+    <item>45 minutes</item>
+    <item>60 minutes</item>
+  </string-array>
+
+  <string-array name="round_up_rule_items">
+    <item>15 minutes</item>
+    <item>30 minutes</item>
+    <item>45 minutes</item>
+  </string-array>
 </resources>

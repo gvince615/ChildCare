@@ -73,6 +73,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
     holder.tvIsActive.text = INACTIVE
     holder.checkInOutBtn.text = context.getText(R.string.activate)
     holder.cv.isEnabled = false
+    holder.tvCheckInTime.text = ""
     holder.ivChildImage.borderColor = context.getColor(R.color.darker_grey)
   }
 
