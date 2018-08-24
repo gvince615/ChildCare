@@ -24,6 +24,8 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   var maxHoursSpinner: MaterialSpinner = itemView.max_billable_hours_spinner
   var minTimeSpinner: MaterialSpinner = itemView.min_billable_time_spinner
   var roundUpRuleSpinner: MaterialSpinner = itemView.round_up_rule_spinner
+  var discountSpinner: MaterialSpinner = itemView.discount_percentage_spinner
+  var discountDescSpinner: MaterialSpinner = itemView.discount_desc_spinner
 
   companion object {
 
@@ -37,7 +39,9 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.maxHoursSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.max_billable_hours_items, android.R.layout.simple_list_item_1)
       holder.minTimeSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.min_billable_time_items, android.R.layout.simple_list_item_1)
       holder.roundUpRuleSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.round_up_rule_items, android.R.layout.simple_list_item_1)
-
+      holder.discountSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.discount_percentage_items,
+          android.R.layout.simple_list_item_1)
+      holder.discountDescSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.discount_desc_items, android.R.layout.simple_list_item_1)
 
 //      holder.billingCycleSpinner.editText?.setText((listItem as RegistrationCardItem<MedicationData>).`object`.medName)
 //      holder.medNameLayout.editText?.onChange {

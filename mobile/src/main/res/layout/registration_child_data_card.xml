@@ -49,6 +49,8 @@
           android:layout_marginStart="5dp"
           android:layout_weight="1"
           android:enabled="false"
+          android:textStyle="bold|italic"
+          android:textSize="16sp"
           android:gravity="center|end"
           android:text="ID_1234-5678-9101"
           android:visibility="visible"
@@ -67,9 +69,9 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginEnd="5dp"
           android:orientation="horizontal"
           android:weightSum="2"
-          android:layout_marginEnd="5dp"
           >
 
         <RelativeLayout
@@ -117,11 +119,12 @@
               android:layout_height="wrap_content"
               android:hint="@string/first_name"
               android:inputType="textPersonName"
+              app:met_checkCharactersCountAtBeginning="false"
               app:met_floatingLabel="highlight"
-              app:met_maxCharacters="20"
-              app:met_minCharacters="2"
-              app:met_singleLineEllipsis="true"
+              app:met_maxCharacters="25"
+              app:met_minCharacters="1"
               app:met_primaryColor="@color/colorBlueAccent"
+              app:met_singleLineEllipsis="true"
               />
 
           <com.rengwuxian.materialedittext.MaterialEditText
@@ -130,11 +133,12 @@
               android:layout_height="wrap_content"
               android:hint="@string/last_name"
               android:inputType="textPersonName"
+              app:met_checkCharactersCountAtBeginning="false"
               app:met_floatingLabel="highlight"
-              app:met_maxCharacters="20"
-              app:met_minCharacters="2"
-              app:met_singleLineEllipsis="true"
+              app:met_maxCharacters="25"
+              app:met_minCharacters="1"
               app:met_primaryColor="@color/colorBlueAccent"
+              app:met_singleLineEllipsis="true"
               />
 
         </LinearLayout>
@@ -145,80 +149,96 @@
           android:id="@+id/input_layout_dob"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/date_of_birth"
-          android:inputType="date"
-          app:met_floatingLabel="highlight"
-          app:met_maxCharacters="10"
-          app:met_minCharacters="10"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
-          app:met_singleLineEllipsis="true"
+          android:hint="@string/date_of_birth"
+          android:inputType="date"
+          app:met_maxCharacters="10"
+          app:met_minCharacters="10"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_singleLineEllipsis="true"
           />
 
       <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_address_ln_1"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/addy_ln_1"
-          android:inputType="textPostalAddress"
-          app:met_floatingLabel="highlight"
-          app:met_singleLineEllipsis="true"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
+          android:hint="@string/addy_ln_1"
+          android:inputType="textPostalAddress"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_singleLineEllipsis="true"
+          app:met_maxCharacters="25"
+          app:met_minCharacters="0"
           />
 
       <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_address_ln_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/addy_ln_1"
-          android:inputType="textPostalAddress"
-          app:met_floatingLabel="highlight"
-          app:met_singleLineEllipsis="true"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
+          android:hint="@string/addy_ln_1"
+          android:inputType="textPostalAddress"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_singleLineEllipsis="true"
+          app:met_maxCharacters="25"
+          app:met_minCharacters="0"
           />
 
       <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_city"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/city"
-          android:inputType="textPostalAddress"
-          app:met_floatingLabel="highlight"
-          app:met_singleLineEllipsis="true"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
+          android:hint="@string/city"
+          android:inputType="textPostalAddress"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_singleLineEllipsis="true"
+          app:met_maxCharacters="25"
+          app:met_minCharacters="0"
           />
 
       <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_state"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
           android:hint="@string/state"
-          android:inputType="textPostalAddress"
+          android:inputType="textCapCharacters"
+          app:met_checkCharactersCountAtBeginning="false"
           app:met_floatingLabel="highlight"
-          app:met_singleLineEllipsis="true"
+          app:met_maxCharacters="2"
+          app:met_minCharacters="0"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_singleLineEllipsis="true"
           />
 
       <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_zip"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/zip"
-          android:inputType="textPostalAddress"
-          app:met_floatingLabel="highlight"
-          app:met_maxCharacters="10"
-          app:met_minCharacters="5"
-          app:met_singleLineEllipsis="true"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
+          android:hint="@string/zip"
+          android:inputType="textPostalAddress"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="10"
+          app:met_minCharacters="0"
           app:met_primaryColor="@color/colorBlueAccent"
+          app:met_singleLineEllipsis="true"
           />
 
       <LinearLayout
@@ -245,6 +265,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:gravity="center"
+            android:checked="true"
             />
 
       </LinearLayout>

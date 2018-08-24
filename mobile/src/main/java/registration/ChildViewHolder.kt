@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.EditText
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
+import com.rengwuxian.materialedittext.validation.RegexpValidator
 import com.vince.childcare.R
 import core.DownloadImageTask
 import de.hdodenhof.circleimageview.CircleImageView
@@ -37,17 +37,48 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return ChildViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_child_data_card, parent, false))
     }
 
-    fun bind(holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
+    fun bind(context: Context, holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      if ((listItem as RegistrationCardItem<Child>).`object`.childImageUrl != "") {
+      if ((listItem as RegistrationCardItem<Child>).`object`.childImageUrl != ""
+          && listItem.`object`.childImageUrl != "null" && listItem.`object`.childImageUrl != null) {
         DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUrl)
+      }
+      holder.childImage.setOnClickListener {
+        listener?.childImageClicked(it)
       }
 
       holder.childId.text = (listItem).`object`.childId
+
       holder.childFirstNameLayout.setText((listItem).`object`.firstName)
+      holder.childFirstNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
+      holder.childFirstNameLayout.setOnFocusChangeListener { v, hasFocus ->
+        if (!hasFocus)
+          holder.childFirstNameLayout.validate()
+      }
+      holder.childFirstNameLayout.onChange {
+        listItem.`object`.firstName = holder.childFirstNameLayout.text?.toString()!!
+      }
+
       holder.childLastNameLayout.setText((listItem).`object`.lastName)
-      holder.childIsActive.isChecked = (listItem.`object`.isActive) == "Active"
-      holder.childDOBLayout.setText(listItem.`object`.birthDate)
+      holder.childLastNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
+      holder.childLastNameLayout.setOnFocusChangeListener { v, hasFocus ->
+        if (!hasFocus)
+          holder.childLastNameLayout.validate()
+      }
+      holder.childLastNameLayout.onChange {
+        listItem.`object`.lastName = holder.childLastNameLayout.text?.toString()!!
+      }
+
+      holder.childDOBLayout.setText((listItem).`object`.birthDate)
+      holder.childDOBLayout.addValidator(RegexpValidator(context.getString(R.string.date_error), context.getString(R.string.date_validation_regex)))
+      holder.childDOBLayout.setOnFocusChangeListener { v, hasFocus ->
+        if (!hasFocus)
+          holder.childDOBLayout.validate()
+      }
+      holder.childDOBLayout.onChange {
+        listItem.`object`.birthDate = holder.childDOBLayout.text?.toString()!!
+      }
+
       holder.childLAddressLn1Layout.setText(listItem.`object`.addressLn1)
       holder.childLAddressLn2Layout.setText(listItem.`object`.addressLn2)
       holder.childLAddressCityLayout.setText(listItem.`object`.addressCity)
@@ -59,20 +90,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         listItem.`object`.childId = holder.childId.text?.toString()!!
       }
 
-      holder.childFirstNameLayout.onChange {
-        holder.childFirstNameLayout.error = if (holder.childFirstNameLayout.text.toString().length > 1) null else "Minimum length of 2"
-        listItem.`object`.firstName = holder.childFirstNameLayout.text?.toString()!!
-      }
-      holder.childLastNameLayout.onChange {
-        holder.childLastNameLayout.error = if (holder.childLastNameLayout.text.toString().length > 1) null else "Minimum length of 2"
-        listItem.`object`.lastName = holder.childLastNameLayout.text?.toString()!!
-      }
-      holder.childDOBLayout.onChange {
-        holder.childDOBLayout.error = if (holder.childDOBLayout.text.toString()
-                .matches("([0-9]{2})/([0-9]{2})/([0-9]{4})".toRegex())) null else "Please enter a valid date (MM/DD/YYYY)"
 
-        listItem.`object`.birthDate = holder.childDOBLayout.text?.toString()!!
-      }
       holder.childLAddressLn1Layout.onChange {
         listItem.`object`.addressLn1 = holder.childLAddressLn1Layout.text?.toString()!!
       }
@@ -89,19 +107,16 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         listItem.`object`.addressZip = holder.childLAddressZipLayout.text?.toString()!!
       }
 
+      holder.childIsActive.isChecked = (listItem.`object`.isActive) == "Active"
       holder.childIsActive.setOnCheckedChangeListener { buttonView, isChecked ->
         if (isChecked)
           (listItem.`object`.isActive) = "Active"
         else
           (listItem.`object`.isActive) = "Inactive"
       }
-
-      holder.childImage.setOnClickListener {
-        listener?.childImageClicked(it)
-      }
     }
 
-    fun EditText.onChange(cb: (String) -> Unit) {
+    fun MaterialEditText.onChange(cb: (String) -> Unit) {
       this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())

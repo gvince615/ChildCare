@@ -55,7 +55,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
       }
     }
 
-    if (items[position].childImageUrl != "" || items[position].childImageUrl != "null") {
+    if (items[position].childImageUrl != "" && items[position].childImageUrl != "null" && items[position].childImageUrl == null) {
       DownloadImageTask(holder.ivChildImage).execute(items[position].childImageUrl)
     }
     holder.tvChildId.text = items[position].childId

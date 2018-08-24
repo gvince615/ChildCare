@@ -117,8 +117,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     var card = adapter.getList()[0]
 
-    if (!isInEditMode) {
-      (card as RegistrationCardItem<Child>).`object`.childId =
+    if (!isInEditMode && (card as RegistrationCardItem<Child>).`object`.childId.isEmpty()) {
+      card.`object`.childId =
           "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
           "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
           "-" + ((Math.random() * 9000).toInt() + 1000).toString()
@@ -238,10 +238,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun lessThanMinimum(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Guardian).firstName.length < 2 || (card.`object` as Guardian).lastName.length < 2 || (card.`object` as Guardian).phoneNumber1.length < 12)
+        return ((card.`object` as Guardian).phoneNumber1.length < 12)
       }
       RegistrationCardItem.CHILD -> {
-        return ((card.`object` as Child).firstName.length < 2 || (card.`object` as Child).lastName.length < 2 || (card.`object` as Child).birthDate.length < 10)
+        return ((card.`object` as Child).birthDate.length < 10)
       }
     }
     return false
@@ -250,10 +250,12 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private fun emptyFields(card: RegistrationCardItem<*>): Boolean {
     when (card.viewType) {
       RegistrationCardItem.PARENT -> {
-        return ((card.`object` as Guardian).firstName.isEmpty() || (card.`object` as Guardian).lastName.isEmpty() || (card.`object` as Guardian).phoneNumber1.isEmpty())
+        return ((card.`object` as Guardian).firstName.isEmpty() || (card.`object` as Guardian).lastName.isEmpty()
+            || (card.`object` as Guardian).phoneNumber1.isEmpty() || (card.`object` as Guardian).emailAddress.isEmpty())
       }
       RegistrationCardItem.CHILD -> {
-        return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty() || (card.`object` as Child).birthDate.isEmpty())
+        return ((card.`object` as Child).firstName.isEmpty() || (card.`object` as Child).lastName.isEmpty()
+            || (card.`object` as Child).birthDate.isEmpty())
       }
     }
     return false
@@ -349,6 +351,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           chilCard = card as RegistrationCardItem<Child>
           if (url != "") {
             card.`object`.childImageUrl = url
+          }
+
+          if (card.`object`.childId.isEmpty()) {
+            card.`object`.childId =
+                "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
+                "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
+                "-" + ((Math.random() * 9000).toInt() + 1000).toString()
           }
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)

@@ -31,7 +31,7 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     when (getItemViewType(position)) {
       RegistrationCardItem.PARENT -> GuardianViewHolder.bind(viewHolder as GuardianViewHolder, list[position], listener)
-      RegistrationCardItem.CHILD -> ChildViewHolder.bind(viewHolder as ChildViewHolder, list[position], listener)
+      RegistrationCardItem.CHILD -> ChildViewHolder.bind(context, viewHolder as ChildViewHolder, list[position], listener)
       RegistrationCardItem.PEDIATRICIAN -> PediatricianViewHolder.bind(viewHolder as PediatricianViewHolder, list[position], listener)
       RegistrationCardItem.MEDICATION -> MedicationViewHolder.bind(viewHolder as MedicationViewHolder, list[position], listener)
       RegistrationCardItem.BILLING -> BillingViewHolder.bind(context, viewHolder as BillingViewHolder, list[position], listener)

@@ -32,11 +32,11 @@
       <TextView
           android:layout_width="0dp"
           android:layout_height="match_parent"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
           android:layout_weight="2"
           android:gravity="start|center"
-          android:layout_marginStart="5dp"
-          android:layout_marginEnd="5dp"
-          android:text="Billing"
+          android:text="@string/billing"
           android:textColor="@android:color/black"
           android:textSize="22sp"
           android:textStyle="bold"
@@ -49,6 +49,7 @@
           android:backgroundTint="@android:color/transparent"
           android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
+          android:contentDescription="@string/delete_card_content_description"
           android:src="@android:drawable/ic_menu_close_clear_cancel"
           android:tint="@color/colorBlack"
 
@@ -62,55 +63,192 @@
         android:gravity="start"
         android:orientation="vertical"
         >
+
       <fr.ganfra.materialspinner.MaterialSpinner
           android:id="@+id/billing_cycle_spinner"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          app:ms_enableErrorLabel="true"
+          app:ms_enableFloatingLabel="true"
+          app:ms_floatingLabelText="Billing Cycle"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
           app:ms_hint="Billing Cycle"
-          app:ms_enableFloatingLabel="true"
-          app:ms_enableErrorLabel="true"
-          app:ms_floatingLabelText="Billing Cycle"
           />
 
-      <fr.ganfra.materialspinner.MaterialSpinner
-          android:id="@+id/hourly_rate_spinner"
+      <!--switch-->
+      <LinearLayout
+          android:id="@+id/switch_container"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          app:ms_hint="Hourly Rate"
-          app:ms_enableFloatingLabel="true"
-          app:ms_enableErrorLabel="true"
-          app:ms_floatingLabelText="Billing Cycle"
-          />
+          android:weightSum="2.5"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:layout_gravity="center"
+          android:orientation="horizontal"
+          >
 
-      <fr.ganfra.materialspinner.MaterialSpinner
-          android:id="@+id/max_billable_hours_spinner"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:ms_hint="Max Billable Hours (per day)"
-          app:ms_enableFloatingLabel="true"
-          app:ms_enableErrorLabel="true"
-          app:ms_floatingLabelText="Billing Cycle"
-          />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:textSize="16sp"
+            android:text="@string/flat_rate_billing"
+            />
 
-      <fr.ganfra.materialspinner.MaterialSpinner
-          android:id="@+id/min_billable_time_spinner"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:ms_hint="Min Billable Time"
-          app:ms_enableFloatingLabel="true"
-          app:ms_enableErrorLabel="true"
-          app:ms_floatingLabelText="Billing Cycle"
-          />
+        <Switch
+            android:id="@+id/billing_type_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            />
 
-      <fr.ganfra.materialspinner.MaterialSpinner
-          android:id="@+id/round_up_rule_spinner"
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="16sp"
+            android:text="@string/hourly_billing"
+            />
+      </LinearLayout>
+      <!--flat rate-->
+      <LinearLayout
+          android:id="@+id/flat_rate_container"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          app:ms_hint="Round Up Rule"
-          app:ms_enableFloatingLabel="true"
-          app:ms_enableErrorLabel="true"
-          app:ms_floatingLabelText="Billing Cycle"
-          />
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:visibility="visible"
+          android:orientation="vertical"
+          >
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/flat_rate_billing_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/flat_rate_amount_per_billing_cycle"
+            android:inputType="numberDecimal"
+            app:met_checkCharactersCountAtBeginning="false"
+            app:met_floatingLabel="highlight"
+            app:met_minCharacters="1"
+            app:met_primaryColor="@color/colorGreenAccent"
+            app:met_singleLineEllipsis="true"
+            />
+
+      </LinearLayout>
+      <!--hourly-->
+      <LinearLayout
+          android:id="@+id/hourly_rate_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:visibility="visible"
+          android:orientation="vertical"
+          >
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/hourly_rate_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Hourly Rate"
+            app:ms_hint="Hourly Rate"
+            />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/max_billable_hours_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Max Billable Hours (per day"
+            app:ms_hint="Max Billable Hours (per day)"
+            />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/min_billable_time_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Min Billable Time"
+            app:ms_hint="Min Billable Time"
+            />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/round_up_rule_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Round Up Rule"
+            app:ms_hint="Round Up Rule"
+            />
+      </LinearLayout>
+      <!--discount-->
+      <LinearLayout
+          android:id="@+id/discount_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:weightSum="2"
+          >
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/discount_percentage_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Discount"
+            app:ms_hint="Discount"
+            />
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/discount_desc_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:ms_enableErrorLabel="true"
+            app:ms_enableFloatingLabel="true"
+            app:ms_floatingLabelText="Type"
+            app:ms_hint="Type"
+            />
+      </LinearLayout>
+      <!--example-->
+      <LinearLayout
+          android:id="@+id/example_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="start"
+          android:orientation="horizontal"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
+          android:weightSum="2"
+          >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/daily_rate"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|end"
+            android:text="$20.00"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+      </LinearLayout>
+
     </LinearLayout>
   </LinearLayout>
 </android.support.v7.widget.CardView>
