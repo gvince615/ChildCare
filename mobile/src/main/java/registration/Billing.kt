@@ -1,11 +1,17 @@
 package registration
 
 class Billing(
-    var medName: String = "",
-    var medDose: String = "",
-    var medTime: String = "") {
+    var billingCycle: String,
+    var billingType: String,
+    var flatRateAmount: String,
+    var hourlyRateAmount: String,
+    var hourlyMaxBillableHours: String,
+    var hourlyMinBillableTime: String,
+    var hourlyRoundUpRule: String,
+    var discountPercent: String,
+    var discountType: String
 
-  constructor() : this("", "", "")
+) {
 
-
+  constructor() : this("", "", "", "", "", "", "", "", "")
 }

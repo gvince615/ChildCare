@@ -202,11 +202,11 @@ class RegistrationPresenter {
         .update(PEDIATRICIAN, pediatricianMap)
 
         .addOnSuccessListener {
-          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_succeeded))
         }
 
         .addOnFailureListener {
-          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_update_failed))
         }
   }
 
@@ -216,7 +216,7 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
         .update(MEDICATIONS, medicationMap)
         .addOnSuccessListener {
-          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_succeeded))
         }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_update_failed))
         }
@@ -226,14 +226,14 @@ class RegistrationPresenter {
   fun saveBillingDataDocument(currentUser: FirebaseUser?, billingMap: HashMap<String, Any>, childData: HashMap<String, Any>?) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString()).collection(COLLECTION_BILLING).document()
-        .update("billing", billingMap)
+        .collection(COLLECTION_REGISTRATION_DATA).document(childData?.get(CHILD_ID).toString())
+        .update(BILLING, billingMap)
         .addOnSuccessListener {
-          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_succeeded))
+          Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.billing_data_succeeded))
         }
 
         .addOnFailureListener {
-          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.parent_data_update_failed))
+          Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.billing_data_update_failed))
         }
   }
 }

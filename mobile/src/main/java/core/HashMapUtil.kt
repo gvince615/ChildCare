@@ -74,4 +74,20 @@ class HashMapUtil {
 
   }
 
+  fun createBillingMap(card: RegistrationCardItem<Billing>): java.util.HashMap<String, Any> {
+    val billingMap = HashMap<String, Any>()
+
+    card.`object`.billingCycle.let { billingMap.put("billingCycle", it) }
+    card.`object`.billingType.let { billingMap.put("billingType", it) }
+    card.`object`.flatRateAmount.let { billingMap.put("flatRateAmount", it) }
+    card.`object`.hourlyMaxBillableHours.let { billingMap.put("hourlyMaxBillableHours", it) }
+    card.`object`.hourlyMinBillableTime.let { billingMap.put("hourlyMinBillableTime", it) }
+    card.`object`.hourlyRateAmount.let { billingMap.put("hourlyRateAmount", it) }
+    card.`object`.hourlyRoundUpRule.let { billingMap.put("hourlyRoundUpRule", it) }
+    card.`object`.discountPercent.let { billingMap.put("discountPercent", it) }
+    card.`object`.discountType.let { billingMap.put("discountType", it) }
+
+    return billingMap
+  }
+
 }

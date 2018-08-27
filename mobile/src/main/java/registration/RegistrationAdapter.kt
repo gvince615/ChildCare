@@ -46,10 +46,6 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     return list[position].viewType
   }
 
-  fun setListener(listener: CardItemListener) {
-    this.listener = listener
-  }
-
   fun getList(): MutableList<RegistrationCardItem<*>> {
     return list
   }

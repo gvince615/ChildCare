@@ -1,39 +1,33 @@
-package core;
+package core
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 
 /**
  * Created by: gvincent on 8/24/17
  */
 
-public final class PermissionUtil {
-
-  private PermissionUtil() {
-
-  }
+object PermissionUtil {
 
   // will return true if permission gets granted
-  public static boolean handlePermission(Activity activity, int intentionCode, Permission permission) {
+  fun handlePermission(activity: Activity, intentionCode: Int, permission: Permission): Boolean {
 
     if (!isPermissionGranted(permission, activity)) {
-      requestPermission(permission, activity, intentionCode);
+      requestPermission(permission, activity, intentionCode)
     }
 
-    return isPermissionGranted(permission, activity);
+    return isPermissionGranted(permission, activity)
   }
 
-  private static boolean isPermissionGranted(Permission permission, Activity activity) {
-    return ContextCompat.checkSelfPermission(activity, permission.getPermissionStr()) == PackageManager.PERMISSION_GRANTED;
+  private fun isPermissionGranted(permission: Permission, activity: Activity): Boolean {
+    return ContextCompat.checkSelfPermission(activity, permission.permissionStr) == PackageManager.PERMISSION_GRANTED
   }
 
-  private static void requestPermission(Permission permission, Activity activity, int intentionCode) {
-    ActivityCompat.requestPermissions(activity, new String[] {
-        permission.getPermissionStr()
-    }, intentionCode);
+  private fun requestPermission(permission: Permission, activity: Activity, intentionCode: Int) {
+    ActivityCompat.requestPermissions(activity, arrayOf(permission.permissionStr), intentionCode)
   }
 
   //public static void handlePermissionDenied(String permission, Activity activity) {
@@ -68,18 +62,9 @@ public final class PermissionUtil {
   //  }
   //}
 
-  public enum Permission {
+  enum class Permission(val permissionStr: String) {
     WRITE_EXTERNAL_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE), CAMERA(
-        Manifest.permission.CAMERA), USE_FINGERPRINT(Manifest.permission.USE_FINGERPRINT);
-
-    private final String permissionStr;
-
-    Permission(String permissionStr) {
-      this.permissionStr = permissionStr;
-    }
-
-    public String getPermissionStr() {
-      return permissionStr;
-    }
+        Manifest.permission.CAMERA),
+    USE_FINGERPRINT(Manifest.permission.USE_FINGERPRINT)
   }
 }

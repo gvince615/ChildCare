@@ -15,6 +15,7 @@
   <string name="address_validation">|[a-zA-Z0-9~@#$^*_+=|\\,.?: -]*$</string>
   <string name="us_zip_validation">([0-9]{5}|)</string>
   <string name="currency_validation">[.,$0-9]*</string>
+  <string name="currency_error">Please enter only numbers, periods and commas</string>
   <string name="login_activity_tag">LOGIN</string>
   <string name="data_update_succeeded">data added or updated</string>
   <string name="data_update_failed">data failed to add or update</string>
@@ -23,7 +24,13 @@
   <string name="title_activity_registration">Registration</string>
   <string name="registration_activity_tag">REGISTRATION</string>
   <string name="parent_data_succeeded">guardian data added or updated</string>
+  <string name="pediatrician_data_succeeded">pediatrician data added or updated</string>
+
+  <string name="billing_data_succeeded">billing data added or updated</string>
+  <string name="medication_data_succeeded">medication data added or updated</string>
   <string name="parent_data_update_failed">guardian data failed to add or update</string>
+  <string name="pediatrician_data_update_failed">pediatrician data failed to add or update</string>
+
   <string name="child_data_succeeded">child data added or updated</string>
   <string name="child_data_update_failed">child data failed to add or update</string>
   <string name="encrypt_tag">ENCRYPT</string>
@@ -32,6 +39,9 @@
   <string name="check_out">Check Out</string>
   <string name="activate">Activate Child</string>
   <string name="medication_data_update_failed">medication data failed to update</string>
+  <string name="guardian_data_update_failed">guardian data failed to update</string>
+  <string name="billing_data_update_failed">billing data failed to update</string>
+
   <string name="first_name">First Name</string>
   <string name="last_name">Last Name</string>
   <string name="date_of_birth">Date of Birth</string>

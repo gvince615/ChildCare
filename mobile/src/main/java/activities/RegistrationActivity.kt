@@ -318,7 +318,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
 
     if (fullChildRegistrationData.childData.billing != null) {
-      list.add(RegistrationCardItem(fullChildRegistrationData.childData.pediatrician, RegistrationCardItem.PEDIATRICIAN))
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.billing, RegistrationCardItem.BILLING))
     }
 
     adapter = RegistrationAdapter(this, list, this)
@@ -381,6 +381,15 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
           FirestoreUtil(FirebaseFirestore.getInstance(), this)
           medications.add(HashMapUtil().createMedicationMap(card as RegistrationCardItem<Medication>))
+
+        }
+
+        RegistrationCardItem.BILLING -> {
+
+          FirestoreUtil(FirebaseFirestore.getInstance(), this)
+          registrationPresenter.saveBillingDataDocument(FirebaseAuth.getInstance().currentUser,
+              HashMapUtil().createBillingMap(card as RegistrationCardItem<Billing>),
+              chilCard?.let { HashMapUtil().createChildMap(it) })
 
         }
       }

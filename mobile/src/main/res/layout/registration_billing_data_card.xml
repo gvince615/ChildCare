@@ -81,7 +81,6 @@
           android:id="@+id/switch_container"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:weightSum="2.5"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
           android:layout_gravity="center"
@@ -102,6 +101,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:textOff="@string/flat_rate_billing"
+            android:textOn="@string/hourly_billing"
+            android:checked="false"
             />
 
         <TextView
@@ -145,7 +147,7 @@
           android:layout_height="wrap_content"
           android:layout_marginEnd="5dp"
           android:layout_marginStart="5dp"
-          android:visibility="visible"
+          android:visibility="gone"
           android:orientation="vertical"
           >
 
