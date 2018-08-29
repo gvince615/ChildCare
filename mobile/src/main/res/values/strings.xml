@@ -1,35 +1,30 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">ChildCare</string>
 
-
-  <!--validation regex-->
-  <string name="name_validation">^[a-zA-Z_/`/\'-.]+(?! and )( [a-zA-Z_/`/\'-.]+)*$</string>
+  <!--validation -->
   <string name="last_name_min_length_error">Please enter your last name.</string>
   <string name="name_error">Please use only letters, apostrophes, hyphens and periods.</string>
-
-  <string name="date_validation_regex">^(0[1-9]|1[0-2])/(0[1-9]|1\\d|2\\d|3[01])/(19|20)\\d{2}$</string>
   <string name="date_error">Please enter a valid date (MM-DD-YYYY)</string>
-
-  <string name="us_2digit_state_validation">[A-Z]*</string>
-  <string name="city_name_validation">|^[a-zA-Z0-9_]+( [a-zA-Z0-9,.;:\'-]+)*$</string>
-  <string name="address_validation">|[a-zA-Z0-9~@#$^*_+=|\\,.?: -]*$</string>
-  <string name="us_zip_validation">([0-9]{5}|)</string>
-  <string name="currency_validation">[.,$0-9]*</string>
   <string name="currency_error">Please enter only numbers, periods and commas</string>
   <string name="login_activity_tag">LOGIN</string>
   <string name="data_update_succeeded">data added or updated</string>
   <string name="data_update_failed">data failed to add or update</string>
+  <!--regex-->
+  <string name="name_validation" tools:ignore="TypographyDashes">^[a-zA-Z_/`/\'-.]+(?! and )( [a-zA-Z_/`/\'-.]+)*$</string>
+  <string name="date_validation_regex" tools:ignore="TypographyDashes">^(0[1-9]|1[0-2])/(0[1-9]|1\\d|2\\d|3[01])/(19|20)\\d{2}$</string>
+  <string name="us_2digit_state_validation" tools:ignore="TypographyDashes">[A-Z]*</string>
+  <string name="city_name_validation" tools:ignore="TypographyDashes">|^[a-zA-Z0-9_]+( [a-zA-Z0-9,.;:\'-]+)*$</string>
+  <string name="address_validation" tools:ignore="TypographyDashes">|[a-zA-Z0-9~@#$^*_+=|\\,.?: -]*$</string>
+  <string name="us_zip_validation" tools:ignore="TypographyDashes">([0-9]{5}|)</string>
+  <string name="currency_validation" tools:ignore="TypographyDashes">[.,$0-9]*</string>
 
-  <!--login activity-->
   <string name="title_activity_registration">Registration</string>
   <string name="registration_activity_tag">REGISTRATION</string>
   <string name="pediatrician_data_succeeded">pediatrician data added or updated</string>
   <string name="guardian_data_succeeded">guardian data added or updated</string>
-
   <string name="billing_data_succeeded">billing data added or updated</string>
   <string name="medication_data_succeeded">medication data added or updated</string>
   <string name="pediatrician_data_update_failed">pediatrician data failed to add or update</string>
-
   <string name="child_data_succeeded">child data added or updated</string>
   <string name="child_data_update_failed">child data failed to add or update</string>
   <string name="family_data_succeeded">family data added or updated</string>
@@ -42,7 +37,6 @@
   <string name="medication_data_update_failed">medication data failed to update</string>
   <string name="guardian_data_update_failed">guardian data failed to update</string>
   <string name="billing_data_update_failed">billing data failed to update</string>
-
   <string name="first_name">First Name</string>
   <string name="last_name">Last Name</string>
   <string name="date_of_birth">Date of Birth</string>
@@ -68,8 +62,16 @@
   <string name="no_family_names_to_get">no families to get:</string>
   <string name="error_getting_family_names">Error getting families:</string>
   <string name="null_filepath">filePath Can\'t be null</string>
+  <string name="new_reg_title">New Registration</string>
+  <string name="new_reg_body">Add the new child to an EXISTING family or a NEW family</string>
+  <string name="new_reg_positive">Existing</string>
+  <string name="select_family_title">Select Family</string>
+  <string name="select_family_neutral">Go Back</string>
+  <string name="new_reg_neutral">New</string>
+  <string name="new_reg_negative">Cancel</string>
+  <string name="unable_to_save_registration_msg">Unable to save registration with empty fields.</string>
 
-
+  <!--arrays-->
   <string-array name="billing_cycle_items">
     <item>Daily</item>
     <item>Weekly</item>

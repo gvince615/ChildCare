@@ -149,6 +149,10 @@ class AttendancePresenter {
   }
 
   fun activateChild(childRef: String) {
+    val id = childRef.split("-")
+    this.familyId = id[0]
+    this.childReference = childRef
+
     activity.showProgress()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
@@ -159,7 +163,7 @@ class AttendancePresenter {
         .addOnSuccessListener { it ->
           val childData = getChild(it)
           childData?.isActive = ACTIVE
-          val childMap = HashMapUtil().createChildMap(childData!!)
+          val childMap = childData?.let { it1 -> HashMapUtil().createChildMap(it1) }
 
           it.reference.update(CHILD, childMap)
               .addOnSuccessListener {

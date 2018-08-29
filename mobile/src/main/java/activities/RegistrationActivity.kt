@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
@@ -61,7 +62,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   override fun childImageClicked(it: View?) {
     imageView = it as CircleImageView
     val snackbar = Snackbar
-        .make(reg_coordinator_layout, "Snap a photo...", Snackbar.LENGTH_LONG)
+        .make(reg_coordinator_layout, "Snap a photo...", Snackbar.LENGTH_INDEFINITE)
         .setAction("Open Camera") {
           openCameraIntent()
         }
@@ -79,6 +80,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
   }
 
+  private var childImageAdded: Boolean = false
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
@@ -92,6 +95,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
               .asBitmap()
               .load(rotatedImage)
               .into(it)
+          childImageAdded = true
         }
       }
     }
@@ -209,7 +213,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       saveChildCard()
     } else {
       val snackbar = Snackbar
-          .make(reg_coordinator_layout, "Unable to save registration with empty fields.", Snackbar.LENGTH_LONG)
+          .make(reg_coordinator_layout, getString(R.string.unable_to_save_registration_msg), Snackbar.LENGTH_LONG)
       snackbar.show()
     }
   }
@@ -263,16 +267,20 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           if ((card as RegistrationCardItem<Child>).`object`.childId.isEmpty()) {
             familyId = "ID_" + ((Math.random() * 9899).toInt() + 100).toString()
             childId = familyId + "-" + ((Math.random() * 98999).toInt() + 1000).toString()
+            card.`object`.childId = childId
           } else {
             val parts = card.`object`.childId.split("-")
             familyId = parts[0]
             childId = card.`object`.childId
           }
 
-          if (imageView != null) {
+          if (imageView != null && childImageAdded) {
             registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView?.drawingCache, childId), firebaseStorage.reference)
           } else {
-            onChildImageUploaded("")
+            registrationPresenter.uploadChildImage(
+                saveImageToInternalStorage(BitmapFactory.decodeResource(resources, R.drawable.account_child_white_48x48), childId),
+                firebaseStorage.reference)
+            // onChildImageUploaded("")
           }
         }
       }
@@ -429,32 +437,35 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private var addToFamily: Boolean = false
 
   fun onFamilyNamesRetrieved(familyNames: Array<String?>) {
-    val dialogAddChild = AlertDialog.Builder(this)
-    dialogAddChild.setTitle("New Registration")
-    dialogAddChild.setMessage("Add the new child to an EXISTING family or a NEW family")
-    dialogAddChild.setPositiveButton("Existing") { _, _ ->
+    val dialogAddChild = AlertDialog.Builder(this@RegistrationActivity)
+    dialogAddChild.setTitle(getString(R.string.new_reg_title))
+    dialogAddChild.setMessage(getString(R.string.new_reg_body))
+    dialogAddChild.setPositiveButton(getString(R.string.new_reg_positive)) { _, _ ->
       val dialogSelectFamily = AlertDialog.Builder(this@RegistrationActivity)
-      dialogSelectFamily.setTitle("Select Family")
+      dialogSelectFamily.setTitle(getString(R.string.select_family_title))
       dialogSelectFamily.setItems(familyNames) { dialog, item ->
         addToFamily = true
         familyNames[item]?.let { registrationPresenter.getFamilyData(it) }
         dialog.dismiss()
       }
-      dialogSelectFamily.setNeutralButton("Go Back") { _, _ ->
-        // go back
+      dialogSelectFamily.setNeutralButton(getString(R.string.select_family_neutral)) { dialog, _ ->
+        dialog.dismiss()
         dialogAddChild.show()
-      }.show()
+      }
+      dialogSelectFamily.setOnCancelListener { dialog ->
+        dialog.dismiss()
+        dialogAddChild.show()
+      }
+      dialogSelectFamily.show()
     }
-    dialogAddChild.setNeutralButton("New") { _, _ ->
-      // add blank child card .. continue
-      // generate new family ID on save of new child
+    dialogAddChild.setNeutralButton(getString(R.string.new_reg_neutral)) { _, _ ->
       addToFamily = false
       setUpRecyclerView()
     }
-    dialogAddChild.setNegativeButton("Cancel") { _, _ ->
-      // finish Activity
+    dialogAddChild.setNegativeButton(getString(R.string.new_reg_negative)) { _, _ ->
       onBackPressed()
     }
+    dialogAddChild.setOnCancelListener { onBackPressed() }
     dialogAddChild.show()
   }
 
