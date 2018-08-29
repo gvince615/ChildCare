@@ -193,11 +193,9 @@ class AttendancePresenter {
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-
               document.reference.collection(COLLECTION_CHILDREN).get()
                   .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                      children.clear()
                       for (document in task.result) {
                         val child = getAttenChildData(document)
                         if (child != null) {

@@ -18,16 +18,12 @@ import kotlinx.android.synthetic.main.registration_billing_data_card.view.*
 class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   var billingDeleteButton: ImageButton = itemView.delete_billing_card_button
-
   var flatRateLayout: LinearLayout = itemView.flat_rate_container
   var hourlyRateLayout: LinearLayout = itemView.hourly_rate_container
-  var discountLayout: LinearLayout = itemView.discount_container
-  var exampleLayout: LinearLayout = itemView.example_container
-
+  //  var discountLayout: LinearLayout = itemView.discount_container
+//  var exampleLayout: LinearLayout = itemView.example_container
   var billingTypeSwitch: Switch = itemView.billing_type_switch
-
   var flatRateBillingAmount: MaterialEditText = itemView.flat_rate_billing_amount
-
   var billingCycleSpinner: MaterialSpinner = itemView.billing_cycle_spinner
   var hourlyRateSpinner: MaterialSpinner = itemView.hourly_rate_spinner
   var maxHoursSpinner: MaterialSpinner = itemView.max_billable_hours_spinner
@@ -42,10 +38,9 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return BillingViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_billing_data_card, parent, false))
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun bind(context: Context, holder: BillingViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
       setAdapersForSpinners(holder, context)
-
-
 
       if ((listItem.`object` as Billing).billingType == "Flat Rate") {
         holder.billingTypeSwitch.isChecked = false
@@ -89,7 +84,7 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.flatRateBillingAmount.setText((listItem.`object`).flatRateAmount)
       holder.flatRateBillingAmount.addValidator(
           RegexpValidator(context.getString(R.string.currency_error), context.getString(R.string.currency_validation)))
-      holder.flatRateBillingAmount.setOnFocusChangeListener { v, hasFocus ->
+      holder.flatRateBillingAmount.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus)
           holder.flatRateBillingAmount.validate()
       }
@@ -255,7 +250,7 @@ class BillingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       holder.discountDescSpinner.adapter = ArrayAdapter.createFromResource(context, R.array.discount_desc_items, android.R.layout.simple_list_item_1)
     }
 
-    fun EditText.onChange(cb: (String) -> Unit) {
+    private fun EditText.onChange(cb: (String) -> Unit) {
       this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())

@@ -37,10 +37,11 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return ChildViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_child_data_card, parent, false))
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun bind(context: Context, holder: ChildViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
       if ((listItem as RegistrationCardItem<Child>).`object`.childImageUrl != ""
-          && listItem.`object`.childImageUrl != "null" && listItem.`object`.childImageUrl != null) {
+          && listItem.`object`.childImageUrl != "null") {
         DownloadImageTask(holder.childImage).execute((listItem).`object`.childImageUrl)
       }
       holder.childImage.setOnClickListener {
@@ -51,7 +52,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
       holder.childFirstNameLayout.setText((listItem).`object`.firstName)
       holder.childFirstNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
-      holder.childFirstNameLayout.setOnFocusChangeListener { v, hasFocus ->
+      holder.childFirstNameLayout.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus)
           holder.childFirstNameLayout.validate()
       }
@@ -61,7 +62,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
       holder.childLastNameLayout.setText((listItem).`object`.lastName)
       holder.childLastNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
-      holder.childLastNameLayout.setOnFocusChangeListener { v, hasFocus ->
+      holder.childLastNameLayout.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus)
           holder.childLastNameLayout.validate()
       }
@@ -71,7 +72,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
       holder.childDOBLayout.setText((listItem).`object`.birthDate)
       holder.childDOBLayout.addValidator(RegexpValidator(context.getString(R.string.date_error), context.getString(R.string.date_validation_regex)))
-      holder.childDOBLayout.setOnFocusChangeListener { v, hasFocus ->
+      holder.childDOBLayout.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus)
           holder.childDOBLayout.validate()
       }
@@ -108,7 +109,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       }
 
       holder.childIsActive.isChecked = (listItem.`object`.isActive) == "Active"
-      holder.childIsActive.setOnCheckedChangeListener { buttonView, isChecked ->
+      holder.childIsActive.setOnCheckedChangeListener { _, isChecked ->
         if (isChecked)
           (listItem.`object`.isActive) = "Active"
         else
@@ -116,7 +117,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       }
     }
 
-    fun MaterialEditText.onChange(cb: (String) -> Unit) {
+    private fun MaterialEditText.onChange(cb: (String) -> Unit) {
       this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())
@@ -127,7 +128,7 @@ class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       })
     }
 
-    fun TextView.onChange(cb: (String) -> Unit) {
+    private fun TextView.onChange(cb: (String) -> Unit) {
       this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
           cb(s.toString())

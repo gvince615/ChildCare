@@ -2,7 +2,10 @@ package core
 
 val SIGN_IN_REQUEST_CODE = 123
 
-val FIRESTORE_TAG = "Firestore:"
+val FIRESTORE_TAG = "Firestore: "
+val REGISTRATION_TAG = "Reg: "
+val ATTENDANCE_TAG = "Atten: "
+
 val CHILD_TO_LOAD = "childToLoad"
 val STORAGE_PATH_CHILD_IMAGES = "childImages/"
 val COLLECTION_USER_DATA = "userData"

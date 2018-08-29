@@ -58,6 +58,16 @@
   <string name="flat_rate_amount_per_billing_cycle">Flat Rate Amount per Billing Cycle</string>
   <string name="billing">Billing</string>
   <string name="delete_card_content_description">Delete Card</string>
+  <string name="child_deleted">Child successfully deleted!</string>
+  <string name="error_deleting_child">Error deleting child</string>
+  <string name="error_getting_family_data">Error getting family data:</string>
+  <string name="error_getting_child_data">Error getting child data:</string>
+  <string name="error_uploading_child_image">Error uploading child image:</string>
+  <string name="success_uploading_child_image">success uploading child image:</string>
+  <string name="retrieved_famiy_names"><![CDATA[families retrieved =>]]></string>
+  <string name="no_family_names_to_get">no families to get:</string>
+  <string name="error_getting_family_names">Error getting families:</string>
+  <string name="null_filepath">filePath Can\'t be null</string>
 
 
   <string-array name="billing_cycle_items">

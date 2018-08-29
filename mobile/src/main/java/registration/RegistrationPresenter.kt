@@ -3,7 +3,6 @@ package registration
 import activities.RegistrationActivity
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -22,28 +21,31 @@ class RegistrationPresenter {
 
   lateinit var activity: RegistrationActivity
 
-  fun deleteChildDataDocument(childToDelete: String) {
+  fun deleteChildDataDocument(childId: String) {
+    val id = childId.split("-")
+    val familyId = id[0]
+
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childToDelete)
+        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childId)
         .delete()
         .addOnSuccessListener {
           activity.onDeleteChildSuccess()
-          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully deleted!")
+          Log.d(FIRESTORE_TAG, activity.getString(R.string.child_deleted))
         }
         .addOnFailureListener { e ->
           //todo failed
-          Log.w(FIRESTORE_TAG, "Error deleting document", e)
+          Log.w(FIRESTORE_TAG, activity.getString(R.string.error_deleting_child), e)
         }
   }
 
   fun loadChild(childID: String) {
-    var id = childID.split("-")
-    var familyId = id[0]
+    val id = childID.split("-")
+    val familyId = id[0]
 
     activity.showProgress()
-    var childData = ChildData()
+    val childData = ChildData()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
@@ -60,26 +62,26 @@ class RegistrationPresenter {
                 FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
                     PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA).document(familyId)
                 .collection(COLLECTION_CHILDREN).document(childID).get()
-                .addOnCompleteListener { task ->
-                  if (task.isSuccessful) {
-                    val document = task.result
+                .addOnCompleteListener {
+                  if (it.isSuccessful) {
+                    val document = it.result
 
                     childData.child = getChild(document)
                     childData.billing = getBilling(document)
                     childData.medications = getMedications(document)
                     activity.setDataCards(FullChildRegistrationData(childData))
-                    Log.d("FIRESTORE", document.id + " => " + document.data)
+                    Log.d(FIRESTORE_TAG + REGISTRATION_TAG, document.id + " => " + document.data)
 
                     activity.hideProgress()
                   } else {
                     activity.hideProgress()
                     //todo handle fail
-                    Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+                    Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_child_data), it.exception)
                   }
                 }
           } else {
             activity.hideProgress()
-            Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_data), task.exception)
           }
         }
   }
@@ -158,7 +160,7 @@ class RegistrationPresenter {
           PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid + "/" + STORAGE_PATH_CHILD_IMAGES + file.lastPathSegment)
       val uploadTask: UploadTask = ref.putFile(file)
 
-      val urlTask = uploadTask.continueWithTask { task ->
+      uploadTask.continueWithTask { task ->
         if (!task.isSuccessful) {
           throw task.exception!!
         }
@@ -168,13 +170,14 @@ class RegistrationPresenter {
         if (task.isSuccessful) {
           activity.hideProgress()
           activity.onChildImageUploaded(task.result.toString())
+          Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.success_uploading_child_image), task.exception)
         } else {
           activity.hideProgress()
-          Toast.makeText(activity.applicationContext, task.result.toString(), Toast.LENGTH_LONG).show()
+          Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_uploading_child_image), task.exception)
         }
       }
     } else {
-      Log.d("NULL PATH", "Can't be null")
+      Log.d(REGISTRATION_TAG, activity.getString(R.string.null_filepath))
     }
   }
 
@@ -197,29 +200,26 @@ class RegistrationPresenter {
                   familyNames.add(document.id)
                 }
               }
-
-              val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
-
-              activity.onFamilyNamesRetrieved(names)
-              activity.hideProgress()
-              Log.d("FIRESTORE", "families => " + familyNames.toString())
             }
-
+            val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
+            activity.onFamilyNamesRetrieved(names)
+            activity.hideProgress()
+            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             if (task.result.isEmpty) {
               activity.hideProgress()
               activity.onNoFamilyNamesRetrieved()
-              Log.d("FIRESTORE", "no families => ")
+              Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.no_family_names_to_get))
             }
           } else {
             activity.hideProgress()
-            Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_names), task.exception)
           }
         }
   }
 
   fun getFamilyData(familyId: String) {
     activity.showProgress()
-    var childData = ChildData()
+    val childData = ChildData()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
@@ -236,11 +236,11 @@ class RegistrationPresenter {
                 FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
                     PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA).document(familyId)
                 .collection(COLLECTION_CHILDREN).get()
-                .addOnCompleteListener { task ->
-                  if (task.isSuccessful) {
-                    for (document in task.result) {
+                .addOnCompleteListener {
+                  if (it.isSuccessful) {
+                    for (document in it.result) {
 
-                      var newChild = getChild(document)
+                      val newChild = getChild(document)
                       (newChild as Child).firstName = ""
                       newChild.lastName = ""
                       newChild.enrollmentDate = Date().toString()
@@ -252,19 +252,20 @@ class RegistrationPresenter {
                       childData.child = newChild
                       childData.billing = getBilling(document)
                       activity.setDataCardsForAddNewChild(FullChildRegistrationData(childData))
-                      Log.d("FIRESTORE", document.id + " => " + document.data)
+                      Log.d(FIRESTORE_TAG + REGISTRATION_TAG, document.id + " => " + document.data)
                       break
                     }
                     activity.hideProgress()
                   } else {
                     activity.hideProgress()
                     //todo handle fail
-                    Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+                    Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_child_data), it.exception)
                   }
                 }
           } else {
             activity.hideProgress()
-            Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_data), task.exception)
+
           }
         }
   }

@@ -30,12 +30,12 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 
-
+@Suppress("UNCHECKED_CAST")
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
   private var imageView: CircleImageView? = null
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
-  val list: MutableList<RegistrationCardItem<*>> = ArrayList()
+  private val list: MutableList<RegistrationCardItem<*>> = ArrayList()
 
   private var isInEditMode: Boolean = false
 
@@ -84,7 +84,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
-        var rotatedImage = saveImage(imageBitmap)
+        val rotatedImage = saveImage(imageBitmap)
         imageView?.isDrawingCacheEnabled = true
 
         imageView?.let {
@@ -108,7 +108,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     val wrapper = ContextWrapper(applicationContext)
     var file = wrapper.getDir("images", Context.MODE_PRIVATE)
 
-    var card = adapter.getList()[0]
+    val card = adapter.getList()[0]
 
     if (!isInEditMode && (card as RegistrationCardItem<Child>).`object`.childId.isEmpty()) {
       card.`object`.childId = childId
@@ -264,7 +264,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
             familyId = "ID_" + ((Math.random() * 9899).toInt() + 100).toString()
             childId = familyId + "-" + ((Math.random() * 98999).toInt() + 1000).toString()
           } else {
-            var parts = card.`object`.childId.split("-")
+            val parts = card.`object`.childId.split("-")
             familyId = parts[0]
             childId = card.`object`.childId
           }
@@ -304,7 +304,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
 
     if (fullChildRegistrationData.childData.guardians != null) {
-      for ((index, parent) in fullChildRegistrationData.childData.guardians!!.withIndex()) {
+      for (parent in fullChildRegistrationData.childData.guardians!!) {
         list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
       }
     }
@@ -377,8 +377,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   fun onChildImageUploaded(url: String) {
-    var parents = ArrayList<Any>()
-    var medications = ArrayList<Any>()
+    val parents = ArrayList<Any>()
+    val medications = ArrayList<Any>()
 
     for (card in adapter.getList()) {
       when (card.viewType) {
@@ -429,33 +429,33 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private var addToFamily: Boolean = false
 
   fun onFamilyNamesRetrieved(familyNames: Array<String?>) {
-    var d = AlertDialog.Builder(this)
-    d.setTitle("New Registration")
-    d.setMessage("Add the new child to an EXISTING family or a NEW family")
-    d.setPositiveButton("Existing") { dialog, which ->
-      val builder = AlertDialog.Builder(this@RegistrationActivity)
-      builder.setTitle("Select Family")
-      builder.setItems(familyNames) { dialog, item ->
+    val dialogAddChild = AlertDialog.Builder(this)
+    dialogAddChild.setTitle("New Registration")
+    dialogAddChild.setMessage("Add the new child to an EXISTING family or a NEW family")
+    dialogAddChild.setPositiveButton("Existing") { _, _ ->
+      val dialogSelectFamily = AlertDialog.Builder(this@RegistrationActivity)
+      dialogSelectFamily.setTitle("Select Family")
+      dialogSelectFamily.setItems(familyNames) { dialog, item ->
         addToFamily = true
         familyNames[item]?.let { registrationPresenter.getFamilyData(it) }
         dialog.dismiss()
       }
-      builder.setNeutralButton("Go Back") { dialog, which ->
+      dialogSelectFamily.setNeutralButton("Go Back") { _, _ ->
         // go back
-        d.show()
+        dialogAddChild.show()
       }.show()
     }
-    d.setNeutralButton("New") { dialog, which ->
+    dialogAddChild.setNeutralButton("New") { _, _ ->
       // add blank child card .. continue
       // generate new family ID on save of new child
       addToFamily = false
       setUpRecyclerView()
     }
-    d.setNegativeButton("Cancel") { dialog, which ->
+    dialogAddChild.setNegativeButton("Cancel") { _, _ ->
       // finish Activity
       onBackPressed()
     }
-    d.show()
+    dialogAddChild.show()
   }
 
   fun onNoFamilyNamesRetrieved() {
