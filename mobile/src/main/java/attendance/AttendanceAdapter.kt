@@ -17,7 +17,7 @@ import java.util.*
 
 class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
-  lateinit var items: ArrayList<AttenChild>
+  private lateinit var items: ArrayList<AttenChild>
   private lateinit var context: Context
   private lateinit var cardItemListener: CardItemListener
 
@@ -28,9 +28,9 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
   }
 
   interface CardItemListener {
-    fun childClicked(childRef: String, position: Int)
-    fun checkInOutBtnClicked(childRef: String, position: Int)
-    fun activateChild(toString: String)
+    fun childClicked(childId: String, position: Int)
+    fun checkInOutBtnClicked(childId: String, position: Int)
+    fun activateChild(childId: String)
   }
 
   override fun getItemCount(): Int {
@@ -49,7 +49,7 @@ class AttendanceAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
     holder.checkInOutBtn.setOnClickListener {
       if (!holder.cv.isEnabled) {
-        cardItemListener.activateChild(holder.tvChildId.text.toString())
+        cardItemListener.activateChild(holder.tvChildId.text as String)
       } else {
         cardItemListener.checkInOutBtnClicked(holder.tvChildId.text.toString(), position)
       }

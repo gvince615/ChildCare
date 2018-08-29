@@ -13,8 +13,8 @@ import java.util.*
 
 class AttendancePresenter {
 
-  lateinit var childReference: String
-  lateinit var activity: MainActivity
+  private lateinit var childReference: String
+  private lateinit var activity: MainActivity
   private lateinit var children: ArrayList<AttenChild>
 
   fun setUp(context: MainActivity, children: ArrayList<AttenChild>) {
@@ -27,17 +27,15 @@ class AttendancePresenter {
   fun postAttendance(childReference: String, position: Int) {
 
     activity.showProgress()
-    var id = childReference.split("-")
+    val id = childReference.split("-")
     this.familyId = id[0]
     this.childReference = childReference
 
-    var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childReference).collection(
-            COLLECTION_ATTENDANCE_DATA)
-
-    ref.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
+            COLLECTION_ATTENDANCE_DATA).orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
 
           if (task.isSuccessful) {
@@ -51,14 +49,14 @@ class AttendancePresenter {
                 }
               }
 
-              Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
+              Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
             }
           } else {
             // todo - unsuccessful
-            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
           }
           if (task.result.isEmpty) {
-            Log.d(FIRESTORE_TAG, "empty result, need to postNew: ")
+            Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "empty result, need to postNew: ")
             postNew(position)
           }
         }
@@ -84,13 +82,13 @@ class AttendancePresenter {
 
           activity.updateChildAttendanceData(attenMap, position)
 
-          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+          Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "DocumentSnapshot successfully written!")
         }
         .addOnFailureListener { e ->
           //todo
           activity.hideProgress()
 
-          Log.w(FIRESTORE_TAG, "Error writing document", e)
+          Log.w(FIRESTORE_TAG + ATTENDANCE_TAG, "Error writing document", e)
         }
   }
 
@@ -108,31 +106,31 @@ class AttendancePresenter {
 
           activity.updateChildAttendanceData(attenMap, position)
 
-          Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+          Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "DocumentSnapshot successfully written!")
         }
         .addOnFailureListener { e ->
           //todo
           activity.hideProgress()
 
-          Log.w(FIRESTORE_TAG, "Error writing document", e)
+          Log.w(FIRESTORE_TAG + ATTENDANCE_TAG, "Error writing document", e)
         }
   }
 
   private fun getLatestAttendanceData(refDoc: DocumentSnapshot, child: AttenChild) {
 
-    var reference = FirebaseFirestore.getInstance().document(refDoc.reference.path).collection(COLLECTION_ATTENDANCE_DATA)
-    reference.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
+    FirebaseFirestore.getInstance().document(refDoc.reference.path).collection(COLLECTION_ATTENDANCE_DATA)
+        .orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             for (doc in task.result.documents) {
               if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() == "")) {
                 child.checkInTime = doc[CHECK_IN].toString()
-                Log.d(FIRESTORE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
+                Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
               }
             }
           } else {
             // todo - unsuccessful
-            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
           }
 
           if (activity.getFragmentRefreshListener() != null) {
@@ -158,29 +156,27 @@ class AttendancePresenter {
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childRef)
         .get()
-        .addOnSuccessListener {
-
-
-          var childData = getChild(it)
+        .addOnSuccessListener { it ->
+          val childData = getChild(it)
           childData?.isActive = ACTIVE
-          var childMap = HashMapUtil().createChildMap(childData!!)
+          val childMap = HashMapUtil().createChildMap(childData!!)
 
           it.reference.update(CHILD, childMap)
               .addOnSuccessListener {
                 activity.hideProgress()
                 activity.updateChildData()
-                Log.d(FIRESTORE_TAG, "DocumentSnapshot successfully written!")
+                Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "DocumentSnapshot successfully written!")
               }
               .addOnFailureListener { e ->
                 //todo
                 activity.hideProgress()
-                Log.w(FIRESTORE_TAG, "Error writing document", e)
+                Log.w(FIRESTORE_TAG + ATTENDANCE_TAG, "Error writing document", e)
               }
         }
         .addOnFailureListener { e ->
           //todo
           activity.hideProgress()
-          Log.w(FIRESTORE_TAG, "Error writing document", e)
+          Log.w(FIRESTORE_TAG + ATTENDANCE_TAG, "Error writing document", e)
         }
   }
 
@@ -194,25 +190,25 @@ class AttendancePresenter {
             children.clear()
             for (document in task.result) {
               document.reference.collection(COLLECTION_CHILDREN).get()
-                  .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                      for (document in task.result) {
-                        val child = getAttenChildData(document)
+                  .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                      for (childDocument in it.result) {
+                        val child = getAttenChildData(childDocument)
                         if (child != null) {
                           children.add(child)
-                          getLatestAttendanceData(document, child)
-                          Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
+                          getLatestAttendanceData(childDocument, child)
+                          Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, document.id + " => " + document.data)
                         }
                       }
                     } else {
                       // todo - unsuccessful
-                      Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+                      Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", it.exception)
                     }
                   }
-              }
+            }
           } else {
             // todo - unsuccessful
-            Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+            Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
           }
         }
   }
