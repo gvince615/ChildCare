@@ -32,7 +32,7 @@ import java.io.OutputStream
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
-  private lateinit var imageView: CircleImageView
+  private var imageView: CircleImageView? = null
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
   val list: MutableList<RegistrationCardItem<*>> = ArrayList()
@@ -42,7 +42,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration)
-
     registrationPresenter = RegistrationPresenter()
     registrationPresenter.setUp(this)
     isInEditMode = false
@@ -53,8 +52,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       registrationPresenter.getFamilies()
     }
 
-
-
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     pediatrician_menu_item.setOnClickListener { pediatricianMenuButtonClicked() }
     medication_menu_item.setOnClickListener { medicationMenuButtonClicked() }
@@ -62,8 +59,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   override fun childImageClicked(it: View?) {
-    this.imageView = it as CircleImageView
-
+    imageView = it as CircleImageView
     val snackbar = Snackbar
         .make(reg_coordinator_layout, "Snap a photo...", Snackbar.LENGTH_LONG)
         .setAction("Open Camera") {
@@ -89,12 +85,14 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
         var rotatedImage = saveImage(imageBitmap)
-        imageView.isDrawingCacheEnabled = true
+        imageView?.isDrawingCacheEnabled = true
 
-        Glide.with(this)
-            .asBitmap()
-            .load(rotatedImage)
-            .into(imageView)
+        imageView?.let {
+          Glide.with(this)
+              .asBitmap()
+              .load(rotatedImage)
+              .into(it)
+        }
       }
     }
   }
@@ -105,7 +103,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
   }
 
-  private fun saveImageToInternalStorage(bitmap: Bitmap, childId: String): Uri {
+  private fun saveImageToInternalStorage(bitmap: Bitmap?, childId: String): Uri {
 
     val wrapper = ContextWrapper(applicationContext)
     var file = wrapper.getDir("images", Context.MODE_PRIVATE)
@@ -120,7 +118,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
     try {
       val stream: OutputStream = FileOutputStream(file)
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+      bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
       stream.flush()
       stream.close()
     } catch (e: IOException) { // Catch the exception
@@ -270,7 +268,12 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
             familyId = parts[0]
             childId = card.`object`.childId
           }
-          registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView.drawingCache, childId), firebaseStorage.reference)
+
+          if (imageView != null) {
+            registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView?.drawingCache, childId), firebaseStorage.reference)
+          } else {
+            onChildImageUploaded("")
+          }
         }
       }
     }

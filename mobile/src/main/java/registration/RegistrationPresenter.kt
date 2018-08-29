@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.gson.Gson
@@ -40,39 +39,52 @@ class RegistrationPresenter {
   }
 
   fun loadChild(childID: String) {
+    var id = childID.split("-")
+    var familyId = id[0]
+
     activity.showProgress()
+    var childData = ChildData()
 
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA)
-        .get()
+        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            for (document in task.result) {
-              if (document.id == childID) {
 
-                var childData = ChildData()
-                childData.child = getChild(document)
-                childData.guardians = getGuardians(document)
-                childData.medications = getMedications(document)
-                childData.pediatrician = getPediatrician(document)
-                childData.billing = getBilling(document)
+            childData.family = getFamily(task.result)
+            childData.guardians = getGuardians(task.result)
+            childData.pediatrician = getPediatrician(task.result)
 
-                activity.setDataCards(FullChildRegistrationData(childData))
+            FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
+                FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
+                    PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA).document(familyId)
+                .collection(COLLECTION_CHILDREN).document(childID).get()
+                .addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                    val document = task.result
 
-              }
-              Log.d("FIRESTORE", document.id + " => " + document.data)
-            }
-            activity.hideProgress()
+                    childData.child = getChild(document)
+                    childData.billing = getBilling(document)
+                    childData.medications = getMedications(document)
+                    activity.setDataCards(FullChildRegistrationData(childData))
+                    Log.d("FIRESTORE", document.id + " => " + document.data)
+
+                    activity.hideProgress()
+                  } else {
+                    activity.hideProgress()
+                    //todo handle fail
+                    Log.d("FIRESTORE", "Error getting documents: ", task.exception)
+                  }
+                }
           } else {
+            activity.hideProgress()
             Log.d("FIRESTORE", "Error getting documents: ", task.exception)
           }
         }
-
   }
 
-  private fun getChild(document: QueryDocumentSnapshot): Child? {
+  private fun getChild(document: DocumentSnapshot): Child? {
     return if (document.contains(CHILD)) {
       val gson = Gson()
       gson.fromJson<Child>(gson.toJsonTree(document[CHILD]), Child::class.java)
@@ -81,7 +93,7 @@ class RegistrationPresenter {
     }
   }
 
-  private fun getBilling(document: QueryDocumentSnapshot): Billing? {
+  private fun getBilling(document: DocumentSnapshot): Billing? {
     return if (document.contains(BILLING)) {
       val gson = Gson()
       gson.fromJson<Billing>(gson.toJsonTree(document[BILLING]), Billing::class.java)
@@ -99,7 +111,7 @@ class RegistrationPresenter {
     }
   }
 
-  private fun getMedications(document: QueryDocumentSnapshot): ArrayList<Medication>? {
+  private fun getMedications(document: DocumentSnapshot): ArrayList<Medication>? {
     val medications = ArrayList<Medication>()
     return if (document.contains(MEDICATIONS)) {
       for (medication in document[MEDICATIONS] as ArrayList<*>) {

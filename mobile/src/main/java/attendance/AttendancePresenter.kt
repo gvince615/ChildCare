@@ -22,16 +22,20 @@ class AttendancePresenter {
     this.children = children
   }
 
+  private lateinit var familyId: String
+
   fun postAttendance(childReference: String, position: Int) {
 
     activity.showProgress()
-
+    var id = childReference.split("-")
+    this.familyId = id[0]
     this.childReference = childReference
 
     var ref = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA)
+        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childReference).collection(
+            COLLECTION_ATTENDANCE_DATA)
 
     ref.orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
@@ -72,7 +76,8 @@ class AttendancePresenter {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childReference).collection(COLLECTION_ATTENDANCE_DATA).document()
+        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childReference).collection(
+            COLLECTION_ATTENDANCE_DATA).document()
         .set(attenMap)
         .addOnSuccessListener {
           activity.hideProgress()
@@ -151,7 +156,7 @@ class AttendancePresenter {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
         FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
             PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA).document(childRef)
+        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childRef)
         .get()
         .addOnSuccessListener {
 
@@ -180,21 +185,33 @@ class AttendancePresenter {
   }
 
   fun getChildData(currentUser: FirebaseUser?) {
-    var d = FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-        currentUser?.displayName.toString().replace(" ", "") +
-            PREFIX_UID + currentUser?.uid).collection(COLLECTION_REGISTRATION_DATA)
-    d.get()
+    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA)
+        .document(currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
+        .collection(COLLECTION_REGISTRATION_DATA).get()
+
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             children.clear()
             for (document in task.result) {
-              val child = getAttenChildData(document)
-              if (child != null) {
-                children.add(child)
-                getLatestAttendanceData(document, child)
-                Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
+
+              document.reference.collection(COLLECTION_CHILDREN).get()
+                  .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                      children.clear()
+                      for (document in task.result) {
+                        val child = getAttenChildData(document)
+                        if (child != null) {
+                          children.add(child)
+                          getLatestAttendanceData(document, child)
+                          Log.d(FIRESTORE_TAG, document.id + " => " + document.data)
+                        }
+                      }
+                    } else {
+                      // todo - unsuccessful
+                      Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
+                    }
+                  }
               }
-            }
           } else {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG, "Error getting documents: ", task.exception)
