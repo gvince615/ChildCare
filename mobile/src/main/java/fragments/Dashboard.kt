@@ -1,5 +1,9 @@
 package fragments
 
+import activities.MessageBoardActivity
+import activities.RegistrationActivity
+import activities.SetupActivity
+import activities.TodoActivity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -9,10 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.vince.childcare.R
-import activities.MessageBoardActivity
-import activities.RegistrationActivity
-import activities.SetupActivity
-import activities.TodoActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 

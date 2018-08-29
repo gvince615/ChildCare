@@ -3,6 +3,7 @@ package activities
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -19,7 +20,6 @@ import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
 import core.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -29,7 +29,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.util.*
 
 
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
@@ -45,16 +44,16 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     setContentView(R.layout.activity_registration)
 
     registrationPresenter = RegistrationPresenter()
+    registrationPresenter.setUp(this)
     isInEditMode = false
     if (intent.hasExtra(CHILD_ID)) {
       isInEditMode = true
-      var childToLoad = intent.getStringExtra(CHILD_ID)
-      registrationPresenter.setUp(this, childToLoad)
-      registrationPresenter.loadChild()
+      registrationPresenter.loadChild(intent.getStringExtra(CHILD_ID))
     } else {
-      setUpRecyclerView()
-      registrationPresenter.setUp(this)
+      registrationPresenter.getFamilies()
     }
+
+
 
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
     pediatrician_menu_item.setOnClickListener { pediatricianMenuButtonClicked() }
@@ -84,13 +83,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
   }
 
-
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
       if (data != null && data.extras != null) {
         val imageBitmap = data.extras.get("data") as Bitmap
         var rotatedImage = saveImage(imageBitmap)
+        imageView.isDrawingCacheEnabled = true
 
         Glide.with(this)
             .asBitmap()
@@ -100,17 +99,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
   }
 
-  private var childImage: Uri? = null
   private fun saveImage(imageBitmap: Bitmap): Bitmap? {
-    childImage = null
     val matrix = Matrix()
     matrix.postRotate(90F)
-    val rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
-    childImage = saveImageToInternalStorage(rotatedBitmap)
-    return rotatedBitmap
+    return Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
   }
 
-  private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
+  private fun saveImageToInternalStorage(bitmap: Bitmap, childId: String): Uri {
 
     val wrapper = ContextWrapper(applicationContext)
     var file = wrapper.getDir("images", Context.MODE_PRIVATE)
@@ -118,10 +113,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     var card = adapter.getList()[0]
 
     if (!isInEditMode && (card as RegistrationCardItem<Child>).`object`.childId.isEmpty()) {
-      card.`object`.childId =
-          "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
-          "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
-          "-" + ((Math.random() * 9000).toInt() + 1000).toString()
+      card.`object`.childId = childId
     }
 
     file = File(file, (list[0] as RegistrationCardItem<Child>).`object`.childId + ".jpg")
@@ -181,6 +173,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     registration_rv.itemAnimator = DefaultItemAnimator()
 
     childMenuButtonClicked()
+    parentMenuButtonClicked()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -209,13 +202,12 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         }
       }
     }
-    finish()
+    onBackPressed()
   }
 
   private fun saveRegistration() {
 
     if (validationSuccess()) {
-
       saveChildCard()
     } else {
       val snackbar = Snackbar
@@ -261,16 +253,24 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     return false
   }
 
+  private lateinit var familyId: String
+
+  private lateinit var childId: String
+
   private fun saveChildCard() {
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
 
-          if (childImage != null) {
-            registrationPresenter.uploadChildImage(childImage, firebaseStorage.reference)
+          if ((card as RegistrationCardItem<Child>).`object`.childId.isEmpty()) {
+            familyId = "ID_" + ((Math.random() * 9899).toInt() + 100).toString()
+            childId = familyId + "-" + ((Math.random() * 98999).toInt() + 1000).toString()
           } else {
-            onChildImageUploaded("")
+            var parts = card.`object`.childId.split("-")
+            familyId = parts[0]
+            childId = card.`object`.childId
           }
+          registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView.drawingCache, childId), firebaseStorage.reference)
         }
       }
     }
@@ -291,7 +291,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.registration_menu, menu)
     return true
   }
@@ -302,8 +301,43 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
 
     if (fullChildRegistrationData.childData.guardians != null) {
-      for (parent in fullChildRegistrationData.childData.guardians!!) {
+      for ((index, parent) in fullChildRegistrationData.childData.guardians!!.withIndex()) {
         list.add(RegistrationCardItem(parent, RegistrationCardItem.PARENT))
+      }
+    }
+
+    if (fullChildRegistrationData.childData.pediatrician != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.pediatrician, RegistrationCardItem.PEDIATRICIAN))
+    }
+
+    if (fullChildRegistrationData.childData.medications != null) {
+      for (medication in fullChildRegistrationData.childData.medications!!) {
+        list.add(RegistrationCardItem(medication, RegistrationCardItem.MEDICATION))
+      }
+    }
+
+    if (fullChildRegistrationData.childData.billing != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.billing, RegistrationCardItem.BILLING))
+    }
+
+    adapter = RegistrationAdapter(this, list, this)
+    registration_rv.adapter = adapter
+    val llm = LinearLayoutManager(applicationContext)
+    registration_rv.layoutManager = llm
+    registration_rv.itemAnimator = DefaultItemAnimator()
+
+    adapter.setUpForEdit()
+
+  }
+
+  fun setDataCardsForAddNewChild(fullChildRegistrationData: FullChildRegistrationData) {
+    if (fullChildRegistrationData.childData.child != null) {
+      list.add(RegistrationCardItem(fullChildRegistrationData.childData.child, RegistrationCardItem.CHILD))
+    }
+
+    if (fullChildRegistrationData.childData.guardians != null) {
+      for (guardian in fullChildRegistrationData.childData.guardians!!) {
+        list.add(RegistrationCardItem(guardian, RegistrationCardItem.PARENT))
       }
     }
 
@@ -340,74 +374,89 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   }
 
   fun onChildImageUploaded(url: String) {
-    var chilCard: RegistrationCardItem<Child>? = null
     var parents = ArrayList<Any>()
     var medications = ArrayList<Any>()
-
 
     for (card in adapter.getList()) {
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
-          chilCard = card as RegistrationCardItem<Child>
+
           if (url != "") {
-            card.`object`.childImageUrl = url
+            (card as RegistrationCardItem<Child>).`object`.childImageUrl = url
           }
 
-          if (card.`object`.childId.isEmpty()) {
-            card.`object`.childId =
-                "ID_" + ((Math.random() * 9000).toInt() + 1000).toString() +
-                "-" + ((Math.random() * 9000).toInt() + 1000).toString() +
-                "-" + ((Math.random() * 9000).toInt() + 1000).toString()
-          }
-
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
-          registrationPresenter.saveChildDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createChildMap(list[0] as RegistrationCardItem<Child>))
+          registrationPresenter.saveNewFamily(FirebaseAuth.getInstance().currentUser, HashMapUtil().createFamilyMap(familyId, "test"))
+          registrationPresenter.saveNewChildDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId,
+              HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
         }
 
         RegistrationCardItem.PARENT -> {
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
           parents.add(HashMapUtil().createParentMap(card as RegistrationCardItem<Guardian>))
         }
 
         RegistrationCardItem.PEDIATRICIAN -> {
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
-          registrationPresenter.savePediatricianDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<Pediatrician>),
-              chilCard?.let { HashMapUtil().createChildMap(it) })
+          registrationPresenter.saveNewPediatricianDataDocument(FirebaseAuth.getInstance().currentUser, familyId,
+              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<Pediatrician>))
         }
 
         RegistrationCardItem.MEDICATION -> {
-
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
           medications.add(HashMapUtil().createMedicationMap(card as RegistrationCardItem<Medication>))
-
         }
 
         RegistrationCardItem.BILLING -> {
-
-          FirestoreUtil(FirebaseFirestore.getInstance(), this)
-          registrationPresenter.saveBillingDataDocument(FirebaseAuth.getInstance().currentUser,
-              HashMapUtil().createBillingMap(card as RegistrationCardItem<Billing>),
-              chilCard?.let { HashMapUtil().createChildMap(it) })
-
+          registrationPresenter.saveNewBillingDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId,
+              HashMapUtil().createBillingMap(card as RegistrationCardItem<Billing>))
         }
       }
 
       if (parents.isNotEmpty()) {
-        registrationPresenter.saveParentDataDocument(FirebaseAuth.getInstance().currentUser, parents,
-            chilCard?.let { HashMapUtil().createChildMap(it) })
+        registrationPresenter.saveNewGuardianDataDocument(FirebaseAuth.getInstance().currentUser, familyId, parents)
       }
       if (medications.isNotEmpty()) {
-        registrationPresenter.saveMedicationDataDocument(FirebaseAuth.getInstance().currentUser, medications,
-            chilCard?.let { HashMapUtil().createChildMap(it) })
+        registrationPresenter.saveNewMedicationDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId, medications)
       }
-
       finish()
     }
   }
 
   fun onDeleteChildSuccess() {
 
+  }
+
+  private var addToFamily: Boolean = false
+
+  fun onFamilyNamesRetrieved(familyNames: Array<String?>) {
+    var d = AlertDialog.Builder(this)
+    d.setTitle("New Registration")
+    d.setMessage("Add the new child to an EXISTING family or a NEW family")
+    d.setPositiveButton("Existing") { dialog, which ->
+      val builder = AlertDialog.Builder(this@RegistrationActivity)
+      builder.setTitle("Select Family")
+      builder.setItems(familyNames) { dialog, item ->
+        addToFamily = true
+        familyNames[item]?.let { registrationPresenter.getFamilyData(it) }
+        dialog.dismiss()
+      }
+      builder.setNeutralButton("Go Back") { dialog, which ->
+        // go back
+        d.show()
+      }.show()
+    }
+    d.setNeutralButton("New") { dialog, which ->
+      // add blank child card .. continue
+      // generate new family ID on save of new child
+      addToFamily = false
+      setUpRecyclerView()
+    }
+    d.setNegativeButton("Cancel") { dialog, which ->
+      // finish Activity
+      onBackPressed()
+    }
+    d.show()
+  }
+
+  fun onNoFamilyNamesRetrieved() {
+    addToFamily = false
+    setUpRecyclerView()
   }
 }

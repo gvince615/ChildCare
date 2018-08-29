@@ -24,6 +24,15 @@ class HashMapUtil {
     return childMap
   }
 
+  fun createFamilyMap(familyId: String, familyName: String): HashMap<String, Any> {
+
+    val familyMap = HashMap<String, Any>()
+    familyId.let { familyMap.put(FAMILY_ID, it) }
+    familyName.let { familyMap.put(FAMILY_NAME, it) }
+
+    return familyMap
+  }
+
   fun createParentMap(card: RegistrationCardItem<Guardian>): HashMap<String, Any> {
 
     val parentMap = HashMap<String, Any>()

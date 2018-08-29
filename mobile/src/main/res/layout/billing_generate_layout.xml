@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/billing_generate_btn_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:background="@color/colorWhiteTrans"
+    tools:showIn="@layout/billing_family_card"
+    >
+
+  <Button
+      android:id="@+id/generate_bill_btn"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingEnd="10dp"
+      android:gravity="end|center"
+      android:foreground="?android:attr/selectableItemBackground"
+      android:text="Generate Billing Report"
+      android:theme="@style/PrimaryFlatButton"
+      />
+
+</LinearLayout>

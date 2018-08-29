@@ -20,15 +20,12 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <service android:name="core.NotificationService">
+
+    <service
+        android:name="core.NotificationService"
+        android:stopWithTask="false">
       <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT" />
-      </intent-filter>
-    </service>
-
-    <service android:name="core.GettingDeviceTokenService">
-      <intent-filter>
-        <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
       </intent-filter>
     </service>
 
