@@ -168,7 +168,7 @@ class AttendancePresenter {
           it.reference.update(CHILD, childMap)
               .addOnSuccessListener {
                 activity.hideProgress()
-                activity.updateChildData()
+                activity.updateAttendanceData()
                 Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "DocumentSnapshot successfully written!")
               }
               .addOnFailureListener { e ->

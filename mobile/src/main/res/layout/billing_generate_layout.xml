@@ -4,21 +4,26 @@
     android:id="@+id/billing_generate_btn_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorGreen"
     android:orientation="horizontal"
-    android:weightSum="1"
-    android:background="@color/colorWhiteTrans"
     tools:showIn="@layout/billing_family_card"
     >
-
-  <Button
-      android:id="@+id/generate_bill_btn"
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:paddingEnd="10dp"
-      android:gravity="end|center"
-      android:foreground="?android:attr/selectableItemBackground"
-      android:text="Generate Billing Report"
-      android:theme="@style/PrimaryFlatButton"
-      />
-
+      android:layout_marginTop="1dp"
+      android:background="@color/colorWhiteTrans"
+      >
+    <Button
+        android:id="@+id/generate_bill_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="end|center"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="Generate Family Billing Report"
+        android:theme="@style/PrimaryFlatButton"
+        />
+  </LinearLayout>
 </LinearLayout>

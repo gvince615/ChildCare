@@ -3,32 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fragments.Billing"
-    android:weightSum="1"
     android:orientation="vertical"
     >
-  <LinearLayout
-      android:id="@+id/billing_graph_layout"
+  <ImageView
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:orientation="vertical"
-      android:layout_weight=".5"
-      >
-    <!--graph-->
-  </LinearLayout>
+      android:layout_height="200dp"
+      android:layout_marginBottom="5dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginStart="10dp"
+      android:layout_marginTop="10dp"
+      android:scaleType="fitXY"
+      android:src="@drawable/ic_launcher_background"
+      android:translationZ="5dp"
+      />
 
-  <LinearLayout
-      android:id="@+id/family_view_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_weight=".5"
-      >
-    <!--recycler-->
+  <!--recycler-->
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/billing_family_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="5dp"
         >
 
     </android.support.v7.widget.RecyclerView>
-  </LinearLayout>
 </LinearLayout>

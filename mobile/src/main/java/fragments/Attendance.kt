@@ -35,7 +35,7 @@ class Attendance : Fragment() {
   }
 
   private fun setRefreshListener() {
-    (activity as MainActivity).setFragmentRefreshListener(object : MainActivity.FragmentRefreshListener {
+    (activity as MainActivity).setFragmentRefreshListener(object : MainActivity.AttendanceFragmentRefreshListener {
 
       override fun setProgress(visibleState: Int) {
         setProgressVisibility(visibleState)

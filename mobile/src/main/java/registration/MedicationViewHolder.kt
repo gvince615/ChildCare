@@ -28,6 +28,7 @@ class MedicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return MedicationViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_medication_data_card, parent, false))
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun bind(holder: MedicationViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
       holder.medNameLayout.editText?.setText((listItem as RegistrationCardItem<Medication>).`object`.medicationName)

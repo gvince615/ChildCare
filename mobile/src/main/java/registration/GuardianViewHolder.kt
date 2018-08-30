@@ -32,6 +32,7 @@ class GuardianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
       return GuardianViewHolder(LayoutInflater.from(context).inflate(R.layout.registration_parent_data_card, parent, false))
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun bind(holder: GuardianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
       holder.parentFirstNameLayout.editText?.setText((listItem as RegistrationCardItem<Guardian>).`object`.firstName)
