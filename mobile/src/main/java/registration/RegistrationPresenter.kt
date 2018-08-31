@@ -31,7 +31,6 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childId)
         .delete()
         .addOnSuccessListener {
-          activity.onDeleteChildSuccess()
           Log.d(FIRESTORE_TAG, activity.getString(R.string.child_deleted))
         }
         .addOnFailureListener { e ->

@@ -434,10 +434,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
   }
 
-  fun onDeleteChildSuccess() {
-
-  }
-
   fun onNoFamilyNamesRetrieved() {
     addToFamily = false
     setUpRecyclerView()
