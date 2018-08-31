@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
@@ -261,6 +260,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   private fun saveChildCard() {
     for (card in adapter.getList()) {
+
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
 
@@ -277,10 +277,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           if (imageView != null && childImageAdded) {
             registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView?.drawingCache, childId), firebaseStorage.reference)
           } else {
-            registrationPresenter.uploadChildImage(
-                saveImageToInternalStorage(BitmapFactory.decodeResource(resources, R.drawable.account_child_white_48x48), childId),
-                firebaseStorage.reference)
-            // onChildImageUploaded("")
+//            registrationPresenter.uploadChildImage(
+//                saveImageToInternalStorage(BitmapFactory.decodeResource(resources, R.drawable.account_child_white_48x48), childId),
+//                firebaseStorage.reference)
+            onChildImageUploaded("")
           }
         }
       }
@@ -387,6 +387,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   fun onChildImageUploaded(url: String) {
     val parents = ArrayList<Any>()
     val medications = ArrayList<Any>()
+    var familyName = ""
 
     for (card in adapter.getList()) {
       when (card.viewType) {
@@ -396,12 +397,14 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
             (card as RegistrationCardItem<Child>).`object`.childImageUrl = url
           }
 
-          registrationPresenter.saveNewFamily(FirebaseAuth.getInstance().currentUser, HashMapUtil().createFamilyMap(familyId, "test"))
           registrationPresenter.saveNewChildDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId,
               HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
         }
 
         RegistrationCardItem.PARENT -> {
+          if (familyName == "") {
+            familyName = (card as RegistrationCardItem<Guardian>).`object`.lastName
+          }
           parents.add(HashMapUtil().createParentMap(card as RegistrationCardItem<Guardian>))
         }
 
@@ -421,6 +424,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       }
 
       if (parents.isNotEmpty()) {
+        registrationPresenter.saveNewFamily(FirebaseAuth.getInstance().currentUser, HashMapUtil().createFamilyMap(familyId, familyName))
         registrationPresenter.saveNewGuardianDataDocument(FirebaseAuth.getInstance().currentUser, familyId, parents)
       }
       if (medications.isNotEmpty()) {

@@ -301,15 +301,14 @@ class RegistrationPresenter {
         }
   }
 
-  fun saveNewPediatricianDataDocument(firebaseUser: FirebaseUser?, familyId: String, pediatricianMap: HashMap<String, Any>) {
+  fun saveNewPediatricianDataDocument(currentUser: FirebaseUser?, familyId: String, pediatricianMap: HashMap<String, Any>) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-        firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
+        currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId)
         .update(PEDIATRICIAN, pediatricianMap)
         .addOnSuccessListener {
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_succeeded))
-        }
-        .addOnFailureListener {
+        }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_update_failed))
         }
   }
@@ -338,7 +337,6 @@ class RegistrationPresenter {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_update_failed))
         }
   }
-
 
   fun saveNewBillingDataDocument(currentUser: FirebaseUser?, familyId: String, childID: String, billingMap: HashMap<String, Any>) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
