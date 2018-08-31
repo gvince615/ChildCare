@@ -31,19 +31,19 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     @Suppress("UNCHECKED_CAST")
     fun bind(holder: PediatricianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      holder.pedNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedName)
+      holder.pedNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianName)
       holder.pedNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedName = holder.pedNameLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianName = holder.pedNameLayout.editText?.text?.toString()!!
       }
 
-      holder.pedOfficeNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeName)
+      holder.pedOfficeNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeName)
       holder.pedOfficeNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
       }
 
-      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNumber)
+      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeNumber)
       holder.pedOfficeNumberLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pedOfficeNumber = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
+        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeNumber = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
       }
 
       holder.pediatricianDeleteButton.setOnClickListener {

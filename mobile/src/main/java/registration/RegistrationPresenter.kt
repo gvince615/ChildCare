@@ -31,7 +31,6 @@ class RegistrationPresenter {
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childId)
         .delete()
         .addOnSuccessListener {
-          activity.onDeleteChildSuccess()
           Log.d(FIRESTORE_TAG, activity.getString(R.string.child_deleted))
         }
         .addOnFailureListener { e ->
@@ -194,22 +193,25 @@ class RegistrationPresenter {
         .get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            for (document in task.result) {
-              if (document.contains(FAMILY_DATA)) {
-                if (!familyNames.contains(document.id)) {
-                  familyNames.add(document.id)
-                }
-              }
-            }
-            val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
-            activity.onFamilyNamesRetrieved(names)
-            activity.hideProgress()
-            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             if (task.result.isEmpty) {
               activity.hideProgress()
               activity.onNoFamilyNamesRetrieved()
               Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.no_family_names_to_get))
+            } else {
+              for (document in task.result) {
+                if (document.contains(FAMILY_DATA)) {
+                  if (!familyNames.contains(document.id)) {
+                    familyNames.add(document.id)
+                  }
+                }
+              }
+              val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
+              activity.onFamilyNamesRetrieved(names)
+              activity.hideProgress()
+              Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             }
+
+
           } else {
             activity.hideProgress()
             Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_names), task.exception)
@@ -301,15 +303,14 @@ class RegistrationPresenter {
         }
   }
 
-  fun saveNewPediatricianDataDocument(firebaseUser: FirebaseUser?, familyId: String, pediatricianMap: HashMap<String, Any>) {
+  fun saveNewPediatricianDataDocument(currentUser: FirebaseUser?, familyId: String, pediatricianMap: HashMap<String, Any>) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-        firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
+        currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).document(familyId)
         .update(PEDIATRICIAN, pediatricianMap)
         .addOnSuccessListener {
           Log.d(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_succeeded))
-        }
-        .addOnFailureListener {
+        }.addOnFailureListener {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.pediatrician_data_update_failed))
         }
   }
@@ -338,7 +339,6 @@ class RegistrationPresenter {
           Log.e(FIRESTORE_TAG, activity.applicationContext.getString(R.string.medication_data_update_failed))
         }
   }
-
 
   fun saveNewBillingDataDocument(currentUser: FirebaseUser?, familyId: String, childID: String, billingMap: HashMap<String, Any>) {
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(

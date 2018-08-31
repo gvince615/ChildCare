@@ -69,22 +69,6 @@ class Billing : Fragment() {
 
   private fun setupRecyclerView(view: View) {
 
-    // dev code
-//    billingFamilies.clear()
-//    var childDataModels1 = ArrayList<BillingChildDataModel>()
-//    childDataModels1.add(BillingChildDataModel("child1 name", "ID_0001-00001"))
-//    billingFamilies.add(BillingFamily("test1 Name", "ID_0001", childDataModels1))
-//    var childDataModels2 = ArrayList<BillingChildDataModel>()
-//    childDataModels2.add(BillingChildDataModel("child1 name", "ID_0002-00001"))
-//    childDataModels2.add(BillingChildDataModel("child2 name", "ID_0002-00002"))
-//    billingFamilies.add(BillingFamily("test2 Name", "ID_0002", childDataModels2))
-//    var childDataModels3 = ArrayList<BillingChildDataModel>()
-//    childDataModels3.add(BillingChildDataModel("child1 name", "ID_0003-00001"))
-//    childDataModels3.add(BillingChildDataModel("child2 name", "ID_0003-00002"))
-//    childDataModels3.add(BillingChildDataModel("child3 name", "ID_0003-00003"))
-//    billingFamilies.add(BillingFamily("test3 Name", "ID_0003", childDataModels3))
-    //
-
     rv = view.billing_family_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)
     billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies, (activity as MainActivity))
