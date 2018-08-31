@@ -3,36 +3,62 @@ package activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
-import android.util.Log
+import android.view.View
 import attendance.AttenChild
+import attendance.AttendanceAdapter
+import attendance.AttendancePresenter
+import billing.BillingFamily
+import billing.BillingFamilyAdapter
+import billing.BillingPresenter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
-import core.*
+import core.CHECK_IN
 import fragments.Attendance
 import fragments.Billing
 import fragments.Dashboard
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener, BillingFamilyAdapter.BillingCardItemListener {
+
   private var doubleBackToExitPressedOnce = false
-  val children: ArrayList<AttenChild> = ArrayList()
+  private val children: ArrayList<AttenChild> = ArrayList()
+  private val billingFamilies: ArrayList<BillingFamily> = ArrayList()
 
-  fun getFragmentRefreshListener(): FragmentRefreshListener? {
-    return fragmentRefreshListener
+  private val attendancePresenter = AttendancePresenter()
+  private val billingPresenter = BillingPresenter()
+
+  override fun billingFamilyCardClicked(position: Int) {
+
   }
 
-  fun setFragmentRefreshListener(fragmentRefreshListener: FragmentRefreshListener) {
-    this.fragmentRefreshListener = fragmentRefreshListener
+  override fun generateBillClicked(position: Int) {
+
   }
 
-  private var fragmentRefreshListener: FragmentRefreshListener? = null
+  fun getFragmentRefreshListener(): AttendanceFragmentRefreshListener? {
+    return attendanceFragmentRefreshListener
+  }
+
+  fun setFragmentRefreshListener(attendanceFragmentRefreshListener: AttendanceFragmentRefreshListener) {
+    this.attendanceFragmentRefreshListener = attendanceFragmentRefreshListener
+  }
+
+  fun getBillingFragmentRefreshListener(): BillingFragmentRefreshListener? {
+    return billingFragmentRefreshListener
+  }
+
+  fun setBillingFragmentRefreshListener(billingFragmentRefreshListener: BillingFragmentRefreshListener) {
+    this.billingFragmentRefreshListener = billingFragmentRefreshListener
+  }
+
+  private var billingFragmentRefreshListener: BillingFragmentRefreshListener? = null
+  private var attendanceFragmentRefreshListener: AttendanceFragmentRefreshListener? = null
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -45,49 +71,39 @@ class MainActivity : BaseActivity() {
 
     spaceTabLayout.initialize(viewPager, supportFragmentManager,
         fragmentList, savedInstanceState)
+
+    attendancePresenter.setUp(this, children)
+    billingPresenter.setUp(this, billingFamilies)
   }
 
-  override fun onPostResume() {
-    super.onPostResume()
-    retrieveChildDataCollection(FirebaseAuth.getInstance().currentUser)
+  override fun onResume() {
+    super.onResume()
+    updateAttendanceData()
+    updateBillingData()
   }
 
-  private fun retrieveChildDataCollection(firebaseUser: FirebaseUser?) {
-    children.clear()
-
-    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(PREFIX_UID + firebaseUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA)
-        .get()
-        .addOnCompleteListener { task ->
-
-          if (task.isSuccessful) {
-            children.clear()
-
-            for (document in task.result) {
-              val child = AttenChild()
-              child.first_name = document[FIRST_NAME].toString()
-              child.last_name = document[LAST_NAME].toString()
-              children.add(child)
-              Log.d(this.packageName.toString(), document.id + " => " + document.data)
-            }
-
-            if (getFragmentRefreshListener() != null) {
-              getFragmentRefreshListener()?.onRefresh(children)
-            }
-
-          } else {
-            Log.d(this.packageName.toString(), "Error getting documents: ", task.exception)
-          }
-        }
+  private fun updateBillingData() {
+    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
   }
 
-  interface FragmentRefreshListener {
-    fun onRefresh(children: ArrayList<AttenChild>)
+  fun updateChildAttendanceData(attenMap: HashMap<String, Any>, position: Int) {
+    children[position].checkInTime = attenMap[CHECK_IN].toString()
+    attendanceFragmentRefreshListener?.onRefresh(children, position)
   }
 
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    spaceTabLayout.saveState(outState)
+  fun updateAttendanceData() {
+    attendancePresenter.getChildData(FirebaseAuth.getInstance().currentUser)
+  }
+
+  interface AttendanceFragmentRefreshListener {
+    fun onRefresh(children: ArrayList<AttenChild>, position: Int)
+    fun childClicked(childRef: String, position: Int)
+    fun setProgress(visibleState: Int)
+  }
+
+  interface BillingFragmentRefreshListener {
+    fun onRefresh(billingFamilies: ArrayList<BillingFamily>, position: Int)
+    fun setProgress(visibleState: Int)
   }
 
   override fun onBackPressed() {
@@ -107,5 +123,26 @@ class MainActivity : BaseActivity() {
         .make(coordinator_layout, "Press back again to sign out.", Snackbar.LENGTH_LONG)
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+  }
+
+  override fun activateChild(childId: String) {
+
+    attendancePresenter.activateChild(childId)
+  }
+
+  override fun childClicked(childId: String, position: Int) {
+    attendanceFragmentRefreshListener?.childClicked(childId, position)
+  }
+
+  override fun checkInOutBtnClicked(childId: String, position: Int) {
+    attendancePresenter.postAttendance(childId, position)
+  }
+
+  fun showProgress() {
+    attendanceFragmentRefreshListener?.setProgress(View.VISIBLE)
+  }
+
+  fun hideProgress() {
+    attendanceFragmentRefreshListener?.setProgress(View.GONE)
   }
 }

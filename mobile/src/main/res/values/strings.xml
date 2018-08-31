@@ -1,19 +1,142 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">ChildCare</string>
 
-
-  <!--login activity-->
+  <!--validation -->
+  <string name="last_name_min_length_error">Please enter your last name.</string>
+  <string name="name_error">Please use only letters, apostrophes, hyphens and periods.</string>
+  <string name="date_error">Please enter a valid date (MM-DD-YYYY)</string>
+  <string name="currency_error">Please enter only numbers, periods and commas</string>
   <string name="login_activity_tag">LOGIN</string>
   <string name="data_update_succeeded">data added or updated</string>
   <string name="data_update_failed">data failed to add or update</string>
+  <!--regex-->
+  <string name="name_validation" tools:ignore="TypographyDashes">^[a-zA-Z_/`/\'-.]+(?! and )( [a-zA-Z_/`/\'-.]+)*$</string>
+  <string name="date_validation_regex" tools:ignore="TypographyDashes">^(0[1-9]|1[0-2])/(0[1-9]|1\\d|2\\d|3[01])/(19|20)\\d{2}$</string>
+  <string name="us_2digit_state_validation" tools:ignore="TypographyDashes">[A-Z]*</string>
+  <string name="city_name_validation" tools:ignore="TypographyDashes">|^[a-zA-Z0-9_]+( [a-zA-Z0-9,.;:\'-]+)*$</string>
+  <string name="address_validation" tools:ignore="TypographyDashes">|[a-zA-Z0-9~@#$^*_+=|\\,.?: -]*$</string>
+  <string name="us_zip_validation" tools:ignore="TypographyDashes">([0-9]{5}|)</string>
+  <string name="currency_validation" tools:ignore="TypographyDashes">[.,$0-9]*</string>
 
-  <!--login activity-->
   <string name="title_activity_registration">Registration</string>
   <string name="registration_activity_tag">REGISTRATION</string>
-  <string name="parent_data_succeeded">parent data added or updated</string>
-  <string name="parent_data_update_failed">parent data failed to add or update</string>
+  <string name="pediatrician_data_succeeded">pediatrician data added or updated</string>
+  <string name="guardian_data_succeeded">guardian data added or updated</string>
+  <string name="billing_data_succeeded">billing data added or updated</string>
+  <string name="medication_data_succeeded">medication data added or updated</string>
+  <string name="pediatrician_data_update_failed">pediatrician data failed to add or update</string>
   <string name="child_data_succeeded">child data added or updated</string>
   <string name="child_data_update_failed">child data failed to add or update</string>
+  <string name="family_data_succeeded">family data added or updated</string>
+  <string name="family_data_update_failed">family data failed to add or update</string>
   <string name="encrypt_tag">ENCRYPT</string>
+  <string name="edit">Edit</string>
+  <string name="check_in">Check In</string>
+  <string name="check_out">Check Out</string>
+  <string name="activate">Activate Child</string>
+  <string name="medication_data_update_failed">medication data failed to update</string>
+  <string name="guardian_data_update_failed">guardian data failed to update</string>
+  <string name="billing_data_update_failed">billing data failed to update</string>
+  <string name="first_name">First Name</string>
+  <string name="last_name">Last Name</string>
+  <string name="date_of_birth">Date of Birth</string>
+  <string name="addy_ln_1">Address Line 1</string>
+  <string name="addy_ln_2">Address Line 1</string>
+  <string name="city">City</string>
+  <string name="state">State</string>
+  <string name="zip">Zip Code</string>
+  <string name="set_child_as_active">Set child as Active?</string>
+  <string name="daily_rate">Daily Rate</string>
+  <string name="flat_rate_billing">Flat Rate Billing</string>
+  <string name="hourly_billing">Hourly Rate billing</string>
+  <string name="flat_rate_amount_per_billing_cycle">Flat Rate Amount per Billing Cycle</string>
+  <string name="billing">Billing</string>
+  <string name="delete_card_content_description">Delete Card</string>
+  <string name="child_deleted">Child successfully deleted!</string>
+  <string name="error_deleting_child">Error deleting child</string>
+  <string name="error_getting_family_data">Error getting family data:</string>
+  <string name="error_getting_child_data">Error getting child data:</string>
+  <string name="error_uploading_child_image">Error uploading child image:</string>
+  <string name="success_uploading_child_image">success uploading child image:</string>
+  <string name="retrieved_famiy_names"><![CDATA[families retrieved =>]]></string>
+  <string name="no_family_names_to_get">no families to get:</string>
+  <string name="error_getting_family_names">Error getting families:</string>
+  <string name="null_filepath">filePath Can\'t be null</string>
+  <string name="new_reg_title">New Registration</string>
+  <string name="new_reg_body">Add the new child to an EXISTING family or a NEW family</string>
+  <string name="new_reg_positive">Existing</string>
+  <string name="select_family_title">Select Family</string>
+  <string name="select_family_neutral">Go Back</string>
+  <string name="new_reg_neutral">New</string>
+  <string name="new_reg_negative">Cancel</string>
+  <string name="unable_to_save_registration_msg">Unable to save registration with empty fields.</string>
 
+  <!--arrays-->
+  <string-array name="billing_cycle_items">
+    <item>Daily</item>
+    <item>Weekly</item>
+    <item>BiMonthly</item>
+    <item>Monthly</item>
+  </string-array>
+
+  <string-array name="hourly_rate_items">
+    <item>$1.00 per Hour</item>
+    <item>$2.00 per Hour</item>
+    <item>$3.00 per Hour</item>
+    <item>$4.00 per Hour</item>
+    <item>$5.00 per Hour</item>
+    <item>$6.00 per Hour</item>
+    <item>$7.00 per Hour</item>
+    <item>$8.00 per Hour</item>
+    <item>$9.00 per Hour</item>
+    <item>$10.00 per Hour</item>
+  </string-array>
+
+  <string-array name="max_billable_hours_items">
+    <item>1 Hour   = Daily Rate</item>
+    <item>2 Hours  = Daily Rate</item>
+    <item>3 Hours  = Daily Rate</item>
+    <item>4 Hours  = Daily Rate</item>
+    <item>5 Hours  = Daily Rate</item>
+    <item>6 Hours  = Daily Rate</item>
+    <item>7 Hours  = Daily Rate</item>
+    <item>8 Hours  = Daily Rate</item>
+    <item>9 Hours  = Daily Rate</item>
+    <item>10 Hours = Daily Rate</item>
+  </string-array>
+
+  <string-array name="min_billable_time_items">
+    <item>15 minutes</item>
+    <item>30 minutes</item>
+    <item>45 minutes</item>
+    <item>60 minutes</item>
+  </string-array>
+
+  <string-array name="round_up_rule_items">
+    <item>15 minutes</item>
+    <item>30 minutes</item>
+    <item>45 minutes</item>
+  </string-array>
+
+  <string-array name="discount_percentage_items">
+    <item>0 %</item>
+    <item>5 %</item>
+    <item>10 %</item>
+    <item>15 %</item>
+    <item>20 %</item>
+    <item>25 %</item>
+    <item>30 %</item>
+    <item>35 %</item>
+    <item>40 %</item>
+    <item>45 %</item>
+    <item>50 %</item>
+  </string-array>
+
+  <string-array name="discount_desc_items">
+    <item>No Discount</item>
+    <item>Multi-Child</item>
+    <item>Military</item>
+    <item>Family</item>
+    <item>Other</item>
+  </string-array>
 </resources>

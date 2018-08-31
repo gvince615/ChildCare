@@ -17,17 +17,61 @@
 package fragments
 
 
+import activities.MainActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import billing.BillingFamily
+import billing.BillingFamilyAdapter
 import com.vince.childcare.R
+import kotlinx.android.synthetic.main.fragment_billing.view.*
 
 
 class Billing : Fragment() {
 
+  private lateinit var billingFamilyAdapter: BillingFamilyAdapter
+  private var billingFamilies: ArrayList<BillingFamily> = ArrayList()
+  private lateinit var rv: RecyclerView
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.fragment_billing, container, false)
+
+    val view: View = inflater.inflate(R.layout.fragment_billing, container, false)
+    setupRecyclerView(view)
+    setRefreshListener()
+    return view
+  }
+
+  private fun setRefreshListener() {
+    (activity as MainActivity).setBillingFragmentRefreshListener(object : MainActivity.BillingFragmentRefreshListener {
+      override fun onRefresh(billingFamilies: ArrayList<BillingFamily>, position: Int) {
+        refreshData(billingFamilies, position)
+      }
+
+      override fun setProgress(visibleState: Int) {
+        setProgressVisibility(visibleState)
+      }
+    })
+  }
+
+  private fun setProgressVisibility(visibleState: Int) {
+    // progress_layout_atten.visibility = visibleState
+  }
+
+
+  private fun refreshData(billingFamilies: ArrayList<BillingFamily>, position: Int) {
+    this.billingFamilies = billingFamilies
+    billingFamilyAdapter.refreshData(this.billingFamilies, position)
+  }
+
+  private fun setupRecyclerView(view: View) {
+
+    rv = view.billing_family_rv as RecyclerView
+    rv.layoutManager = LinearLayoutManager(this.context)
+    billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies, (activity as MainActivity))
+    rv.adapter = billingFamilyAdapter
   }
 }

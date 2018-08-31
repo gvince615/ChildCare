@@ -9,40 +9,47 @@
     <item name="android:windowContentTransitions">true</item>
   </style>
 
-  <style name="RegistrationTheme" parent="AppTheme">
+  <style name="OrangeTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorRed</item>
-    <item name="colorPrimaryDark">@color/colorRedDark</item>
-    <item name="colorAccent">@color/colorRedAccent</item>
+    <item name="colorPrimary">@color/colorOrange</item>
+    <item name="colorPrimaryDark">@color/colorOrangeDark</item>
+    <item name="colorAccent">@color/colorOrangeAccent</item>
   </style>
 
-  <style name="MessageBoardTheme" parent="AppTheme">
+  <style name="BlueTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorBlue</item>
     <item name="colorPrimaryDark">@color/colorBlueDark</item>
     <item name="colorAccent">@color/colorBlueAccent</item>
   </style>
 
-  <style name="TodoTheme" parent="AppTheme">
+  <style name="RedTheme" parent="AppTheme">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorRed</item>
+    <item name="colorPrimaryDark">@color/colorRedDark</item>
+    <item name="colorAccent">@color/colorRedAccent</item>
+  </style>
+
+  <style name="GreenTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorGreen</item>
     <item name="colorPrimaryDark">@color/colorGreenDark</item>
     <item name="colorAccent">@color/colorGreenAccent</item>
   </style>
 
-  <style name="SetupTheme" parent="AppTheme">
+  <style name="YellowTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorYellow</item>
     <item name="colorPrimaryDark">@color/colorYellowDark</item>
     <item name="colorAccent">@color/colorYellowAccent</item>
   </style>
 
-  <style name="ChildCardTheme" parent="MessageBoardTheme">
+  <style name="ChildCardTheme" parent="BlueTheme">
     <!-- Customize your theme here. -->
 
   </style>
 
-  <style name="ParentCardTheme" parent="SetupTheme">
+  <style name="ParentCardTheme" parent="YellowTheme">
     <!-- Customize your theme here. -->
 
   </style>
@@ -54,8 +61,17 @@
     <item name="colorAccent">@color/colorPurpleAccent</item>
   </style>
 
+  <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+    <item name="android:backgroundTint">@color/fui_transparent</item>
+    <item name="android:elevation">0dp</item>
+    <item name="android:buttonStyle">
+      @style/Widget.AppCompat.Button.Borderless.Colored
+    </item>
+    <item name="colorAccent">@color/colorWhite</item>
+  </style>
 
-  <style name="BillingCardTheme" parent="TodoTheme">
+
+  <style name="BillingCardTheme" parent="GreenTheme">
     <!-- Customize your theme here. -->
 
   </style>

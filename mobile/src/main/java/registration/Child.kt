@@ -1,14 +1,22 @@
 package registration
 
-class Child() {
-  internal var firstName: String? = null
-  internal var lastName: String? = null
-  internal var birthDate: String? = null
-  internal var enrollmentDate: String? = null
-  internal var addressLn1: String? = null
-  internal var addressLn2: String? = null
-  internal var addressCity: String? = null
-  internal var addressState: String? = null
-  internal var addressZip: String? = null
+data class Child(
+    var childId: String = "",
+    var childImageUrl: String = "",
+    var firstName: String = "",
+    var lastName: String = "",
+    var birthDate: String = "",
+    var isActive: String? = "",
+    var enrollmentDate: String = "",
+    var addressLn1: String = "",
+    var addressLn2: String = "",
+    var addressCity: String = "",
+    var addressState: String = "",
+    var addressZip: String = ""
+) {
 
+  constructor() : this("", "", "", "", "",
+      "", "", "", "", "", "",
+      "")
 }
+

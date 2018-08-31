@@ -4,6 +4,11 @@
   <item
       android:id="@+id/menu_save"
       android:icon="@android:drawable/ic_menu_save"
-      android:title="Save"
-      app:showAsAction="always" />
+      android:title="Save Registration"
+      app:showAsAction="ifRoom" />
+  <item
+      android:id="@+id/menu_delete"
+      android:icon="@android:drawable/ic_menu_delete"
+      android:title="Delete Registration"
+      app:showAsAction="ifRoom" />
 </menu>
