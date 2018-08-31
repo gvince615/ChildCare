@@ -47,9 +47,9 @@ class HashMapUtil {
 
   fun createPediatricianMap(card: RegistrationCardItem<Pediatrician>): HashMap<String, Any> {
     val pediatricianMap = HashMap<String, Any>()
-    card.`object`.pedName.let { pediatricianMap.put(PEDIATRICIAN_NAME, it) }
-    card.`object`.pedOfficeName.let { pediatricianMap.put(PEDIATRICIAN_OFFICE, it) }
-    card.`object`.pedOfficeNumber.let { pediatricianMap.put(PEDIATRICIAN_NUMBER, it) }
+    card.`object`.pediatricianName.let { pediatricianMap.put(PEDIATRICIAN_NAME, it) }
+    card.`object`.pediatricianOfficeName.let { pediatricianMap.put(PEDIATRICIAN_OFFICE, it) }
+    card.`object`.pediatricianOfficeNumber.let { pediatricianMap.put(PEDIATRICIAN_NUMBER, it) }
 
     return pediatricianMap
 

@@ -194,22 +194,25 @@ class RegistrationPresenter {
         .get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            for (document in task.result) {
-              if (document.contains(FAMILY_DATA)) {
-                if (!familyNames.contains(document.id)) {
-                  familyNames.add(document.id)
-                }
-              }
-            }
-            val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
-            activity.onFamilyNamesRetrieved(names)
-            activity.hideProgress()
-            Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             if (task.result.isEmpty) {
               activity.hideProgress()
               activity.onNoFamilyNamesRetrieved()
               Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.no_family_names_to_get))
+            } else {
+              for (document in task.result) {
+                if (document.contains(FAMILY_DATA)) {
+                  if (!familyNames.contains(document.id)) {
+                    familyNames.add(document.id)
+                  }
+                }
+              }
+              val names = familyNames.toArray(arrayOfNulls<String>(familyNames.size))
+              activity.onFamilyNamesRetrieved(names)
+              activity.hideProgress()
+              Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             }
+
+
           } else {
             activity.hideProgress()
             Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_names), task.exception)

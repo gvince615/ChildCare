@@ -1,9 +1,9 @@
 package registration
 
 data class Pediatrician(
-    var pedName: String = "",
-    var pedOfficeName: String = "",
-    var pedOfficeNumber: String = "") {
+    var pediatricianName: String = "",
+    var pediatricianOfficeName: String = "",
+    var pediatricianOfficeNumber: String = "") {
 
   constructor() : this("", "", "")
 

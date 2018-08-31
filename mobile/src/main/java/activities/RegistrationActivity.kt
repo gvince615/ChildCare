@@ -36,7 +36,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter
   private val list: MutableList<RegistrationCardItem<*>> = ArrayList()
-
+  private var addToFamily: Boolean = false
   private var isInEditMode: Boolean = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -277,9 +277,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
           if (imageView != null && childImageAdded) {
             registrationPresenter.uploadChildImage(saveImageToInternalStorage(imageView?.drawingCache, childId), firebaseStorage.reference)
           } else {
-//            registrationPresenter.uploadChildImage(
-//                saveImageToInternalStorage(BitmapFactory.decodeResource(resources, R.drawable.account_child_white_48x48), childId),
-//                firebaseStorage.reference)
             onChildImageUploaded("")
           }
         }
@@ -390,27 +387,30 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     var familyName = ""
 
     for (card in adapter.getList()) {
+
+      when (card.viewType) {
+        RegistrationCardItem.PARENT -> {
+          if (familyName == "") {
+            familyName = (card as RegistrationCardItem<Guardian>).`object`.lastName
+            registrationPresenter.saveNewFamily(FirebaseAuth.getInstance().currentUser,
+                HashMapUtil().createFamilyMap(familyId, card.`object`.lastName))
+          }
+          parents.add(HashMapUtil().createParentMap(card as RegistrationCardItem<Guardian>))
+        }
+        RegistrationCardItem.PEDIATRICIAN -> {
+          registrationPresenter.saveNewPediatricianDataDocument(FirebaseAuth.getInstance().currentUser, familyId,
+              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<Pediatrician>))
+        }
+      }
+
       when (card.viewType) {
         RegistrationCardItem.CHILD -> {
 
           if (url != "") {
             (card as RegistrationCardItem<Child>).`object`.childImageUrl = url
           }
-
           registrationPresenter.saveNewChildDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId,
               HashMapUtil().createChildMap(card as RegistrationCardItem<Child>))
-        }
-
-        RegistrationCardItem.PARENT -> {
-          if (familyName == "") {
-            familyName = (card as RegistrationCardItem<Guardian>).`object`.lastName
-          }
-          parents.add(HashMapUtil().createParentMap(card as RegistrationCardItem<Guardian>))
-        }
-
-        RegistrationCardItem.PEDIATRICIAN -> {
-          registrationPresenter.saveNewPediatricianDataDocument(FirebaseAuth.getInstance().currentUser, familyId,
-              HashMapUtil().createPediatricianMap(card as RegistrationCardItem<Pediatrician>))
         }
 
         RegistrationCardItem.MEDICATION -> {
@@ -424,13 +424,13 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       }
 
       if (parents.isNotEmpty()) {
-        registrationPresenter.saveNewFamily(FirebaseAuth.getInstance().currentUser, HashMapUtil().createFamilyMap(familyId, familyName))
         registrationPresenter.saveNewGuardianDataDocument(FirebaseAuth.getInstance().currentUser, familyId, parents)
       }
       if (medications.isNotEmpty()) {
         registrationPresenter.saveNewMedicationDataDocument(FirebaseAuth.getInstance().currentUser, familyId, childId, medications)
       }
-      finish()
+
+      onBackPressed()
     }
   }
 
@@ -438,29 +438,21 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   }
 
-  private var addToFamily: Boolean = false
+  fun onNoFamilyNamesRetrieved() {
+    addToFamily = false
+    setUpRecyclerView()
+  }
 
   fun onFamilyNamesRetrieved(familyNames: Array<String?>) {
+    displayAddNewChildDialog(familyNames)
+  }
+
+  private fun displayAddNewChildDialog(familyNames: Array<String?>) {
     val dialogAddChild = AlertDialog.Builder(this@RegistrationActivity)
     dialogAddChild.setTitle(getString(R.string.new_reg_title))
     dialogAddChild.setMessage(getString(R.string.new_reg_body))
     dialogAddChild.setPositiveButton(getString(R.string.new_reg_positive)) { _, _ ->
-      val dialogSelectFamily = AlertDialog.Builder(this@RegistrationActivity)
-      dialogSelectFamily.setTitle(getString(R.string.select_family_title))
-      dialogSelectFamily.setItems(familyNames) { dialog, item ->
-        addToFamily = true
-        familyNames[item]?.let { registrationPresenter.getFamilyData(it) }
-        dialog.dismiss()
-      }
-      dialogSelectFamily.setNeutralButton(getString(R.string.select_family_neutral)) { dialog, _ ->
-        dialog.dismiss()
-        dialogAddChild.show()
-      }
-      dialogSelectFamily.setOnCancelListener { dialog ->
-        dialog.dismiss()
-        dialogAddChild.show()
-      }
-      dialogSelectFamily.show()
+      displaySelectFamilyDialog(familyNames, dialogAddChild)
     }
     dialogAddChild.setNeutralButton(getString(R.string.new_reg_neutral)) { _, _ ->
       addToFamily = false
@@ -473,8 +465,23 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     dialogAddChild.show()
   }
 
-  fun onNoFamilyNamesRetrieved() {
-    addToFamily = false
-    setUpRecyclerView()
+  private fun displaySelectFamilyDialog(familyNames: Array<String?>, dialogAddChild: AlertDialog.Builder) {
+    val dialogSelectFamily = AlertDialog.Builder(this@RegistrationActivity)
+    dialogSelectFamily.setTitle(getString(R.string.select_family_title))
+    dialogSelectFamily.setItems(familyNames) { dialog, item ->
+      addToFamily = true
+      familyNames[item]?.let { registrationPresenter.getFamilyData(it) }
+      dialog.dismiss()
+    }
+    dialogSelectFamily.setNeutralButton(getString(R.string.select_family_neutral)) { dialog, _ ->
+      dialog.dismiss()
+      dialogAddChild.show()
+    }
+    dialogSelectFamily.setOnCancelListener { dialog ->
+      dialog.dismiss()
+      dialogAddChild.show()
+    }
+    dialogSelectFamily.show()
   }
+
 }
