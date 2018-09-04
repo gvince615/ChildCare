@@ -9,7 +9,6 @@ import attendance.AttenChild
 import attendance.AttendanceAdapter
 import attendance.AttendancePresenter
 import billing.BillingFamily
-import billing.BillingPresenter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
@@ -27,10 +26,10 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
 
   private var doubleBackToExitPressedOnce = false
   private val children: ArrayList<AttenChild> = ArrayList()
-  private val billingFamilies: ArrayList<BillingFamily> = ArrayList()
+//  private val billingFamilies: ArrayList<BillingFamily> = ArrayList()
 
   private val attendancePresenter = AttendancePresenter()
-  private val billingPresenter = BillingPresenter()
+//  private val billingPresenter = BillingPresenter()
 
   fun getFragmentRefreshListener(): AttendanceFragmentRefreshListener? {
     return attendanceFragmentRefreshListener
@@ -65,17 +64,17 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener {
         fragmentList, savedInstanceState)
 
     attendancePresenter.setUp(this, children)
-    billingPresenter.setUp(this, billingFamilies)
+//    billingPresenter.setUp(this, billingFamilies)
   }
 
   override fun onResume() {
     super.onResume()
     updateAttendanceData()
-    updateBillingData()
+    //updateBillingData()
   }
 
   private fun updateBillingData() {
-    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
+//    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
   }
 
   fun updateChildAttendanceData(attenMap: HashMap<String, Any>, position: Int) {

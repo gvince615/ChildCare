@@ -264,6 +264,7 @@ class RegistrationPresenter {
                     Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_child_data), it.exception)
                   }
                 }
+            activity.hideProgress()
           } else {
             activity.hideProgress()
             Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.error_getting_family_data), task.exception)

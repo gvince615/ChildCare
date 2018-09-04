@@ -27,6 +27,8 @@ import android.view.View
 import android.view.ViewGroup
 import billing.BillingFamily
 import billing.BillingFamilyAdapter
+import billing.BillingPresenter
+import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.fragment_billing.view.*
 
@@ -37,11 +39,18 @@ class Billing : Fragment() {
   private var billingFamilies: ArrayList<BillingFamily> = ArrayList()
   private lateinit var rv: RecyclerView
 
+  private val billingPresenter = BillingPresenter()
+
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
     val view: View = inflater.inflate(R.layout.fragment_billing, container, false)
     setupRecyclerView(view)
-    setRefreshListener()
+    //setRefreshListener()
+
+    billingPresenter.setUp(this, billingFamilies)
+    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
+
     return view
   }
 
@@ -73,5 +82,10 @@ class Billing : Fragment() {
     rv.layoutManager = LinearLayoutManager(this.context)
     billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies)
     rv.adapter = billingFamilyAdapter
+  }
+
+  fun refresh(billingFamilyData: ArrayList<BillingFamily>, i: Int) {
+    this.billingFamilies = billingFamilyData
+    billingFamilyAdapter.notifyDataSetChanged()
   }
 }

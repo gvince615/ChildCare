@@ -1,6 +1,5 @@
 package billing
 
-import activities.MainActivity
 import android.util.Log
 import attendance.AttendanceRecord
 import com.google.firebase.auth.FirebaseUser
@@ -8,12 +7,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.gson.Gson
 import core.*
+import fragments.Billing
 
 class BillingPresenter {
-  private lateinit var activity: MainActivity
+  private lateinit var activity: Billing
   private lateinit var billingFamilyData: ArrayList<BillingFamily>
 
-  fun setUp(context: MainActivity, billingFamilyData: ArrayList<BillingFamily>) {
+  fun setUp(context: Billing, billingFamilyData: ArrayList<BillingFamily>) {
     this.activity = context
     this.billingFamilyData = billingFamilyData
   }
@@ -46,9 +46,9 @@ class BillingPresenter {
                                   billingFamily?.children?.get(childIndex)?.attendanceRecord?.add(attenRecord)
 
                                 }
-                                if (activity.getFragmentRefreshListener() != null) {
-                                  activity.getBillingFragmentRefreshListener()?.onRefresh(billingFamilyData, -1)
-                                }
+//                                if (activity.getFragmentRefreshListener() != null) {
+                                activity.refresh(billingFamilyData, -1)
+//                                }
                               } else {
 
                               }

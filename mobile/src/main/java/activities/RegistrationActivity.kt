@@ -95,6 +95,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
               .load(rotatedImage)
               .into(it)
           childImageAdded = true
+          hideProgress()
         }
       }
     }
@@ -127,7 +128,6 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     } catch (e: IOException) { // Catch the exception
       e.printStackTrace()
     }
-    hideProgress()
     return Uri.parse(file.absolutePath)
   }
 

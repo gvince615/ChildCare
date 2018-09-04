@@ -29,15 +29,7 @@ class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>,
 
       convertView!!.setOnClickListener { v ->
 
-        val dialog = BottomSheetDialog(context)
-        dialog.setContentView(R.layout.layout_records_bottom_sheet)
-        val attenRecordsLv = dialog.findViewById(R.id.lv_atten_records) as BottomSheetListView?
-        val headerTv = dialog.findViewById(R.id.tv_bottom_sheet_heading) as TextView?
-        headerTv?.text = dataSet[position].firstName + " - " + dataSet[position].childId
-
-        val adapter = MySimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepairData(dataSet[position].attendanceRecord))
-        attenRecordsLv?.adapter = adapter
-        dialog.show()
+        showBottomSheetWithAttendance(position)
       }
 
       viewHolder.txtName = convertView.child_name_tv
@@ -58,6 +50,18 @@ class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>,
     viewHolder.txtName!!.text = dataSet[position].firstName
     viewHolder.txtId!!.text = dataSet[position].childId
     return convertView
+  }
+
+  fun showBottomSheetWithAttendance(position: Int) {
+    val dialog = BottomSheetDialog(context)
+    dialog.setContentView(R.layout.layout_records_bottom_sheet)
+    val attenRecordsLv = dialog.findViewById(R.id.lv_atten_records) as BottomSheetListView?
+    val headerTv = dialog.findViewById(R.id.tv_bottom_sheet_heading) as TextView?
+    headerTv?.text = dataSet[position].firstName + " - " + dataSet[position].childId
+
+    val adapter = MySimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepairData(dataSet[position].attendanceRecord))
+    attenRecordsLv?.adapter = adapter
+    dialog.show()
   }
 
   private fun prepairData(records: ArrayList<AttendanceRecord>): ArrayList<String> {

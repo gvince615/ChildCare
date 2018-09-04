@@ -20,6 +20,8 @@
       android:gravity="start|center"
       android:textSize="20sp"
       android:textStyle="bold"
+      android:paddingBottom="3dp"
+      android:paddingTop="3dp"
       />
 
   <TextView
