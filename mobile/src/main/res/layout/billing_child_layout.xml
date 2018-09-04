@@ -7,12 +7,13 @@
     android:orientation="horizontal"
     android:weightSum="1"
     android:background="@color/colorWhiteTrans"
+    android:foreground="?android:attr/selectableItemBackground"
     tools:showIn="@layout/billing_family_card"
     >
   <TextView
       android:id="@+id/child_name_tv"
       android:layout_width="0dp"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:layout_weight=".60"
       android:paddingStart="20dp"
       android:paddingEnd="0dp"
@@ -29,15 +30,13 @@
       android:visibility="gone"
       />
 
-  <Button
-      android:id="@+id/view_atten_btn"
+  <TextView
+      android:id="@+id/view_atten_tv"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight=".40"
       android:gravity="end|center"
-      android:foreground="?android:attr/selectableItemBackground"
       android:text="View Records"
-      android:theme="@style/PrimaryFlatButton"
       />
 
 </LinearLayout>

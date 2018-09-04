@@ -71,7 +71,7 @@ class Billing : Fragment() {
 
     rv = view.billing_family_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)
-    billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies, (activity as MainActivity))
+    billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies, (activity as MainActivity), (activity as MainActivity))
     rv.adapter = billingFamilyAdapter
   }
 }

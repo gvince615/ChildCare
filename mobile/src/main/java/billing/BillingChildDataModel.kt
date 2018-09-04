@@ -1,9 +1,12 @@
 package billing
 
+import attendance.AttendanceRecord
 
-class BillingChildDataModel(firstName: String?, childId: String?) {
-  var childId = childId
-  var firstName = firstName
 
+class BillingChildDataModel(
+    var childId: String = "",
+    var firstName: String = "",
+    val attendanceRecord: ArrayList<AttendanceRecord>
+) {
+  constructor() : this("", "", ArrayList())
 }
-

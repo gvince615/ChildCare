@@ -39,6 +39,8 @@
 
   <color name="colorBlack">#000000</color>
 
-
+  <color name="md_bottom_sheet_text_color">#000000</color>
+  <color name="grayTextColor">#000000</color>
+  <color name="md_bottom_sheet_title_color">#000000</color>
 
 </resources>
