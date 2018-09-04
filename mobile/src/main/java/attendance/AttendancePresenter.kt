@@ -1,12 +1,12 @@
 package attendance
 
-import activities.MainActivity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.gson.Gson
 import core.*
+import fragments.Attendance
 import registration.Child
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,10 +14,10 @@ import java.util.*
 class AttendancePresenter {
 
   private lateinit var childReference: String
-  private lateinit var activity: MainActivity
+  private lateinit var activity: Attendance
   private lateinit var children: ArrayList<AttenChild>
 
-  fun setUp(context: MainActivity, children: ArrayList<AttenChild>) {
+  fun setUp(context: Attendance, children: ArrayList<AttenChild>) {
     this.activity = context
     this.children = children
   }
@@ -132,10 +132,8 @@ class AttendancePresenter {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
           }
-
-          if (activity.getFragmentRefreshListener() != null) {
-            activity.getFragmentRefreshListener()?.onRefresh(children, -1)
-          }
+          activity.hideProgress()
+          activity.refreshData(children, -1)
         }
   }
 
@@ -167,8 +165,8 @@ class AttendancePresenter {
 
           it.reference.update(CHILD, childMap)
               .addOnSuccessListener {
-                activity.hideProgress()
-                activity.updateAttendanceData()
+
+                getChildData(FirebaseAuth.getInstance().currentUser)
                 Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "DocumentSnapshot successfully written!")
               }
               .addOnFailureListener { e ->
@@ -185,6 +183,7 @@ class AttendancePresenter {
   }
 
   fun getChildData(currentUser: FirebaseUser?) {
+    activity.showProgress()
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA)
         .document(currentUser?.displayName.toString().replace(" ", "") + PREFIX_UID + currentUser?.uid)
         .collection(COLLECTION_REGISTRATION_DATA).get()

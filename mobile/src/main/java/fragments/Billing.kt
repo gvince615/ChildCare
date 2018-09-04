@@ -17,7 +17,6 @@
 package fragments
 
 
-import activities.MainActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -38,50 +37,34 @@ class Billing : Fragment() {
   private lateinit var billingFamilyAdapter: BillingFamilyAdapter
   private var billingFamilies: ArrayList<BillingFamily> = ArrayList()
   private lateinit var rv: RecyclerView
-
   private val billingPresenter = BillingPresenter()
-
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
     val view: View = inflater.inflate(R.layout.fragment_billing, container, false)
     setupRecyclerView(view)
-    //setRefreshListener()
-
     billingPresenter.setUp(this, billingFamilies)
-    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
-
     return view
   }
 
-  private fun setRefreshListener() {
-    (activity as MainActivity).setBillingFragmentRefreshListener(object : MainActivity.BillingFragmentRefreshListener {
-      override fun onRefresh(billingFamilies: ArrayList<BillingFamily>, position: Int) {
-        refreshData(billingFamilies, position)
-      }
-
-      override fun setProgress(visibleState: Int) {
-        setProgressVisibility(visibleState)
-      }
-    })
-  }
-
-  private fun setProgressVisibility(visibleState: Int) {
-    // progress_layout_atten.visibility = visibleState
-  }
-
-
-  private fun refreshData(billingFamilies: ArrayList<BillingFamily>, position: Int) {
-    this.billingFamilies = billingFamilies
-    billingFamilyAdapter.refreshData(this.billingFamilies, position)
+  override fun onResume() {
+    super.onResume()
+    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
   }
 
   private fun setupRecyclerView(view: View) {
-
     rv = view.billing_family_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)
     billingFamilyAdapter = BillingFamilyAdapter(this.context!!, billingFamilies)
     rv.adapter = billingFamilyAdapter
+  }
+
+  fun showProgress() {
+    //progress_layout_billing.visibility = View.VISIBLE
+  }
+
+  fun hideProgress() {
+    //progress_layout_billing.visibility = View.GONE
   }
 
   fun refresh(billingFamilyData: ArrayList<BillingFamily>, i: Int) {
