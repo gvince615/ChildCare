@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import billing.BillingChildAdapter.BillingChildClickListener
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.billing_family_card.view.*
 import kotlinx.android.synthetic.main.billing_generate_layout.view.*
@@ -20,20 +19,10 @@ class BillingFamilyAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
   private lateinit var items: ArrayList<BillingFamily>
   private lateinit var context: Context
-  private lateinit var billingCardItemListener: BillingCardItemListener
-  private lateinit var billingChildClickListener: BillingChildClickListener
 
-  constructor(context: Context, items: ArrayList<BillingFamily>, billingCardItemListener: BillingCardItemListener,
-      billingChildClickListener: BillingChildClickListener) : this() {
+  constructor(context: Context, items: ArrayList<BillingFamily>) : this() {
     this.context = context
     this.items = items
-    this.billingCardItemListener = billingCardItemListener
-    this.billingChildClickListener = billingChildClickListener
-
-  }
-
-  interface BillingCardItemListener {
-    fun generateBillClicked(position: Int)
   }
 
   override fun getItemCount(): Int {
@@ -54,7 +43,7 @@ class BillingFamilyAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
     holder.tvFamilyName.text = items[position].familyName
     holder.tvFamilyId.text = items[position].familyId
-    holder.lvChildren.adapter = BillingChildAdapter(items[position].children, context, billingChildClickListener)
+    holder.lvChildren.adapter = BillingChildAdapter(items[position].children, context)
   }
 
   fun refreshData(familyList: ArrayList<BillingFamily>, pos: Int) {

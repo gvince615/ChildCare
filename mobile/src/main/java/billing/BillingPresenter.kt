@@ -28,6 +28,7 @@ class BillingPresenter {
             for (familyDocument in task.result) {
               // get families
               var billingFamily = getBillingFamilyData(familyDocument)
+              billingFamily?.let { billingFamilyData.add(it) }
 
               familyDocument.reference.collection(COLLECTION_CHILDREN).get()
                   .addOnCompleteListener {
@@ -41,9 +42,7 @@ class BillingPresenter {
                               if (it.isSuccessful) {
                                 for (attenDocument in it.result) {
                                   //get attendance
-
-                                  val attenRecord = AttendanceRecord(childDocument.id, childDocument[FIRST_NAME].toString(),
-                                      childDocument[LAST_NAME].toString(), attenDocument[CHECK_IN].toString(), attenDocument[CHECK_OUT].toString())
+                                  val attenRecord = AttendanceRecord(attenDocument[CHECK_IN].toString(), attenDocument[CHECK_OUT].toString())
                                   billingFamily?.children?.get(childIndex)?.attendanceRecord?.add(attenRecord)
 
                                 }
@@ -55,12 +54,9 @@ class BillingPresenter {
                               }
                             }
                       }
-//                      if (activity.getFragmentRefreshListener() != null) {
-//                        activity.getBillingFragmentRefreshListener()?.onRefresh(billingFamilyData, -1)
-//                      }
                     }
                   }
-              billingFamily?.let { billingFamilyData.add(it) }
+
             }
             Log.d(FIRESTORE_TAG + "BILLING", "Success getting billing data: ", task.exception)
 
@@ -69,15 +65,6 @@ class BillingPresenter {
             Log.d(FIRESTORE_TAG + "BILLING", "Error getting billing data: ", task.exception)
           }
         }
-  }
-
-  private fun getBillingAttendanceForChild(attenDocument: QueryDocumentSnapshot?): AttendanceRecord? {
-    return if (attenDocument?.contains(CHECK_IN)!!) {
-      val gson = Gson()
-      gson.fromJson<AttendanceRecord>(gson.toJsonTree(attenDocument), AttendanceRecord::class.java)
-    } else {
-      null
-    }
   }
 
   private fun getBillingChildData(document: QueryDocumentSnapshot): BillingChildDataModel? {
@@ -97,40 +84,4 @@ class BillingPresenter {
       null
     }
   }
-
-//  fun getBillingAttendanceRecords(childId: String): AttendanceRecord {
-//    activity.showProgress()
-//
-//    val id = childId.split("-")
-//    val familyId = id[0]
-//    var records = ArrayList<AttendanceRecord>()
-//
-//    FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
-//        FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
-//            PREFIX_UID + FirebaseAuth.getInstance().currentUser?.uid)
-//        .collection(COLLECTION_REGISTRATION_DATA).document(familyId).collection(COLLECTION_CHILDREN).document(childId).collection(
-//            COLLECTION_ATTENDANCE_DATA)
-//        .orderBy(TIME_STAMP, Query.Direction.DESCENDING).get()
-//        .addOnCompleteListener { task ->
-//          if (task.isSuccessful) {
-//            for (doc in task.result.documents) {
-//              if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
-//                val childRecord = AttendanceRecord(childId, "", "", doc[CHECK_IN].toString(), doc[CHECK_OUT].toString())
-//                records.add(childRecord)
-//              }
-//            }
-//            activity.onGetBillingAttendanceRecordsSuccess(childId, records)
-//            activity.hideProgress()
-//          } else {
-//            // todo - unsuccessful
-//            Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
-//          }
-//
-////          if (activity.getFragmentRefreshListener() != null) {
-////            activity.getFragmentRefreshListener()?.onRefresh(children, -1)
-////          }
-//        }
-//
-//  }
-
 }

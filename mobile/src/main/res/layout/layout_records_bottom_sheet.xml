@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_8"
     android:layout_marginTop="@dimen/dp_8"
     android:orientation="vertical"
@@ -15,7 +15,7 @@
       android:layout_marginStart="@dimen/dp_16"
       android:gravity="center"
       android:textColor="@color/md_bottom_sheet_title_color"
-      android:textSize="16sp"
+      android:textSize="20sp"
       />
 
   <View
@@ -29,7 +29,7 @@
   <core.BottomSheetListView
       android:id="@+id/lv_atten_records"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="200dp"
       android:layout_marginEnd="@dimen/dp_16"
       android:layout_marginStart="@dimen/dp_16"
       android:backgroundTint="@android:color/white"
