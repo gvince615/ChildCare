@@ -8,6 +8,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.gson.Gson
 import core.*
 import fragments.Billing
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BillingPresenter {
   private lateinit var activity: Billing
@@ -28,7 +30,7 @@ class BillingPresenter {
             billingFamilyData.clear()
             for (familyDocument in task.result) {
               // get families
-              var billingFamily = getBillingFamilyData(familyDocument)
+              val billingFamily = getBillingFamilyData(familyDocument)
               billingFamily?.let { billingFamilyData.add(it) }
               getChildrenDocuments(familyDocument, billingFamily)
             }
@@ -36,7 +38,7 @@ class BillingPresenter {
         }
   }
 
-  fun getChildrenDocuments(familyDocument: QueryDocumentSnapshot, billingFamily: BillingFamily?) {
+  private fun getChildrenDocuments(familyDocument: QueryDocumentSnapshot, billingFamily: BillingFamily?) {
     familyDocument.reference.collection(COLLECTION_CHILDREN).get()
         .addOnCompleteListener {
           if (it.isSuccessful) {
@@ -50,18 +52,23 @@ class BillingPresenter {
         }
   }
 
-  fun getAttendanceDocuments(childDocument: QueryDocumentSnapshot, billingFamily: BillingFamily?,
+  private fun getAttendanceDocuments(childDocument: QueryDocumentSnapshot, billingFamily: BillingFamily?,
       childIndex: Int) {
     childDocument.reference.collection(COLLECTION_ATTENDANCE_DATA).orderBy(TIME_STAMP, Query.Direction.DESCENDING).get()
         .addOnCompleteListener {
           if (it.isSuccessful) {
             for (attenDocument in it.result) {
               //get attendance
-              val attenRecord = AttendanceRecord(attenDocument[CHECK_IN].toString(), attenDocument[CHECK_OUT].toString())
-              billingFamily?.children?.get(childIndex)?.attendanceRecord?.add(attenRecord)
 
+              if (attenDocument[CHECK_OUT].toString() != "") {
+                val attenRecord = AttendanceRecord(SimpleDateFormat(BILLING_ATTEN_CARD_TIME_FORMAT, Locale.US).format(
+                    SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).parse(attenDocument[CHECK_IN].toString())).toString(),
+                    SimpleDateFormat(BILLING_ATTEN_CARD_TIME_FORMAT, Locale.US).format(
+                        SimpleDateFormat(FIRESTORE_DATE_TIME_FORMAT, Locale.US).parse(attenDocument[CHECK_OUT].toString())).toString())
+                billingFamily?.children?.get(childIndex)?.attendanceRecord?.add(attenRecord)
+              }
             }
-            activity.refresh(billingFamilyData, -1)
+            activity.refresh(billingFamilyData)
           } else {
 
           }

@@ -13,13 +13,12 @@ import com.vince.childcare.R
 import core.BottomSheetListView
 import kotlinx.android.synthetic.main.billing_child_layout.view.*
 
-
 class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>, internal var context: Context) : ArrayAdapter<BillingChildDataModel>(
     context, R.layout.billing_child_layout, dataSet) {
   private var lastPosition = -1
 
-  override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    var convertView = convertView
+  override fun getView(position: Int, view: View?, parent: ViewGroup): View {
+    var convertView = view
     val viewHolder: ViewHolder
     val result: View
     if (convertView == null) {
@@ -27,8 +26,7 @@ class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>,
       val inflater = LayoutInflater.from(getContext())
       convertView = inflater.inflate(R.layout.billing_child_layout, parent, false)
 
-      convertView!!.setOnClickListener { v ->
-
+      convertView!!.setOnClickListener { _ ->
         showBottomSheetWithAttendance(position)
       }
 
@@ -52,22 +50,23 @@ class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>,
     return convertView
   }
 
-  fun showBottomSheetWithAttendance(position: Int) {
+  private fun showBottomSheetWithAttendance(position: Int) {
     val dialog = BottomSheetDialog(context)
     dialog.setContentView(R.layout.layout_records_bottom_sheet)
     val attenRecordsLv = dialog.findViewById(R.id.lv_atten_records) as BottomSheetListView?
     val headerTv = dialog.findViewById(R.id.tv_bottom_sheet_heading) as TextView?
-    headerTv?.text = dataSet[position].firstName + " - " + dataSet[position].childId
+    val headerText = context.getString(R.string.atten_records_for) + " " + dataSet[position].firstName
+    headerTv?.text = headerText
 
-    val adapter = MySimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepairData(dataSet[position].attendanceRecord))
+    val adapter = MySimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepareData(dataSet[position].attendanceRecord))
     attenRecordsLv?.adapter = adapter
     dialog.show()
   }
 
-  private fun prepairData(records: ArrayList<AttendanceRecord>): ArrayList<String> {
+  private fun prepareData(records: ArrayList<AttendanceRecord>): ArrayList<String> {
     val list = ArrayList<String>()
     for (record in records) {
-      list.add(record.checkInTime + record.checkOutTime)
+      list.add("IN : " + record.checkInTime + "\nOUT: " + record.checkOutTime)
     }
     return list
   }

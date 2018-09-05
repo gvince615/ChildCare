@@ -32,6 +32,8 @@ import java.io.OutputStream
 
 @Suppress("UNCHECKED_CAST")
 class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListener {
+
+
   private var imageView: CircleImageView? = null
   private lateinit var adapter: RegistrationAdapter
   private lateinit var registrationPresenter: RegistrationPresenter

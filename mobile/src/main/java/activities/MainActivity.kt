@@ -15,7 +15,7 @@ import java.util.*
 
 class MainActivity : BaseActivity(), Attendance.UpdateBillingListener {
   override fun updateBilling() {
-    var billingFragment = fragmentList[2] as Billing
+    val billingFragment = fragmentList[2] as Billing
     billingFragment.updateBilling()
   }
 

@@ -4,7 +4,7 @@
     android:id="@+id/billing_generate_btn_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorGreen"
+    android:background="@color/lighter_grey"
     android:orientation="horizontal"
     tools:showIn="@layout/billing_family_card"
     >
@@ -22,7 +22,7 @@
         android:gravity="end|center"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:text="Generate Family Billing Report"
+        android:text="@string/gen_bill_report_btn_text"
         android:theme="@style/PrimaryFlatButton"
         />
   </LinearLayout>

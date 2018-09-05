@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">ChildCare</string>
+  <string name="app_name">KiddoCare2.0</string>
 
   <!--validation -->
   <string name="last_name_min_length_error">Please enter your last name.</string>
@@ -144,4 +144,9 @@
   <string name="bottom_sheet_option_gallery">Upload from Gallery</string>
   <string name="bottom_sheet_option_heading">Add Photo</string>
   <string name="bottom_sheet_option_remove_photo">Remove Photo</string>
+  <string name="atten_records_for">Billing Cycle Attendance for : </string>
+  <string name="gen_bill_report_btn_text">Generate Family Billing Report</string>
+  <string name="family_name">Family Name</string>
+  <string name="down_arrow_expand_family_billing_card">Down Arrow - Expand Family Billing Card</string>
+  <string name="child_registration">Child Registration</string>
 </resources>

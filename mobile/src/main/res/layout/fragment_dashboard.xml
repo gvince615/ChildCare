@@ -43,7 +43,7 @@
           <ImageView
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:src="@mipmap/ic_launcher"
+              android:src="@drawable/ic_launcher_new"
               />
         </LinearLayout>
 
@@ -234,7 +234,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Child Registration"
+                android:text="@string/child_registration"
                 />
 
           </LinearLayout>
@@ -264,24 +264,27 @@
             android:transitionName="simple_activity_transition"
             >
 
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Graph"
-              />
-
-          <ImageView
+          <com.github.mikephil.charting.charts.BarChart
+              android:id="@+id/dashboard_bar_graph"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginTop="-10dp"
-              android:padding="10dp"
-              android:src="@drawable/ic_launcher_background"
+              android:layout_above="@+id/seekBar1"
               />
+          <!--<TextView-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:text="Graph"-->
+          <!--/>-->
+
+          <!--<ImageView-->
+          <!--android:layout_width="match_parent"-->
+          <!--android:layout_height="match_parent"-->
+          <!--android:layout_marginTop="-10dp"-->
+          <!--android:padding="10dp"-->
+          <!--android:src="@drawable/ic_launcher_background"-->
+          <!--/>-->
         </LinearLayout>
-
-
       </RelativeLayout>
-
     </GridLayout>
   </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

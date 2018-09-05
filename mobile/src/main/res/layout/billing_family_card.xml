@@ -7,7 +7,7 @@
     android:layout_marginEnd="5dp"
     android:layout_marginStart="5dp"
     android:layout_marginTop="5dp"
-    android:backgroundTint="@color/colorGreen"
+    android:backgroundTint="@color/lighter_grey"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -35,7 +35,7 @@
           android:layout_height="wrap_content"
           android:layout_marginStart="10dp"
           android:layout_weight=".8"
-          android:text="Family Name"
+          android:text="@string/family_name"
           android:textSize="20sp"
           android:textStyle="bold"
           />
@@ -43,7 +43,6 @@
           android:id="@+id/family_id_tv"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="ID"
           android:textSize="16sp"
           android:textStyle="bold"
           />
@@ -52,9 +51,10 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_gravity="end|center"
-          android:layout_marginEnd="10dp"
+          android:layout_marginEnd="5dp"
           android:layout_weight=".2"
           android:padding="5dp"
+          android:contentDescription="@string/down_arrow_expand_family_billing_card"
           android:src="@android:drawable/arrow_down_float"
           />
 

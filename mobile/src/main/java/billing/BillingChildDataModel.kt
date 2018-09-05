@@ -9,5 +9,4 @@ class BillingChildDataModel(
     val attendanceRecord: ArrayList<AttendanceRecord>
 ) {
   constructor() : this("", "", ArrayList())
-  constructor(toString: String, toString1: String) : this()
 }

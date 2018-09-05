@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 
 class RegistrationPresenter {
 
-  lateinit var activity: RegistrationActivity
+  private lateinit var activity: RegistrationActivity
 
   fun deleteChildDataDocument(childId: String) {
     val id = childId.split("-")

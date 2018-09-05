@@ -24,17 +24,15 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
+  private var children: ArrayList<AttenChild> = ArrayList()
+  private lateinit var rv: RecyclerView
+  private lateinit var adapter: AttendanceAdapter
+  private val attendancePresenter = AttendancePresenter()
+  private lateinit var updateBillingListener: UpdateBillingListener
+
   interface UpdateBillingListener {
     fun updateBilling()
   }
-
-  var children: ArrayList<AttenChild> = ArrayList()
-  lateinit var rv: RecyclerView
-  private lateinit var adapter: AttendanceAdapter
-  private val attendancePresenter = AttendancePresenter()
-
-
-  private lateinit var updateBillingListener: UpdateBillingListener
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
@@ -85,7 +83,7 @@ class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
     val options = activity?.let {
       ActivityOptionsCompat.makeSceneTransitionAnimation(it,
           rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image),
-          ViewCompat.getTransitionName(rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image)))
+          ViewCompat.getTransitionName(rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image))!!)
     }
     startActivity(intent, options?.toBundle())
   }
