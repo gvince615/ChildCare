@@ -52,6 +52,10 @@ class Billing : Fragment() {
     billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
   }
 
+  fun updateBilling() {
+    billingPresenter.getBillingFragmentData(FirebaseAuth.getInstance().currentUser)
+  }
+
   private fun setupRecyclerView(view: View) {
     rv = view.billing_family_rv as RecyclerView
     rv.layoutManager = LinearLayoutManager(this.context)

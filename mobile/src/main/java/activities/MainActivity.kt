@@ -13,18 +13,22 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), Attendance.UpdateBillingListener {
+  override fun updateBilling() {
+    var billingFragment = fragmentList[2] as Billing
+    billingFragment.updateBilling()
+  }
+
+  private val fragmentList = Arrays.asList(
+      Dashboard(),
+      Attendance(),
+      Billing())
 
   private var doubleBackToExitPressedOnce = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
-    val fragmentList = Arrays.asList(
-        Dashboard(),
-        Attendance(),
-        Billing())
 
     spaceTabLayout.initialize(viewPager, supportFragmentManager,
         fragmentList, savedInstanceState)

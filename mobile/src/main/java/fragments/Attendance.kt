@@ -1,6 +1,7 @@
 package fragments
 
 import activities.RegistrationActivity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -23,11 +24,26 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
+  interface UpdateBillingListener {
+    fun updateBilling()
+  }
 
   var children: ArrayList<AttenChild> = ArrayList()
   lateinit var rv: RecyclerView
   private lateinit var adapter: AttendanceAdapter
   private val attendancePresenter = AttendancePresenter()
+
+
+  private lateinit var updateBillingListener: UpdateBillingListener
+
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
+    try {
+      updateBillingListener = context as UpdateBillingListener
+    } catch (e: ClassCastException) {
+      throw ClassCastException(context.toString() + " must implement UpdateBillingListener")
+    }
+  }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -53,6 +69,7 @@ class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
   fun updateChildAttendanceData(attenMap: HashMap<String, Any>, position: Int) {
     children[position].checkInTime = attenMap[CHECK_IN].toString()
     refreshData(children, position)
+    updateBillingListener.updateBilling()
   }
 
   fun showProgress() {
