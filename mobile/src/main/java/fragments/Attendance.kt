@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import attendance.AttenChild
 import attendance.AttendanceAdapter
 import attendance.AttendancePresenter
@@ -43,12 +44,16 @@ class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
     }
   }
 
+  private lateinit var progress: RelativeLayout
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
     val view: View = inflater.inflate(R.layout.fragment_attendance, container, false)
     setupRecyclerView(view)
 
     attendancePresenter.setUp(this, children)
+
+    progress = view.progress_layout_atten
     return view
   }
 
@@ -71,11 +76,11 @@ class Attendance : Fragment(), AttendanceAdapter.CardItemListener {
   }
 
   fun showProgress() {
-    //progress_layout_atten.visibility = View.VISIBLE
+    progress.visibility = View.VISIBLE
   }
 
   fun hideProgress() {
-    //progress_layout_atten.visibility = View.GONE
+    progress.visibility = View.GONE
   }
 
   override fun childClicked(childId: String, position: Int) {

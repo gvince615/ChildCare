@@ -5,6 +5,23 @@
     tools:context="fragments.Billing"
     android:orientation="vertical"
     >
+
+  <RelativeLayout
+      android:id="@+id/progress_layout_billing"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/colorWhiteTrans"
+      android:gravity="center"
+      android:visibility="gone"
+      >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/ProgressColorAccent"
+        />
+  </RelativeLayout>
+
   <com.github.mikephil.charting.charts.BarChart
       android:id="@+id/billingChart"
       android:layout_width="match_parent"
@@ -21,18 +38,5 @@
 
     </android.support.v7.widget.RecyclerView>
 
-  <RelativeLayout
-      android:id="@+id/progress_layout_billing"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@color/colorGreyTrans"
-      android:gravity="center"
-      android:visibility="gone"
-      >
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-  </RelativeLayout>
 </LinearLayout>

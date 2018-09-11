@@ -24,6 +24,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import billing.BillingFamily
 import billing.BillingFamilyAdapter
 import billing.BillingPresenter
@@ -47,12 +48,16 @@ class Billing : Fragment() {
   private lateinit var rv: RecyclerView
   private val billingPresenter = BillingPresenter()
 
+  private lateinit var progress: RelativeLayout
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
     val view: View = inflater.inflate(R.layout.fragment_billing, container, false)
     setupRecyclerView(view)
     billingPresenter.setUp(this, billingFamilies)
     setupBarGraph(view)
+
+    progress = view.progress_layout_billing
     return view
   }
 
@@ -167,11 +172,11 @@ class Billing : Fragment() {
   }
 
   fun showProgress() {
-    //progress_layout_billing.visibility = View.VISIBLE
+    progress.visibility = View.VISIBLE
   }
 
   fun hideProgress() {
-    //progress_layout_billing.visibility = View.GONE
+    progress.visibility = View.GONE
   }
 
   fun refresh(billingFamilyData: ArrayList<BillingFamily>) {
