@@ -97,10 +97,10 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
               .load(rotatedImage)
               .into(it)
           childImageAdded = true
-          hideProgress()
         }
       }
     }
+    hideProgress()
   }
 
   private fun saveImage(imageBitmap: Bitmap): Bitmap? {
