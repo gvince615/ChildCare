@@ -184,7 +184,7 @@ class RegistrationPresenter {
     this.activity = registrationActivity
   }
 
-  fun getFamilies() {
+  fun loadFamilyData() {
     activity.showProgress()
     val familyNames = ArrayList<String>()
     FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
@@ -210,7 +210,7 @@ class RegistrationPresenter {
               activity.hideProgress()
               Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.retrieved_famiy_names) + familyNames.toString())
             }
-
+            activity.hideProgress()
 
           } else {
             activity.hideProgress()

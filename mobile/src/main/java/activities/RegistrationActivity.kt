@@ -51,7 +51,7 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
       isInEditMode = true
       registrationPresenter.loadChild(intent.getStringExtra(CHILD_ID))
     } else {
-      registrationPresenter.getFamilies()
+      registrationPresenter.loadFamilyData()
     }
 
     parent_menu_item.setOnClickListener { parentMenuButtonClicked() }
@@ -461,6 +461,11 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
     }
     dialogAddChild.setOnCancelListener { onBackPressed() }
     dialogAddChild.show()
+  }
+
+  override fun onPostResume() {
+    super.onPostResume()
+    hideProgress()
   }
 
   private fun displaySelectFamilyDialog(familyNames: Array<String?>, dialogAddChild: AlertDialog.Builder) {
