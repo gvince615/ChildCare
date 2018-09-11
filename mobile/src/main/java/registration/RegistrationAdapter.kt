@@ -30,10 +30,10 @@ class RegistrationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
   override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
 
     when (getItemViewType(position)) {
-      RegistrationCardItem.PARENT -> GuardianViewHolder.bind(viewHolder as GuardianViewHolder, list[position], listener)
+      RegistrationCardItem.PARENT -> GuardianViewHolder.bind(context, viewHolder as GuardianViewHolder, list[position], listener)
       RegistrationCardItem.CHILD -> ChildViewHolder.bind(context, viewHolder as ChildViewHolder, list[position], listener)
-      RegistrationCardItem.PEDIATRICIAN -> PediatricianViewHolder.bind(viewHolder as PediatricianViewHolder, list[position], listener)
-      RegistrationCardItem.MEDICATION -> MedicationViewHolder.bind(viewHolder as MedicationViewHolder, list[position], listener)
+      RegistrationCardItem.PEDIATRICIAN -> PediatricianViewHolder.bind(context, viewHolder as PediatricianViewHolder, list[position], listener)
+      RegistrationCardItem.MEDICATION -> MedicationViewHolder.bind(context, viewHolder as MedicationViewHolder, list[position], listener)
       RegistrationCardItem.BILLING -> BillingViewHolder.bind(context, viewHolder as BillingViewHolder, list[position], listener)
     }
   }

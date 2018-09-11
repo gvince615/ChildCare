@@ -5,6 +5,7 @@ import activities.RegistrationActivity
 import activities.SetupActivity
 import activities.TodoActivity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
@@ -12,21 +13,28 @@ import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis.XAxisPosition
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import android.widget.RelativeLayout
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
+import dashboard.DashboardPresenter
+import dashboard.Family
+import dashboard.NumberFormatter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 
 class Dashboard : Fragment() {
-
+  private val dashboardPresenter = DashboardPresenter()
+  private lateinit var dashboardData: ArrayList<Family>
+  private var chart: PieChart? = null
+  private lateinit var progressView: RelativeLayout
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     // Inflate the layout for this fragment
@@ -34,102 +42,96 @@ class Dashboard : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_dashboard, container,
         false)
 
+    chart = view.dashboard_graph
+    progressView = view.progress_layout_dash
     view.registration_cardview.setOnClickListener { startRegistrationActivity() }
     view.msg_board_cardview.setOnClickListener { startMessageBoardActivity() }
     view.todo_cardview.setOnClickListener { startTodoActivity() }
     view.setup_cardview.setOnClickListener { startSetupActivity() }
 
-    setupBarGraph(view)
 
+    dashboardPresenter.setUp(this)
+    dashboardPresenter.getDashboardFragmentData(FirebaseAuth.getInstance().currentUser)
     return view
   }
 
-  private fun setupBarGraph(view: View) {
+  private fun setData(families: ArrayList<Family>, chart: PieChart) {
+    val entries = ArrayList<PieEntry>()
+    for (family in families) {
+      entries.add(PieEntry(family.children.toFloat(), family.familyName))
+    }
 
-    view.dashboard_bar_graph.setDrawBarShadow(false)
-    view.dashboard_bar_graph.setDrawValueAboveBar(true)
+    val dataSet = PieDataSet(entries, "")
 
-    val xAxis = view.dashboard_bar_graph.xAxis
-    xAxis.position = XAxisPosition.BOTTOM
-    xAxis.setDrawGridLines(false)
-    xAxis.granularity = 1f // only intervals of 1 day
-    xAxis.labelCount = 7
+    dataSet.sliceSpace = 3f
+    dataSet.iconsOffset = MPPointF(0f, 40f)
+    dataSet.selectionShift = 5f
 
+    dataSet.colors = addColors()
 
-    val leftAxis = view.dashboard_bar_graph.axisLeft
-    leftAxis.setLabelCount(8, false)
-    leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART)
-    leftAxis.spaceTop = 15f
-    leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+    val data = PieData(dataSet)
+    data.setValueFormatter(NumberFormatter())
+    data.setValueTextSize(11f)
+    data.setValueTextColor(Color.BLACK)
+    chart.data = data
 
-    val rightAxis = view.dashboard_bar_graph.axisRight
-    rightAxis.setDrawGridLines(false)
-    rightAxis.setLabelCount(8, false)
-    rightAxis.spaceTop = 15f
-    rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+    // undo all highlights
+    chart.highlightValues(null)
 
-    setData(4, 10f, view.dashboard_bar_graph)
-
-    // mChart.setDrawLegend(false);
+    chart.invalidate()
   }
 
-  private fun setData(count: Int, range: Float, dashboard_bar_graph: BarChart) {
+  private fun addColors(): ArrayList<Int> {
+    val colors = ArrayList<Int>()
 
-    val start = 1f
+    for (c in ColorTemplate.MATERIAL_COLORS)
+      colors.add(c)
 
-    val yVals1 = ArrayList<BarEntry>()
+    for (c in ColorTemplate.JOYFUL_COLORS)
+      colors.add(c)
 
-    var i = start.toInt()
-    while (i < start + count.toFloat() + 1f) {
-      val mult = range + 1
-      val `val` = (Math.random() * mult).toFloat()
+    for (c in ColorTemplate.COLORFUL_COLORS)
+      colors.add(c)
 
-      if (Math.random() * 100 < 10) {
-        yVals1.add(BarEntry(i.toFloat(), `val`, resources.getDrawable(R.drawable.ic_tab_three, null)))
-      } else {
-        yVals1.add(BarEntry(i.toFloat(), `val`))
-      }
-      i++
-    }
+    for (c in ColorTemplate.PASTEL_COLORS)
+      colors.add(c)
 
-    val set1: BarDataSet
+    for (c in ColorTemplate.LIBERTY_COLORS)
+      colors.add(c)
 
-    if (dashboard_bar_graph.data != null && dashboard_bar_graph.data.dataSetCount > 0) {
-      set1 = dashboard_bar_graph.data.getDataSetByIndex(0) as BarDataSet
-      set1.values = yVals1
-      dashboard_bar_graph.data.notifyDataChanged()
-      dashboard_bar_graph.notifyDataSetChanged()
-    } else {
-      set1 = BarDataSet(yVals1, "Registration by Bracket")
+    for (c in ColorTemplate.VORDIPLOM_COLORS)
+      colors.add(c)
+    return colors
+  }
 
-      val colors = ArrayList<Int>()
-      for (c in ColorTemplate.VORDIPLOM_COLORS)
-        colors.add(c)
+  private fun setupPieChart() {
 
-      for (c in ColorTemplate.JOYFUL_COLORS)
-        colors.add(c)
+    chart?.dragDecelerationFrictionCoef = 0.95f
+    chart?.setUsePercentValues(false)
+    chart?.centerText = "Registration\nBy Family"
 
-      for (c in ColorTemplate.COLORFUL_COLORS)
-        colors.add(c)
+    chart?.isDrawHoleEnabled = true
+    chart?.setHoleColor(Color.TRANSPARENT)
 
-      for (c in ColorTemplate.LIBERTY_COLORS)
-        colors.add(c)
+    chart?.holeRadius = 58f
+    chart?.transparentCircleRadius = 61f
 
-      for (c in ColorTemplate.PASTEL_COLORS)
-        colors.add(c)
+    chart?.setDrawCenterText(true)
+    chart?.rotationAngle = 0f
+    chart?.isRotationEnabled = true
 
-      colors.add(ColorTemplate.getHoloBlue())
-      set1.colors = colors
+    chart?.let { setData(dashboardData, it) }
 
-      val dataSets = ArrayList<IBarDataSet>()
-      dataSets.add(set1)
+    chart?.animateY(1400, Easing.EasingOption.EaseInOutQuad)
 
-      val data = BarData(dataSets)
-      data.setValueTextSize(10f)
-      data.barWidth = 0.9f
+    // entry label styling
+    chart?.setEntryLabelColor(Color.BLACK)
+    chart?.setEntryLabelTextSize(12f)
 
-      dashboard_bar_graph.data = data
-    }
+    chart?.description?.isEnabled = false
+
+    val l = chart?.legend
+    l?.isEnabled = false
   }
 
   private fun startMessageBoardActivity() {
@@ -169,6 +171,19 @@ class Dashboard : Fragment() {
           ViewCompat.getTransitionName(registration_view)!!)
     }
     startActivity(intent, options?.toBundle())
+  }
+
+  fun showProgress() {
+    progressView.visibility = View.VISIBLE
+  }
+
+  fun hideProgress() {
+    progressView.visibility = View.GONE
+  }
+
+  fun setDashboardData(dashboardData: ArrayList<Family>) {
+    this.dashboardData = dashboardData
+    setupPieChart()
   }
 
 }

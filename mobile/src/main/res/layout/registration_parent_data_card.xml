@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parentDataCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,10 +33,10 @@
       <TextView
           android:layout_width="0dp"
           android:layout_height="match_parent"
+          android:layout_marginEnd="5dp"
+          android:layout_marginStart="5dp"
           android:layout_weight="2"
           android:gravity="start|center"
-          android:layout_marginStart="5dp"
-          android:layout_marginEnd="5dp"
           android:text="Guardian"
           android:textColor="@color/colorBlack"
           android:textSize="22sp"
@@ -49,8 +50,8 @@
           android:backgroundTint="@android:color/transparent"
           android:foreground="?android:attr/selectableItemBackground"
           android:padding="3dp"
-          android:tint="@color/colorBlack"
           android:src="@android:drawable/ic_menu_close_clear_cancel"
+          android:tint="@color/colorBlack"
 
           />
     </LinearLayout>
@@ -61,89 +62,80 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="2"
+        android:background="@color/colorWhiteTrans"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@color/colorWhiteTrans"
         >
 
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/parent_first_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/first_name"
+          android:inputType="textPersonName"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="25"
+          app:met_minCharacters="1"
+          app:met_primaryColor="@color/colorYellowAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="First Name"
-            android:inputType="textPersonName"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/parent_last_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/last_name"
+          android:inputType="textPersonName"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="25"
+          app:met_minCharacters="1"
+          app:met_primaryColor="@color/colorYellowAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Last Name"
-            android:inputType="textPersonName"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/parent_contact_num_1"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/phone_number_1"
+          android:inputType="phone"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="12"
+          app:met_minCharacters="12"
+          app:met_primaryColor="@color/colorYellowAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_contact_num_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Primary Phone Number"
-            android:inputType="phone"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/parent_contact_num_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/phone_number_2"
+          android:inputType="phone"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="12"
+          app:met_minCharacters="12"
+          app:met_primaryColor="@color/colorYellowAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_contact_num_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Secondary Phone Number"
-            android:inputType="phone"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/parent_email"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
-
-        <EditText
-            android:id="@+id/input_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            />
-
-      </android.support.design.widget.TextInputLayout>
+          android:hint="@string/email_address"
+          android:inputType="textEmailAddress"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="30"
+          app:met_minCharacters="5"
+          app:met_primaryColor="@color/colorYellowAccent"
+          app:met_singleLineEllipsis="true"
+          />
     </LinearLayout>
   </LinearLayout>
 </android.support.v7.widget.CardView>

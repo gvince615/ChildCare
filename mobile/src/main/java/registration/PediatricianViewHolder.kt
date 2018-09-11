@@ -1,7 +1,6 @@
 package registration
 
 import android.content.Context
-import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import com.rengwuxian.materialedittext.MaterialEditText
+import com.rengwuxian.materialedittext.validation.RegexpValidator
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_pediatrician_data_card.view.*
 
@@ -18,9 +19,9 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
   var pediatricianDeleteButton: ImageButton = itemView.delete_pediatrician_card_button
 
-  var pedNameLayout: TextInputLayout = itemView.input_layout_ped_name
-  var pedOfficeNameLayout: TextInputLayout = itemView.input_layout_ped_office_name
-  var pedOfficeNumberLayout: TextInputLayout = itemView.input_layout_ped_contact_num_1
+  var pedNameLayout: MaterialEditText = itemView.input_layout_ped_name
+  var pedOfficeNameLayout: MaterialEditText = itemView.input_layout_ped_office_name
+  var pedOfficeNumberLayout: MaterialEditText = itemView.input_layout_ped_contact_num_1
 
   companion object {
 
@@ -29,21 +30,37 @@ class PediatricianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun bind(holder: PediatricianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
+    fun bind(context: Context, holder: PediatricianViewHolder, listItem: RegistrationCardItem<*>, listener: RegistrationAdapter.CardItemListener?) {
 
-      holder.pedNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianName)
-      holder.pedNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianName = holder.pedNameLayout.editText?.text?.toString()!!
+      holder.pedNameLayout.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianName)
+      holder.pedNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
+      holder.pedNameLayout.setOnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus)
+          holder.pedNameLayout.validate()
+      }
+      holder.pedNameLayout.onChange {
+        listItem.`object`.pediatricianName = holder.pedNameLayout.text?.toString()!!
       }
 
-      holder.pedOfficeNameLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeName)
-      holder.pedOfficeNameLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeName = holder.pedOfficeNameLayout.editText?.text?.toString()!!
+      holder.pedOfficeNameLayout.setText(listItem.`object`.pediatricianOfficeName)
+      holder.pedOfficeNameLayout.addValidator(RegexpValidator(context.getString(R.string.name_error), context.getString(R.string.name_validation)))
+      holder.pedOfficeNameLayout.setOnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus)
+          holder.pedOfficeNameLayout.validate()
+      }
+      holder.pedOfficeNameLayout.onChange {
+        listItem.`object`.pediatricianOfficeName = holder.pedOfficeNameLayout.text?.toString()!!
       }
 
-      holder.pedOfficeNumberLayout.editText?.setText((listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeNumber)
-      holder.pedOfficeNumberLayout.editText?.onChange {
-        (listItem as RegistrationCardItem<Pediatrician>).`object`.pediatricianOfficeNumber = holder.pedOfficeNumberLayout.editText?.text?.toString()!!
+      holder.pedOfficeNumberLayout.setText(listItem.`object`.pediatricianOfficeNumber)
+      holder.pedOfficeNumberLayout.addValidator(
+          RegexpValidator(context.getString(R.string.phone_error), context.getString(R.string.phone_validation)))
+      holder.pedOfficeNumberLayout.setOnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus)
+          holder.pedOfficeNumberLayout.validate()
+      }
+      holder.pedOfficeNumberLayout.onChange {
+        listItem.`object`.pediatricianOfficeNumber = holder.pedOfficeNumberLayout.text?.toString()!!
       }
 
       holder.pediatricianDeleteButton.setOnClickListener {

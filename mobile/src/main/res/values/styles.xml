@@ -75,4 +75,8 @@
     <!-- Customize your theme here. -->
 
   </style>
+
+  <style name="ProgressColorAccent" parent="ThemeOverlay.AppCompat.Light">
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pediatricianDataCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -62,52 +63,48 @@
         android:gravity="start"
         android:orientation="vertical"
         >
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_ped_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/ped_name"
+          android:inputType="textPersonName"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="30"
+          app:met_minCharacters="1"
+          app:met_primaryColor="@color/colorRedAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_ped_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            />
-
-      </android.support.design.widget.TextInputLayout>
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_ped_office_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
+          android:hint="@string/ped_office_name"
+          android:inputType="textCapWords"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="30"
+          app:met_minCharacters="1"
+          app:met_primaryColor="@color/colorRedAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
-        <EditText
-            android:id="@+id/input_ped_office_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Office Name"
-            />
 
-      </android.support.design.widget.TextInputLayout>
-
-      <android.support.design.widget.TextInputLayout
+      <com.rengwuxian.materialedittext.MaterialEditText
           android:id="@+id/input_layout_ped_contact_num_1"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          >
-
-        <EditText
-            android:id="@+id/input_ped_contact_num_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Primary Phone Number"
-            android:inputType="phone"
-            />
-
-      </android.support.design.widget.TextInputLayout>
+          android:hint="@string/phone_number_1"
+          android:inputType="phone"
+          app:met_checkCharactersCountAtBeginning="false"
+          app:met_floatingLabel="highlight"
+          app:met_maxCharacters="12"
+          app:met_minCharacters="12"
+          app:met_primaryColor="@color/colorRedAccent"
+          app:met_singleLineEllipsis="true"
+          />
 
 
     </LinearLayout>

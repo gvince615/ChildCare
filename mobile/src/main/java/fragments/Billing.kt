@@ -17,7 +17,6 @@
 package fragments
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -28,15 +27,14 @@ import android.view.ViewGroup
 import billing.BillingFamily
 import billing.BillingFamilyAdapter
 import billing.BillingPresenter
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.fragment_billing.view.*
@@ -54,86 +52,85 @@ class Billing : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_billing, container, false)
     setupRecyclerView(view)
     billingPresenter.setUp(this, billingFamilies)
-    setupPieChart(view)
+    setupBarGraph(view)
     return view
   }
 
-  private fun setupPieChart(view: View) {
+  private fun setupBarGraph(view: View) {
 
-    val chart = view.billingChart
+    view.billingChart.setDrawBarShadow(false)
+    view.billingChart.setDrawValueAboveBar(true)
 
-    chart.setUsePercentValues(true)
-    chart.description.isEnabled = false
-    chart.setExtraOffsets(5f, 10f, 5f, 5f)
-
-    chart.dragDecelerationFrictionCoef = 0.95f
-
-    chart.centerText = "Revenue Graph"
-
-    chart.isDrawHoleEnabled = true
-    chart.setHoleColor(Color.WHITE)
-
-    chart.setTransparentCircleColor(Color.WHITE)
-    chart.setTransparentCircleAlpha(110)
-
-    chart.holeRadius = 58f
-    chart.transparentCircleRadius = 61f
-
-    chart.setDrawCenterText(true)
-
-    chart.rotationAngle = 0f
-    // enable rotation of the chart by touch
-    chart.isRotationEnabled = true
-    chart.isHighlightPerTapEnabled = true
-
-    // mChart.setUnit(" €");
-    // mChart.setDrawUnitsInChart(true);
-
-    // add a selection listener
-
-    setData(4, 100f, chart)
-
-    chart.animateY(1400, Easing.EasingOption.EaseInOutQuad)
-    // mChart.spin(2000, 0, 360);
+    val xAxis = view.billingChart.xAxis
+    xAxis.position = XAxis.XAxisPosition.BOTTOM
+    xAxis.setDrawGridLines(false)
+    xAxis.granularity = 1f // only intervals of 1 day
+    xAxis.labelCount = 7
 
 
-    val l = chart.legend
-    l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-    l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-    l.orientation = Legend.LegendOrientation.VERTICAL
-    l.setDrawInside(false)
-    l.xEntrySpace = 7f
-    l.yEntrySpace = 0f
-    l.yOffset = 0f
+    val leftAxis = view.billingChart.axisLeft
+    leftAxis.setLabelCount(8, false)
+    leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+    leftAxis.spaceTop = 15f
+    leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-    // entry label styling
-    chart.setEntryLabelColor(Color.WHITE)
-    chart.setEntryLabelTextSize(12f)
+    val rightAxis = view.billingChart.axisRight
+    rightAxis.setDrawGridLines(false)
+    rightAxis.setLabelCount(8, false)
+    rightAxis.spaceTop = 15f
+    rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+
+    setData(4, 10f, view.billingChart)
+
+    // mChart.setDrawLegend(false);
   }
 
-  private fun setData(count: Int, range: Float, chart: PieChart) {
+  private fun setData(count: Int, range: Float, dashboard_bar_graph: BarChart) {
 
-    val entries = ArrayList<PieEntry>()
+    val start = 1f
 
-    // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-    // the chart.
-    for (i in 0 until count) {
-      entries.add(PieEntry((Math.random() * range + range / 5).toFloat(), "label", resources.getDrawable(R.drawable.ic_tab_three, null)))
+    val yVals1 = ArrayList<BarEntry>()
+
+    var i = start.toInt()
+    while (i < start + count.toFloat() + 1f) {
+      val mult = range + 1
+      val `val` = (Math.random() * mult).toFloat()
+
+      if (Math.random() * 100 < 10) {
+        yVals1.add(BarEntry(i.toFloat(), `val`, resources.getDrawable(R.drawable.ic_tab_three, null)))
+      } else {
+        yVals1.add(BarEntry(i.toFloat(), `val`))
+      }
+      i++
     }
 
-    val dataSet = PieDataSet(entries, "Election Results")
+    val set1: BarDataSet
 
-    dataSet.setDrawIcons(false)
+    if (dashboard_bar_graph.data != null && dashboard_bar_graph.data.dataSetCount > 0) {
+      set1 = dashboard_bar_graph.data.getDataSetByIndex(0) as BarDataSet
+      set1.values = yVals1
+      dashboard_bar_graph.data.notifyDataChanged()
+      dashboard_bar_graph.notifyDataSetChanged()
+    } else {
+      set1 = BarDataSet(yVals1, "Registration by Bracket")
 
-    dataSet.sliceSpace = 3f
-    dataSet.iconsOffset = MPPointF(0f, 40f)
-    dataSet.selectionShift = 5f
+      set1.colors = addColors()
 
-    // add a lot of colors
+      val dataSets = ArrayList<IBarDataSet>()
+      dataSets.add(set1)
 
+      val data = BarData(dataSets)
+      data.setValueTextSize(10f)
+      data.barWidth = 0.9f
+
+      dashboard_bar_graph.data = data
+    }
+  }
+
+  private fun addColors(): ArrayList<Int> {
     val colors = ArrayList<Int>()
 
-    for (c in ColorTemplate.VORDIPLOM_COLORS)
+    for (c in ColorTemplate.MATERIAL_COLORS)
       colors.add(c)
 
     for (c in ColorTemplate.JOYFUL_COLORS)
@@ -142,27 +139,15 @@ class Billing : Fragment() {
     for (c in ColorTemplate.COLORFUL_COLORS)
       colors.add(c)
 
-    for (c in ColorTemplate.LIBERTY_COLORS)
-      colors.add(c)
-
     for (c in ColorTemplate.PASTEL_COLORS)
       colors.add(c)
 
-    colors.add(ColorTemplate.getHoloBlue())
+    for (c in ColorTemplate.LIBERTY_COLORS)
+      colors.add(c)
 
-    dataSet.colors = colors
-    //dataSet.setSelectionShift(0f);
-
-    val data = PieData(dataSet)
-    data.setValueFormatter(PercentFormatter())
-    data.setValueTextSize(11f)
-    data.setValueTextColor(Color.WHITE)
-    chart.data = data
-
-    // undo all highlights
-    chart.highlightValues(null)
-
-    chart.invalidate()
+    for (c in ColorTemplate.VORDIPLOM_COLORS)
+      colors.add(c)
+    return colors
   }
 
   override fun onResume() {
