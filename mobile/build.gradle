@@ -42,6 +42,8 @@ dependencies {
   implementation 'com.github.ganfra:material-spinner:2.0.0'
   implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
+  implementation 'com.itextpdf:itextg:5.5.10'
+
 
   implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
   implementation 'com.google.firebase:firebase-storage:16.0.1'

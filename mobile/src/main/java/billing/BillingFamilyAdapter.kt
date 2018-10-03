@@ -16,13 +16,20 @@ import java.util.*
 
 
 class BillingFamilyAdapter() : RecyclerView.Adapter<ViewHolder>() {
+  interface CardItemListener {
+    fun genBillClicked(position: Int)
+
+  }
 
   private lateinit var items: ArrayList<BillingFamily>
   private lateinit var context: Context
+  private lateinit var cardItemListener: CardItemListener
 
-  constructor(context: Context, items: ArrayList<BillingFamily>) : this() {
+
+  constructor(context: Context, items: ArrayList<BillingFamily>, cardItemListener: CardItemListener) : this() {
     this.context = context
     this.items = items
+    this.cardItemListener = cardItemListener
   }
 
   override fun getItemCount(): Int {
@@ -44,6 +51,7 @@ class BillingFamilyAdapter() : RecyclerView.Adapter<ViewHolder>() {
     holder.tvFamilyName.text = items[position].familyName
     holder.tvFamilyId.text = items[position].familyId
     holder.lvChildren.adapter = BillingChildAdapter(items[position].children, context)
+    holder.generateBillBtn.setOnClickListener { cardItemListener.genBillClicked(position) }
   }
 
   fun refreshData(familyList: ArrayList<BillingFamily>, pos: Int) {

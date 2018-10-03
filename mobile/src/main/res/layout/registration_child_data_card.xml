@@ -87,7 +87,7 @@
               android:layout_centerInParent="true"
               android:layout_margin="5dp"
               android:src="@drawable/account_child_white_48x48"
-              app:civ_border_color="@color/colorBlue"
+              app:civ_border_color="@color/fui_transparent"
               app:civ_border_width="3dp"
               />
 

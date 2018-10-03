@@ -7,6 +7,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
@@ -79,6 +80,24 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
         startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE)
       }
     }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    // If request is cancelled, the result arrays are empty.
+    if (grantResults.isNotEmpty()
+        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+      val pictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+      if (pictureIntent.resolveActivity(packageManager) != null) {
+        startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE)
+      }
+    } else {
+
+      // permission denied, boo! todo Disable the functionality that depends on this permission.
+    }
+    return
   }
 
   private var childImageAdded: Boolean = false

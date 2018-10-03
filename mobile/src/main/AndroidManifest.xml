@@ -20,6 +20,18 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
 
+    <!-- File Provider -->
+    <provider
+        android:authorities="com.vince.childcare"
+        android:exported="false"
+        android:grantUriPermissions="true"
+        android:name="android.support.v4.content.FileProvider">
+      <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/provider_paths" />
+    </provider>
+
+
     <service
         android:name="core.NotificationService"
         android:stopWithTask="false">
@@ -28,15 +40,6 @@
       </intent-filter>
     </service>
 
-    <provider
-        android:authorities="${applicationId}.fileprovider"
-        android:exported="false"
-        android:grantUriPermissions="true"
-        android:name="android.support.v4.content.FileProvider">
-      <meta-data
-          android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/file_paths" />
-    </provider>
 
     <activity
         android:name="activities.BaseActivity"
