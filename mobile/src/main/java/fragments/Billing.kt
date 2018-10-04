@@ -30,6 +30,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import attendance.AttendanceRecord
+import billing.BillingChildDataModel
 import billing.BillingFamily
 import billing.BillingFamilyAdapter
 import billing.BillingPresenter
@@ -47,13 +49,13 @@ import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.draw.LineSeparator
 import com.vince.childcare.R
-import core.ACTION_UPLOAD_PERMISSION
-import core.FileUtils
-import core.PermissionUtil
+import core.*
 import kotlinx.android.synthetic.main.fragment_billing.view.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
@@ -75,7 +77,7 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
   }
 
   override fun genBillClicked(position: Int) {
-    createPdfWrapper()
+    createPdfWrapper(position)
   }
 
   private fun setupBarGraph(view: View) {
@@ -85,7 +87,7 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
     val xAxis = view.billingChart.xAxis
     xAxis.position = XAxis.XAxisPosition.BOTTOM
     xAxis.setDrawGridLines(false)
-    xAxis.granularity = 1f // only intervals of 1 day
+    xAxis.granularity = 2f
     xAxis.labelCount = 7
 
     val leftAxis = view.billingChart.axisLeft
@@ -200,18 +202,18 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
 
 
   @Throws(FileNotFoundException::class, DocumentException::class)
-  private fun createPdfWrapper() {
+  private fun createPdfWrapper(position: Int) {
 
     PermissionUtil.handlePermission(this.context as Activity, ACTION_UPLOAD_PERMISSION, PermissionUtil.Permission.WRITE_EXTERNAL_STORAGE)
     if (PermissionUtil.handlePermission(this.context as Activity, ACTION_UPLOAD_PERMISSION, PermissionUtil.Permission.WRITE_EXTERNAL_STORAGE)) {
       val path = File(this.context!!.filesDir, "external_files")
       path.mkdir()
-      val file = File(path.path, "test.pdf") //todo change filename
-      createPdf(file.path, file)
+      val file = File(path.path, billingFamilies[position].familyName + ".pdf") //todo change filename
+      createPdf(file.path, file, position)
     }
   }
 
-  private fun createPdf(dest: String, file: File) {
+  private fun createPdf(dest: String, file: File, position: Int) {
 
     if (File(dest).exists()) {
       File(dest).delete()
@@ -226,12 +228,8 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
       // Document Settings
       setDocumentSettings(document)
 
-      // LINE SEPARATOR
-      var lineSeparator = LineSeparator()
-      lineSeparator.lineColor = BaseColor(0, 0, 0, 68)
-
-      setHeaderOnDocument(document, lineSeparator, BaseColor(0, 153, 204, 255))
-      setBillingDataOnDocument(20.0f, BaseColor(0, 153, 204, 255), document, 16.0f, lineSeparator)
+      setHeaderOnDocument(document, position)
+      setBillingDataOnDocument(document, position)
 
       document.close()
       FileUtils.openFile(this.context as Activity, file)
@@ -245,11 +243,11 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
     }
   }
 
-  private fun setHeaderOnDocument(document: Document, lineSeparator: LineSeparator, mColorAccent: BaseColor) {
+  private fun setHeaderOnDocument(document: Document, position: Int) {
     // Title Order Details...
     // Adding Title....
     val titleFont = Font(Font.FontFamily.COURIER, 18.0f, Font.NORMAL, BaseColor.BLACK)
-    val titleChunk = Chunk("Billing Report", titleFont)
+    val titleChunk = Chunk("Billing Report for " + billingFamilies[position].familyName, titleFont)
     val myImg = FileUtils.getResizedBitmap(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_new), 50, 50)
 
     document.add(myImg)
@@ -258,41 +256,96 @@ class Billing : Fragment(), BillingFamilyAdapter.CardItemListener {
 
     // Adding Line Breakable Space....
     document.add(Paragraph(""))
-    // Adding Horizontal Line...
-    document.add(Chunk(lineSeparator))
-    // Adding Line Breakable Space....
-    document.add(Paragraph(""))
-
-//    var mOrderIdFont = Font(Font.FontFamily.COURIER, 14.0f, Font.NORMAL, mColorAccent)
-    document.add(dataTable())
   }
 
-  private fun dataTable(): PdfPTable {
-    var table = PdfPTable(5)
-
+  private fun dataTable(child: BillingChildDataModel): PdfPTable {
+    val table = PdfPTable(5)
     table.widthPercentage = 100f
 
-    var cell = PdfPCell(Phrase("Child Name Here"))
-    cell.horizontalAlignment = Element.ALIGN_CENTER
-    cell.verticalAlignment = Element.ALIGN_CENTER
-    cell.colspan = 5
-    table.addCell(cell)
+    createTableHeader1(table, child)
 
-    var f = Font()
-    f.color = BaseColor.BLUE
+    createTableHeader(table)
+    createTableData(table, child.attendanceRecord)
 
-    table.addCell(PdfPCell(Phrase("Date:", f))).horizontalAlignment = Element.ALIGN_CENTER
-    table.addCell(PdfPCell(Phrase("Check-In:", f))).horizontalAlignment = Element.ALIGN_CENTER
-    table.addCell(PdfPCell(Phrase("Check-Out:", f))).horizontalAlignment = Element.ALIGN_CENTER
-    table.addCell(PdfPCell(Phrase("Time:", f))).horizontalAlignment = Element.ALIGN_CENTER
-    table.addCell(PdfPCell(Phrase("Cost:", f))).horizontalAlignment = Element.ALIGN_CENTER
     return table
   }
 
-  private fun setBillingDataOnDocument(mHeadingFontSize: Float, mColorAccent: BaseColor, document: Document,
-      mValueFontSize: Float, lineSeparator: LineSeparator) {
+  private fun createTableData(table: PdfPTable, records: ArrayList<AttendanceRecord>) {
+    val fData = Font()
+    fData.color = BaseColor.BLACK
+
+    val dataCell = PdfPCell()
+    dataCell.borderColor = BaseColor.WHITE
+    dataCell.horizontalAlignment = Element.ALIGN_CENTER
+
+    for (record in records) {
+
+      val dateIn = DateUtil().getDateObjectFromStringFormat(SimpleDateFormat(BILLING_ATTEN_CARD_TIME_FORMAT, Locale.US), record.checkInTime)
+      val dateOut = DateUtil().getDateObjectFromStringFormat(SimpleDateFormat(BILLING_ATTEN_CARD_TIME_FORMAT, Locale.US), record.checkOutTime)
+
+      val dateFormatted = DateUtil().getFormattedDateTimeFromDate(SimpleDateFormat(FIRESTORE_MONTH_DAY_FORMAT, Locale.US), dateIn)
+      val timeInFormatted = DateUtil().getFormattedDateTimeFromDate(SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US), dateIn)
+      val timeOutFormatted = DateUtil().getFormattedDateTimeFromDate(SimpleDateFormat(CHILD_ATTEN_CARD_TIME_FORMAT, Locale.US), dateOut)
+
+      dataCell.phrase = Phrase(dateFormatted, fData)
+      table.addCell(dataCell)
+
+      dataCell.phrase = Phrase(timeInFormatted, fData)
+      table.addCell(dataCell)
+
+      dataCell.phrase = Phrase(timeOutFormatted, fData)
+      table.addCell(dataCell)
+
+      dataCell.phrase = Phrase(dateIn?.let { dateOut?.let { it1 -> DateUtil().getDateDifference(it, it1) } }, fData)
+      table.addCell(dataCell)
+
+      dataCell.phrase = Phrase(" .. ", fData)
+      table.addCell(dataCell)
+    }
+  }
+
+
+  private fun createTableHeader(table: PdfPTable) {
+    val fHeader = Font()
+    fHeader.color = BaseColor.BLUE
+
+    table.addCell(PdfPCell(Phrase("Date:", fHeader))).horizontalAlignment = Element.ALIGN_CENTER
+    table.addCell(PdfPCell(Phrase("Check-In:", fHeader))).horizontalAlignment = Element.ALIGN_CENTER
+    table.addCell(PdfPCell(Phrase("Check-Out:", fHeader))).horizontalAlignment = Element.ALIGN_CENTER
+    table.addCell(PdfPCell(Phrase("Time:", fHeader))).horizontalAlignment = Element.ALIGN_CENTER
+    table.addCell(PdfPCell(Phrase("Cost:", fHeader))).horizontalAlignment = Element.ALIGN_CENTER
+  }
+
+  private fun createTableHeader1(table: PdfPTable, child: BillingChildDataModel) {
+    val fHeader1 = Font()
+    fHeader1.color = BaseColor.BLACK
+
+    val cellChildName = PdfPCell(Phrase(child.firstName, fHeader1))
+    cellChildName.borderColor = BaseColor.WHITE
+    cellChildName.colspan = 4
+    table.addCell(cellChildName)
+
+    val cellChildId = PdfPCell(Phrase(child.childId, fHeader1))
+    cellChildId.borderColor = BaseColor.WHITE
+    cellChildId.colspan = 1
+    cellChildId.horizontalAlignment = Element.ALIGN_RIGHT
+    table.addCell(cellChildId)
+  }
+
+  private fun setBillingDataOnDocument(document: Document, position: Int) {
     // Fields of Order Details...
     // Adding Chunks for Title and value
+    // LINE SEPARATOR
+    var lineSeparator = LineSeparator()
+    lineSeparator.lineColor = BaseColor(0, 0, 0, 68)
+
+
+    for (child in billingFamilies[position].children) {
+      document.add(dataTable(child))
+      document.add(Paragraph(""))
+      document.add(Paragraph(""))
+    }
+
 //
 //    var mOrderIdValueFont = Font(Font.FontFamily.COURIER, mValueFontSize, Font.NORMAL, BaseColor.BLACK)
 //    var mOrderIdValueChunk = Chunk("#123123", mOrderIdValueFont)
