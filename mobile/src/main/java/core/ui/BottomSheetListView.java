@@ -1,4 +1,4 @@
-package core;
+package core.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

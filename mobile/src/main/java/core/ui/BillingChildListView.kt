@@ -1,11 +1,11 @@
-package core
+package core.ui
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ListView
 
-class MyListView : ListView {
+class BillingChildListView : ListView {
 
   constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 

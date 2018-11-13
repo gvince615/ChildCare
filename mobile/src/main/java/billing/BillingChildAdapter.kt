@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import attendance.AttendanceRecord
 import com.vince.childcare.R
-import core.BottomSheetListView
+import core.ui.BottomSheetListView
 import kotlinx.android.synthetic.main.billing_child_layout.view.*
 
 class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>, internal var context: Context) : ArrayAdapter<BillingChildDataModel>(

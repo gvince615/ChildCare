@@ -60,14 +60,14 @@
 
     </LinearLayout>
 
-    <core.MyListView
+    <core.ui.BillingChildListView
         android:id="@+id/billing_child_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         >
 
-    </core.MyListView>
+    </core.ui.BillingChildListView>
 
     <include layout="@layout/billing_generate_layout" />
 
