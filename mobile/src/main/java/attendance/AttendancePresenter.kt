@@ -40,7 +40,7 @@ class AttendancePresenter {
 
           if (task.isSuccessful) {
 
-            for (doc in task.result.documents) {
+            for (doc in task.result?.documents!!) {
               if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "")) {
                 if (doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() != "")) {
                   postNew(position)
@@ -55,7 +55,7 @@ class AttendancePresenter {
             // todo - unsuccessful
             Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "Error getting documents: ", task.exception)
           }
-          if (task.result.isEmpty) {
+          if (task.result?.isEmpty!!) {
             Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, "empty result, need to postNew: ")
             postNew(position)
           }
@@ -122,7 +122,7 @@ class AttendancePresenter {
         .orderBy(TIME_STAMP, Query.Direction.DESCENDING).limit(1).get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            for (doc in task.result.documents) {
+            for (doc in task.result?.documents!!) {
               if (doc.contains(CHECK_IN).and(doc[CHECK_IN].toString() != "") && doc.contains(CHECK_OUT).and(doc[CHECK_OUT].toString() == "")) {
                 child.checkInTime = doc[CHECK_IN].toString()
                 Log.d(FIRESTORE_TAG + ATTENDANCE_TAG, doc.id + " => " + doc[CHECK_IN].toString() + "::" + doc[CHECK_OUT].toString())
@@ -191,11 +191,11 @@ class AttendancePresenter {
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             children.clear()
-            for (document in task.result) {
+            for (document in task.result!!) {
               document.reference.collection(COLLECTION_CHILDREN).get()
                   .addOnCompleteListener {
                     if (it.isSuccessful) {
-                      for (childDocument in it.result) {
+                      for (childDocument in it.result!!) {
                         val child = getAttenChildData(childDocument)
                         if (child != null) {
                           children.add(child)

@@ -35,7 +35,7 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
         .addOnCompleteListener { task ->
 
           if (task.isSuccessful) {
-            for (document in task.result) {
+            for (document in task.result!!) {
               Log.d(context.getString(R.string.registration_activity_tag), document.id + " => " + document.data)
               children.add(document.data)
             }

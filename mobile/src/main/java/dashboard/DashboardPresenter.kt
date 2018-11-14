@@ -24,7 +24,7 @@ class DashboardPresenter {
         .addOnCompleteListener { task ->
           dashboardData.clear()
           if (task.isSuccessful) {
-            for (familyDocument in task.result) {
+            for (familyDocument in task.result!!) {
               val family = Family()
 
               val billingFamily = getBillingFamilyData(familyDocument)
@@ -39,7 +39,7 @@ class DashboardPresenter {
     familyDocument.reference.collection(COLLECTION_CHILDREN).get()
         .addOnCompleteListener {
           if (it.isSuccessful) {
-            family.children = it.result.size()
+            family.children = it.result?.size()!!
             dashboardData.add(family)
             activity.setDashboardData(dashboardData)
           }

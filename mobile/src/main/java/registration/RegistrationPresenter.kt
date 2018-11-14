@@ -53,9 +53,9 @@ class RegistrationPresenter {
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
 
-            childData.family = getFamily(task.result)
-            childData.guardians = getGuardians(task.result)
-            childData.pediatrician = getPediatrician(task.result)
+            childData.family = getFamily(task.result!!)
+            childData.guardians = getGuardians(task.result!!)
+            childData.pediatrician = getPediatrician(task.result!!)
 
             FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
                 FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
@@ -65,7 +65,7 @@ class RegistrationPresenter {
                   if (it.isSuccessful) {
                     val document = it.result
 
-                    childData.child = getChild(document)
+                    childData.child = getChild(document!!)
                     childData.billing = getBilling(document)
                     childData.medications = getMedications(document)
                     activity.setDataCards(FullChildRegistrationData(childData))
@@ -193,12 +193,12 @@ class RegistrationPresenter {
         .get()
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            if (task.result.isEmpty) {
+            if (task.result?.isEmpty!!) {
               activity.hideProgress()
               activity.onNoFamilyNamesRetrieved()
               Log.d(FIRESTORE_TAG + REGISTRATION_TAG, activity.getString(R.string.no_family_names_to_get))
             } else {
-              for (document in task.result) {
+              for (document in task.result!!) {
                 if (document.contains(FAMILY_DATA)) {
                   if (!familyNames.contains(document.id)) {
                     familyNames.add(document.id)
@@ -230,9 +230,9 @@ class RegistrationPresenter {
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
 
-            childData.family = getFamily(task.result)
-            childData.guardians = getGuardians(task.result)
-            childData.pediatrician = getPediatrician(task.result)
+            childData.family = getFamily(task.result!!)
+            childData.guardians = getGuardians(task.result!!)
+            childData.pediatrician = getPediatrician(task.result!!)
 
             FirebaseFirestore.getInstance().collection(COLLECTION_USER_DATA).document(
                 FirebaseAuth.getInstance().currentUser?.displayName.toString().replace(" ", "") +
@@ -240,7 +240,7 @@ class RegistrationPresenter {
                 .collection(COLLECTION_CHILDREN).get()
                 .addOnCompleteListener {
                   if (it.isSuccessful) {
-                    for (document in it.result) {
+                    for (document in it.result!!) {
 
                       val newChild = getChild(document)
                       (newChild as Child).firstName = ""

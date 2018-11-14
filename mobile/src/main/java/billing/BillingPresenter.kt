@@ -28,7 +28,7 @@ class BillingPresenter {
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             billingFamilyData.clear()
-            for (familyDocument in task.result) {
+            for (familyDocument in task.result!!) {
               // get families
               val billingFamily = getBillingFamilyData(familyDocument)
               billingFamily?.let { billingFamilyData.add(it) }
@@ -42,7 +42,7 @@ class BillingPresenter {
     familyDocument.reference.collection(COLLECTION_CHILDREN).get()
         .addOnCompleteListener {
           if (it.isSuccessful) {
-            for ((childIndex, childDocument) in it.result.withIndex()) {
+            for ((childIndex, childDocument) in it.result?.withIndex()!!) {
               //get children
               getBillingChildData(childDocument)?.let { it1 -> billingFamily?.children?.add(it1) }
 
@@ -57,7 +57,7 @@ class BillingPresenter {
     childDocument.reference.collection(COLLECTION_ATTENDANCE_DATA).orderBy(TIME_STAMP, Query.Direction.DESCENDING).get()
         .addOnCompleteListener {
           if (it.isSuccessful) {
-            for (attenDocument in it.result) {
+            for (attenDocument in it.result!!) {
               //get attendance
 
               if (attenDocument[CHECK_OUT].toString() != "") {
