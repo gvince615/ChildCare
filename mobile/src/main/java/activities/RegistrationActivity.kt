@@ -1,7 +1,5 @@
 package activities
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -307,16 +305,8 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   override fun onBackPressed() {
     super.onBackPressed()
-    beginBackTransition()
-  }
-
-  private fun beginBackTransition() {
     registration_rv.visibility = View.GONE
-    val colorAnimation = ValueAnimator.ofObject(
-        ArgbEvaluator(), resources.getColor(R.color.colorWhite, null), resources.getColor(R.color.colorWhiteTrans, null))
-    colorAnimation.duration = 250 // milliseconds
-    colorAnimation.addUpdateListener { animator -> content.setBackgroundColor(animator.animatedValue as Int) }
-    colorAnimation.start()
+    beginBackTransition()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

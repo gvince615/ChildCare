@@ -50,8 +50,6 @@ class LoginActivity : BaseActivity() {
     super.onActivityResult(requestCode, resultCode, data)
 
     if (requestCode == SIGN_IN_REQUEST_CODE) {
-//      val response = IdpResponse.fromResultIntent(data)
-
       if (resultCode == Activity.RESULT_OK) {
 
         AnalyticsUtil(FirebaseAnalytics.getInstance(this))::logLoginEvent
