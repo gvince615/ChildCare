@@ -48,7 +48,7 @@ class MainActivity : BaseActivity(), Attendance.UpdateBillingListener {
 
     this.doubleBackToExitPressedOnce = true
     val snackbar = Snackbar
-        .make(coordinator_layout, "Press back again to sign out.", Snackbar.LENGTH_LONG)
+        .make(coordinator_layout, getString(R.string.double_tap_msg), Snackbar.LENGTH_LONG)
     snackbar.show()
     Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
   }

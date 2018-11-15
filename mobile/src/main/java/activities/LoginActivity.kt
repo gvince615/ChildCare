@@ -58,7 +58,7 @@ class LoginActivity : BaseActivity() {
       } else {
 
         val snackbar = Snackbar
-            .make(coordinator_layout, "You are not currently signed in", Snackbar.LENGTH_LONG)
+            .make(coordinator_layout, getString(R.string.sign_in_msg), Snackbar.LENGTH_LONG)
             .setAction("RETRY") {
               displayFirebaseAuthLogin()
             }

@@ -14,7 +14,6 @@ class TodoActivity : BaseActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       android.R.id.home -> {
-        // Respond to the action bar's Up/Home button
         onBackPressed()
         return true
       }
