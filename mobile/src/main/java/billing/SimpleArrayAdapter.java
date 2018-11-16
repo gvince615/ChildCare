@@ -5,10 +5,10 @@ import android.widget.ArrayAdapter;
 import java.util.HashMap;
 import java.util.List;
 
-public class MySimpleArrayAdapter extends ArrayAdapter<String> {
+public class SimpleArrayAdapter extends ArrayAdapter<String> {
   HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-  public MySimpleArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
+  public SimpleArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
     super(context, textViewResourceId, objects);
     for (int i = 0; i < objects.size(); ++i) {
       mIdMap.put(objects.get(i), i);

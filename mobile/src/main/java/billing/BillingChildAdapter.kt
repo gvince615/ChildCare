@@ -58,7 +58,7 @@ class BillingChildAdapter(private val dataSet: ArrayList<BillingChildDataModel>,
     val headerText = context.getString(R.string.atten_records_for) + " " + dataSet[position].firstName
     headerTv?.text = headerText
 
-    val adapter = MySimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepareData(dataSet[position].attendanceRecord))
+    val adapter = SimpleArrayAdapter(context, android.R.layout.simple_list_item_1, prepareData(dataSet[position].attendanceRecord))
     attenRecordsLv?.adapter = adapter
     dialog.show()
   }
