@@ -1,9 +1,5 @@
-package fragments
+package ui.fragments
 
-import activities.MessageBoardActivity
-import activities.RegistrationActivity
-import activities.SetupActivity
-import activities.TodoActivity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -28,6 +24,10 @@ import dashboard.Family
 import dashboard.NumberFormatter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
+import ui.activities.MessageBoardActivity
+import ui.activities.RegistrationActivity
+import ui.activities.SetupActivity
+import ui.activities.TodoActivity
 
 
 class Dashboard : Fragment() {

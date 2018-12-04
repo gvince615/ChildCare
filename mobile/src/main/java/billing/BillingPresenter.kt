@@ -7,7 +7,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.gson.Gson
 import core.*
-import fragments.Billing
+import ui.fragments.Billing
 import java.text.SimpleDateFormat
 import java.util.*
 

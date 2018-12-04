@@ -1,6 +1,5 @@
-package fragments
+package ui.fragments
 
-import activities.RegistrationActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +20,7 @@ import com.vince.childcare.R
 import core.CHECK_IN
 import core.CHILD_ID
 import kotlinx.android.synthetic.main.fragment_attendance.view.*
+import ui.activities.RegistrationActivity
 import java.util.HashMap
 import kotlin.collections.ArrayList
 

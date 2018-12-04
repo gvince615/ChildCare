@@ -1,6 +1,5 @@
 package registration
 
-import activities.RegistrationActivity
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +11,7 @@ import com.google.firebase.storage.UploadTask
 import com.google.gson.Gson
 import com.vince.childcare.R
 import core.*
+import ui.activities.RegistrationActivity
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList

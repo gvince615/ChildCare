@@ -1,4 +1,4 @@
-package activities
+package ui.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vince.childcare.R
 import core.AnalyticsUtil
@@ -53,7 +52,8 @@ class LoginActivity : BaseActivity() {
       if (resultCode == Activity.RESULT_OK) {
 
         AnalyticsUtil(FirebaseAnalytics.getInstance(this))::logLoginEvent
-        FirestoreUtil(FirebaseFirestore.getInstance(), this).updateOrAddUser(FirebaseAuth.getInstance().currentUser)
+        FirestoreUtil(FirebaseFirestore.getInstance(), this).updateOrAddUser(firebaseAuth.currentUser)
+
         startMainActivity()
       } else {
 

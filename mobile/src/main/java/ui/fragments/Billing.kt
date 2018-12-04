@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package fragments
+package ui.fragments
 
 
 import android.app.Activity

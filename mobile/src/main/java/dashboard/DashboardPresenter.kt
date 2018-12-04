@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.gson.Gson
 import core.*
-import fragments.Dashboard
+import ui.fragments.Dashboard
 
 class DashboardPresenter {
   private lateinit var activity: Dashboard

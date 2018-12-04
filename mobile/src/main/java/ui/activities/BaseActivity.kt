@@ -1,4 +1,4 @@
-package activities
+package ui.activities
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator

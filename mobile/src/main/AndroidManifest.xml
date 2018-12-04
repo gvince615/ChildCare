@@ -42,11 +42,11 @@
 
 
     <activity
-        android:name="activities.BaseActivity"
+        android:name="ui.activities.BaseActivity"
         android:screenOrientation="portrait" />
 
     <activity
-        android:name="activities.LoginActivity"
+        android:name="ui.activities.LoginActivity"
         android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -54,34 +54,34 @@
       </intent-filter>
     </activity>
     <activity
-        android:name="activities.MainActivity"
+        android:name="ui.activities.MainActivity"
         android:screenOrientation="portrait" />
 
     <activity
-        android:name="activities.RegistrationActivity"
-        android:parentActivityName="activities.MainActivity"
+        android:name="ui.activities.RegistrationActivity"
+        android:parentActivityName="ui.activities.MainActivity"
         android:screenOrientation="portrait"
         android:theme="@style/OrangeTheme"
         android:windowSoftInputMode="stateHidden|adjustResize">
 
     </activity>
     <activity
-        android:name="activities.MessageBoardActivity"
-        android:parentActivityName="activities.MainActivity"
+        android:name="ui.activities.MessageBoardActivity"
+        android:parentActivityName="ui.activities.MainActivity"
         android:screenOrientation="portrait"
         android:theme="@style/BlueTheme">
 
     </activity>
     <activity
-        android:name="activities.TodoActivity"
-        android:parentActivityName="activities.MainActivity"
+        android:name="ui.activities.TodoActivity"
+        android:parentActivityName="ui.activities.MainActivity"
         android:screenOrientation="portrait"
         android:theme="@style/GreenTheme">
 
     </activity>
     <activity
-        android:name="activities.SetupActivity"
-        android:parentActivityName="activities.MainActivity"
+        android:name="ui.activities.SetupActivity"
+        android:parentActivityName="ui.activities.MainActivity"
         android:screenOrientation="portrait"
         android:theme="@style/YellowTheme" />
 

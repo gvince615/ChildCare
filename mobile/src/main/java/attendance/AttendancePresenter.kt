@@ -6,8 +6,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.gson.Gson
 import core.*
-import fragments.Attendance
 import registration.Child
+import ui.fragments.Attendance
 import java.text.SimpleDateFormat
 import java.util.*
 

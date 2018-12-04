@@ -1,4 +1,4 @@
-package activities
+package ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.os.Handler
 import android.support.design.widget.Snackbar
 import com.firebase.ui.auth.AuthUI
 import com.vince.childcare.R
-import fragments.Attendance
-import fragments.Billing
-import fragments.Dashboard
 import kotlinx.android.synthetic.main.activity_main.*
+import ui.fragments.Attendance
+import ui.fragments.Billing
+import ui.fragments.Dashboard
 import java.util.*
 
 

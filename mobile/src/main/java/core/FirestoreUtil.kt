@@ -25,24 +25,4 @@ class FirestoreUtil(private val db: FirebaseFirestore, private val context: Cont
       }
     }
   }
-
-  fun retrieveChildDataCollection(firebaseUser: FirebaseUser?): ArrayList<Any> {
-    val children = ArrayList<Any>()
-
-    db.collection(COLLECTION_USER_DATA).document(firebaseUser?.displayName.toString().replace(" ", "") + PREFIX_UID + firebaseUser?.uid)
-        .collection(COLLECTION_REGISTRATION_DATA)
-        .get()
-        .addOnCompleteListener { task ->
-
-          if (task.isSuccessful) {
-            for (document in task.result!!) {
-              Log.d(context.getString(R.string.registration_activity_tag), document.id + " => " + document.data)
-              children.add(document.data)
-            }
-          } else {
-            Log.d(context.getString(R.string.registration_activity_tag), "Error getting documents: ", task.exception)
-          }
-        }
-    return children
-  }
 }

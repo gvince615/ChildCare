@@ -1,6 +1,5 @@
 package core
 
-import activities.MainActivity
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -11,6 +10,7 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.vince.childcare.R
+import ui.activities.MainActivity
 import java.util.*
 
 class NotificationService : FirebaseMessagingService() {

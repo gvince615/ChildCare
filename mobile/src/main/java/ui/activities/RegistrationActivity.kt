@@ -1,4 +1,4 @@
-package activities
+package ui.activities
 
 import android.app.Activity
 import android.app.AlertDialog
