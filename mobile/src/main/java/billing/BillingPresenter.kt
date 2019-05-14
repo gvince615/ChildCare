@@ -45,7 +45,6 @@ class BillingPresenter {
             for ((childIndex, childDocument) in it.result?.withIndex()!!) {
               //get children
               getBillingChildData(childDocument)?.let { it1 -> billingFamily?.children?.add(it1) }
-
               getAttendanceDocuments(childDocument, billingFamily, childIndex)
             }
           }
