@@ -6,12 +6,12 @@ import activities.SetupActivity
 import activities.TodoActivity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
@@ -38,7 +38,7 @@ class Dashboard : Fragment() {
     val intent = Intent(activity, MessageBoardActivity::class.java)
     val options = activity?.let {
       ActivityOptionsCompat.makeSceneTransitionAnimation(it, msg_board_view,
-          ViewCompat.getTransitionName(msg_board_view))
+          ViewCompat.getTransitionName(msg_board_view)!!)
     }
     startActivity(intent, options?.toBundle())
   }
@@ -48,7 +48,7 @@ class Dashboard : Fragment() {
     val options = activity?.let {
       ActivityOptionsCompat.makeSceneTransitionAnimation(it,
           todo_view,
-          ViewCompat.getTransitionName(todo_view))
+          ViewCompat.getTransitionName(todo_view)!!)
     }
     startActivity(intent, options?.toBundle())
   }
@@ -58,7 +58,7 @@ class Dashboard : Fragment() {
     val options = activity?.let {
       ActivityOptionsCompat.makeSceneTransitionAnimation(it,
           setup_view,
-          ViewCompat.getTransitionName(setup_view))
+          ViewCompat.getTransitionName(setup_view)!!)
     }
     startActivity(intent, options?.toBundle())
   }
@@ -68,7 +68,7 @@ class Dashboard : Fragment() {
     val options = activity?.let {
       ActivityOptionsCompat.makeSceneTransitionAnimation(it,
           registration_view,
-          ViewCompat.getTransitionName(registration_view))
+          ViewCompat.getTransitionName(registration_view)!!)
     }
     startActivity(intent, options?.toBundle())
   }

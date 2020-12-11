@@ -1,9 +1,6 @@
 package registration
 
 import android.content.Context
-import android.support.design.widget.TextInputLayout
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
@@ -12,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import com.vince.childcare.R
 import kotlinx.android.synthetic.main.registration_parent_data_card.view.*
 

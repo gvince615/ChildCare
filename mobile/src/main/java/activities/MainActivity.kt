@@ -3,8 +3,9 @@ package activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import attendance.AttenChild
 import attendance.AttendanceAdapter
 import attendance.AttendancePresenter
@@ -12,6 +13,7 @@ import billing.BillingFamily
 import billing.BillingFamilyAdapter
 import billing.BillingPresenter
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
 import core.CHECK_IN
@@ -70,7 +72,7 @@ class MainActivity : BaseActivity(), AttendanceAdapter.CardItemListener, Billing
         Billing())
 
     spaceTabLayout.initialize(viewPager, supportFragmentManager,
-        fragmentList, savedInstanceState)
+        fragmentList as MutableList<Fragment>?, savedInstanceState)
 
     attendancePresenter.setUp(this, children)
     billingPresenter.setUp(this, billingFamilies)

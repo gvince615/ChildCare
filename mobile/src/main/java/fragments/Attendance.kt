@@ -4,14 +4,14 @@ import activities.MainActivity
 import activities.RegistrationActivity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import attendance.AttenChild
 import attendance.AttendanceAdapter
 import com.vince.childcare.R
@@ -45,8 +45,8 @@ class Attendance : Fragment() {
         val intent = Intent(activity, RegistrationActivity::class.java).putExtra(CHILD_ID, childRef)
         val options = activity?.let {
           ActivityOptionsCompat.makeSceneTransitionAnimation(it,
-              rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image),
-              ViewCompat.getTransitionName(rv.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.child_image)))
+              rv.findViewHolderForAdapterPosition(position)!!.itemView.findViewById(R.id.child_image),
+              ViewCompat.getTransitionName(rv.findViewHolderForAdapterPosition(position)!!.itemView.findViewById(R.id.child_image))!!)
         }
         startActivity(intent, options?.toBundle())
       }

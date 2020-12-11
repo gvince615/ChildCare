@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentDataCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         android:background="@color/colorWhiteTrans"
         >
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/parent_first_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -80,9 +80,9 @@
             android:inputType="textPersonName"
             />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/parent_last_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -96,9 +96,9 @@
             android:inputType="textPersonName"
             />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/parent_contact_num_1"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -112,8 +112,8 @@
             android:inputType="phone"
             />
 
-      </android.support.design.widget.TextInputLayout>
-      <android.support.design.widget.TextInputLayout
+      </com.google.android.material.textfield.TextInputLayout>
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/parent_contact_num_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -127,9 +127,9 @@
             android:inputType="phone"
             />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/parent_email"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -143,8 +143,8 @@
             android:inputType="textEmailAddress"
             />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
   </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
 

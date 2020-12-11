@@ -1,6 +1,6 @@
 package registration
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 open class RegistrationCardItem<T>(internal var `object`: T, @field:ViewType internal var viewType: Int) {
   @kotlin.annotation.Retention()

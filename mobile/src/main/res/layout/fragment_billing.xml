@@ -13,17 +13,16 @@
       android:layout_marginStart="10dp"
       android:layout_marginTop="10dp"
       android:scaleType="fitXY"
-      android:src="@drawable/ic_launcher_background"
+      android:src="@mipmap/ic_graph"
       android:translationZ="5dp"
       />
 
-  <!--recycler-->
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/billing_family_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         >
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

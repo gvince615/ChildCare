@@ -12,13 +12,13 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.vince.childcare.R
 import core.*
@@ -134,31 +134,31 @@ class RegistrationActivity : BaseActivity(), RegistrationAdapter.CardItemListene
 
   private fun billingMenuButtonClicked() {
     adapter.addBilling(Billing())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    registration_rv.adapter?.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun medicationMenuButtonClicked() {
     adapter.addMedication(Medication())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    registration_rv.adapter?.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun pediatricianMenuButtonClicked() {
     adapter.addPediatrician(Pediatrician())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    registration_rv.adapter?.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun parentMenuButtonClicked() {
     adapter.addParent(Guardian())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    registration_rv.adapter?.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 
   private fun childMenuButtonClicked() {
     adapter.addChild(Child())
-    registration_rv.adapter.notifyItemInserted(registration_rv.childCount + 1)
+    registration_rv.adapter?.notifyItemInserted(registration_rv.childCount + 1)
     menu.close(true)
   }
 

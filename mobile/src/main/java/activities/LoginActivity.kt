@@ -4,9 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -66,9 +67,9 @@ class LoginActivity : BaseActivity() {
             }
         snackbar.setActionTextColor(Color.RED)
         val sbView = snackbar.view
-        val textView = sbView.findViewById(android.support.design.R.id.snackbar_text) as TextView
+        val textView = sbView.findViewById(R.id.snackbar_text) as TextView
         textView.setTextColor(Color.YELLOW)
-        snackbar.duration = Snackbar.LENGTH_INDEFINITE
+        snackbar.duration = LENGTH_INDEFINITE
         snackbar.show()
       }
     }
